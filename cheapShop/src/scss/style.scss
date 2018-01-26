@@ -1,0 +1,49 @@
+*,
+*:before,
+*:after {
+	margin: 0;
+	padding: 0;
+    box-sizing: border-box;
+}
+html,body{
+    position:relative;
+    height: 100%; width: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    background-color: #f7f7f7;
+}
+input{
+	border:none;
+	outline:none;
+}
+input::-webkit-input-placeholder {
+	font-size: 0.28rem;
+	color: #C3C4C4;
+	font-weight: 300;
+}
+input:-ms-input-placeholder { // IE10+
+	font-size: 0.28rem;
+	color: #C3C4C4;
+	font-weight: 300;
+}
+input:-moz-placeholder { // Firefox4-18
+	font-size: 0.28rem;
+	color: #C3C4C4;
+	font-weight: 300;
+}
+input::-moz-placeholder { // Firefox19+
+	font-size: 0.28rem;
+	color: #C3C4C4;
+	font-weight: 300;
+}
+
+@import '_normalize.scss';
+@import '_select.scss';
+@import '_dialog.scss';
+
+@import '_container.scss';
+@import '_index.scss';
+@import '_login.scss';
+@import '_order.scss';
+@import '_pay.scss';
+

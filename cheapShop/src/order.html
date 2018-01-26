@@ -1,0 +1,76 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="telephone=no" name="format-detection" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta http-equiv="Expires" CONTENT="0">
+    <meta http-equiv="Cache-Control" CONTENT="no-cache">
+    <meta http-equiv="Pragma" CONTENT="no-cache">
+    <title></title>
+    <script type="text/javascript">
+    function adapt(designWidth, rem2px) {
+        var d = window.document.createElement('div');
+        d.style.width = '1rem';
+        d.style.display = "none";
+        var head = window.document.getElementsByTagName('head')[0];
+        head.appendChild(d);
+        var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+        document.documentElement.style.fontSize = window.innerWidth / designWidth * rem2px / defaultFontSize * 100 + '%';
+        var st = document.createElement('style');
+        var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+        var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+        st.innerHTML = portrait + landscape;
+        head.appendChild(st);
+        return defaultFontSize
+    };
+    var defaultFontSize = adapt(750, 100);
+    </script>
+    <!-- build:css -->
+    <!-- endbuild -->
+</head>
+
+<body>
+    <div class="container-order" id="container">
+        <div class="from-groups">
+            <div class="from-group">
+                <span class="lable">姓名</span>
+                <input type="text" name="name" placeholder="请输入姓名">
+            </div>
+            <div class="from-group">
+                <span class="lable">手机</span>
+                <input type="text" name="phone" placeholder="请输入手机号">
+            </div>
+            <div class="from-group">
+                <span class="lable">地区</span>
+                <input type="text" name="address" placeholder="请选择" readonly="readonly">
+            </div>
+            <div class="from-group">
+                <span class="lable">详细地址</span>
+                <input type="text" name="detail" placeholder="请输入街道门牌信息">
+            </div>
+        </div>
+        <div class="from-groups">
+            <div class="from-group redio check" data-id="8">
+                <img class="icon-content" src="images/grade-8.png">
+                <div class="info">
+                    <span>八年级讲义2本+原创文章1本</span>
+                    <span class="price">¥<span class="price-number ">1</span></span>
+                </div>
+            </div>
+            <div class="from-group redio" data-id="9">
+                <img class="icon-content" src="images/grade-9.png">
+                <div class="info">
+                    <span>九年级讲义2本+原创文章1本</span>
+                    <span class="price">¥<span class="price-number ">1</span></span>
+                </div>
+            </div>
+        </div>
+        <span class="btn-pay">立即付款</span>
+    </div>
+    <script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <!-- build:js -->
+    <!-- endbuild -->
+</body>
+
+</html>
