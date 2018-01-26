@@ -1,6 +1,6 @@
 var common = {};
 $(function() {
-  var version = '1.0.2';
+  var version = '1.0.3';
   common.baseUrl = 'http://www.chaisenwuli.com/zjwh5/';
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
@@ -168,13 +168,13 @@ $(function() {
     return args;
   }
   var jsApiList = [ 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'translateVoice', 'startRecord', 'stopRecord', 'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'closeWindow', 'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'];
-  common.initWeixinShare = function(wxData) {
-    wxData = $.extend({
+  common.initWeixinShare = function(callback) {
+    wxData = {
       title: "柴森物理，寒春网课讲义一元购",
       link: common.baseUrl  + "activitys/cheapShop/index.html",
       desc: "柴森老师，独家讲义，一元包邮三本，仅限10000本",
       imgUrl: common.baseUrl + "activitys/cheapShop/images/icon-share.png"
-    },wxData || {})
+    };
     actions.getJsConfig().done(function(res) {
       if (res.code == 0) {
         var config = res.data;
@@ -182,7 +182,7 @@ $(function() {
         wx.config(config);
         wx.ready(function() {
           wx.onMenuShareAppMessage(wxData);
-          wx.onMenuShareTimeline(wxData);
+          wx.onMenuShareTimeline($.extend({},wxData,callback || {}));
           wx.onMenuShareQQ(wxData);
         });
       }

@@ -8,9 +8,7 @@ $(function() {
     var that = this;
     common.initWeixinShare({
       success: function(res){
-        if(res.errMsg == 'onMenuShareTimeline:ok' || res.errMsg == 'shareTimeline:ok'){
-          that.doForward();
-        }
+        that.doForward();
       }
     })
   }
@@ -21,7 +19,11 @@ $(function() {
       if(res.code == 0){
         if(res.data.status ==  2){
           that.$elem.find('.price').remove();
-          that.$elem.find('.btn-shop').css({'width':'100%'}).addClass('disabled').text('已购买');
+          var text = '已购买 ';
+          if(res.data.product){
+            text += res.data.product == 8 ? '八年级讲义2本+原创文章1本' : '九年级讲义2本+原创文章1本';
+          }
+          that.$elem.find('.btn-shop').css({'width':'100%'}).addClass('disabled').text(text);
           that.$elem.find('.share-arrow').remove();
           that.$elem.find('.share-text').remove();
         }
