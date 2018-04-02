@@ -1,6 +1,6 @@
 var common = {};
 $(function() {
-  var version = '1.0.3';
+  var version = '1.0.4';
   common.baseUrl = 'http://www.chaisenwuli.com/zjwh5/';
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
@@ -171,7 +171,7 @@ $(function() {
   common.initWeixinShare = function(callback) {
     wxData = {
       title: "柴森物理，寒春网课讲义一元购",
-      link: common.baseUrl  + "activitys/cheapShop/index.html",
+      link: common.baseUrl  + "activitys/cheapShop/main.html",
       desc: "柴森老师，独家讲义，一元包邮三本，仅限10000本",
       imgUrl: common.baseUrl + "activitys/cheapShop/images/icon-share.png"
     };

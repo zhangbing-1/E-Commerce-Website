@@ -1,6 +1,6 @@
 {
   "name": "hanchun-activity",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "总结网(柴森物理)，寒春网课讲义一元购 柴森老师，独家讲义，一元包邮三本，仅限10000本",
   "main": "index.js",
   "scripts": {

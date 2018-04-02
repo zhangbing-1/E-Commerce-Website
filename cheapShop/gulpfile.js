@@ -16,7 +16,7 @@ var config = require('./package.json');
 var rename = require("gulp-rename");
 
 
-var modules = ['index','order','login','pay'];
+var modules = ['index','order','login','pay','main'];
 
 // =================   build =================
 var buildPath = 'build/activitys/cheapShop/'

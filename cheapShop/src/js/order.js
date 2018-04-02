@@ -142,7 +142,4 @@ $(function() {
     this.bindEvent();
   }
 
-  var page = new Page();
-  page.init();
-
 });
