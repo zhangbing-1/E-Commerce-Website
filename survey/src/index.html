@@ -1,0 +1,148 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta http-equiv="Expires" CONTENT="0">
+  <meta http-equiv="Cache-Control" CONTENT="no-cache">
+  <meta http-equiv="Pragma" CONTENT="no-cache">
+  <title>爱总结</title>
+  <script type="text/javascript">
+  function adapt(designWidth, rem2px) {
+    var d = window.document.createElement('div');
+    d.style.width = '1rem';
+    d.style.display = "none";
+    var head = window.document.getElementsByTagName('head')[0];
+    head.appendChild(d);
+    var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+    document.documentElement.style.fontSize = window.innerWidth / designWidth * rem2px / defaultFontSize * 100 + '%';
+    var st = document.createElement('style');
+    var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+    var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+    st.innerHTML = portrait + landscape;
+    head.appendChild(st);
+    return defaultFontSize
+  };
+  var defaultFontSize = adapt(750, 100);
+
+  </script>
+  <!-- build:css -->
+  <!-- endbuild -->
+</head>
+
+<body>
+  <h2 class="title">1班珍哥物理课前摸底</h2>
+  <div class="container">
+    <p class="desc">同学你好~</p>
+    <p class="desc">请认真阅读以下题目，并诚实填写你的信息,如有遗漏或错填会影响我们后续对你的辅导服务！我们需要根据你的成绩情况为你制定最适合你的学习计划~</p>
+    <div class="form">
+      <div class="form-group">
+        <div class="lable">1. 你的姓名 </div>
+        <div class="controll">
+          <input class="input" type="text" name="name" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">2. 你的年级 </div>
+        <div class="controll">
+          <select class="select" name="grade">
+            <option value="">==== 请选择年级 ====</option>
+            <option value="1">一年级</option>
+            <option value="2">二年级</option>
+            <option value="3">三年级</option>
+            <option value="4">四年级</option>
+            <option value="5">五年级</option>
+            <option value="6">六年级</option>
+            <option value="7">初一</option>
+            <option value="8">初二</option>
+            <option value="9">初三</option>
+            <option value="10">高一</option>
+            <option value="11">高二</option>
+            <option value="12">高三</option>
+          </select>
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">3. 你的学校 </div>
+        <div class="controll">
+          <input class="input" type="text" name="schoolName" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">4. QQ号 </div>
+        <div class="controll">
+          <input class="input" type="text" name="qq" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">5. 邮箱 </div>
+        <div class="controll">
+          <input class="input" type="text" name="email" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">6. 请输入你的手机号码 </div>
+        <div class="controll">
+          <input class="input" type="text" name="phone" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">7. 请输入你家长的手机号码</div>
+        <div class="controll">
+          <input class="input" type="text" name="parentPhone" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">9. 初中平均数学成绩（并用括号写出满分）</div>
+        <div class="controll">
+          <input class="input" type="text" name="cz0sx" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">10. 初中平均英语成绩（并用括号写出满分）</div>
+        <div class="controll">
+          <input class="input" type="text" name="cz0yy" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">11. 高中平均数学成绩（并用括号写出满分）</div>
+        <div class="controll">
+          <input class="input" type="text" name="gz0sx" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">12. 高中平均物理成绩（并用括号写出满分）</div>
+        <div class="controll">
+          <input class="input" type="text" name="gz0wl" />
+        </div>
+        <div class="msg"></div>
+      </div>
+      <div class="form-group">
+        <div class="lable">14. 目前学校进度（填写知识点，不要填写章节）</div>
+        <div class="controll">
+          <input class="input" type="text" name="schedule" />
+        </div>
+        <div class="msg"></div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="submit" name="submit">提交</button>
+    </div>
+  </div>
+  <p class="success-msg">摸底问卷已经提交， 你的班主任会及时帮你建立档案，并且给你发送学习计划~</p>
+  <!-- build:js -->
+  <!-- endbuild -->
+</body>
+
+</html>
