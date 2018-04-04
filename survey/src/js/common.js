@@ -2,7 +2,13 @@ var common = {};
 $(function() {
   var version = '1.0.0';
   common.baseUrl = '//testapi.chaisenwuli.com/';
-
+  common.prefix = '';
+  if (location.href.indexOf("h5.test.chaisenwuli.com")) {
+    common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/survey/";
+  } else if (location.href.indexOf('h5.chaisenwuli.com')) {
+    common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/survey/";
+    common.baseUrl = "//api.chaisenwuli.com/";
+  }
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
     var o = {
@@ -51,10 +57,7 @@ $(function() {
     $.extend(_options, {
       type: "GET",
       dataType: 'json',
-      timeout: 10000,
-      headers:{
-        Accept: "application/json; charset=utf-8"
-      }
+      timeout: 10000
     }, options)
     _options.type = _options.type.toUpperCase();
     _options.url = common.baseUrl + _options.url;
@@ -74,7 +77,8 @@ $(function() {
   }
 
   function Loading() {
-    this.elem = $('<div class="loading-layer"><div class="loading-inner"><img src="img/loading.png" /></div></div>');
+
+    this.elem = $('<div class="loading-layer"><div class="loading-inner"><img src="' + prefix + 'img/loading.png" /></div></div>');
   }
   Loading.prototype.show = function() {
     this.elem.appendTo('body').fadeIn('fast');
@@ -151,7 +155,7 @@ $(function() {
     removeLocalStroge: removeLocalStroge,
     loading: createLoading,
     toast: createToast,
-    urlGet:urlGet,
+    urlGet: urlGet,
     stringify: stringify,
   }, true);
 });

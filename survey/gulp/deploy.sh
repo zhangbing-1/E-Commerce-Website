@@ -29,8 +29,9 @@ function proDeploy(){
 }
 
 function testDeploy(){
-  npm run build
-  scp -i ~/.ssh/deploy -r ./build/ root@47.104.172.172:/home/activitys/
+  npm run test
+  npm run upyun test
+  scp -i ~/.ssh/deploy -r ./build/*.html root@47.104.172.172:/home/activitys/survey
 }
 
 echo "请输入当前代码发布环境：[ 1:测试环境 2:线上环境 3:同步脚本 4:本地发布线上 5:本地发布测试]"

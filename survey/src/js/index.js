@@ -1,23 +1,23 @@
 $(function() {
   var token = common.getLocalStroge('token');
-  if(!token){
+  if (!token) {
     location.href = './login.html'
   }
 
   FastClick.attach(document.body);
   var items = {
-    $name:$('[name=name]'),
-    $grade:$('[name=grade]'),
-    $schoolName:$('[name=schoolName]'),
-    $qq:$('[name=qq]'),
-    $email:$('[name=email]'),
-    $phone:$('[name=phone]'),
-    $parentPhone:$('[name=parentPhone]'),
-    $cz0sx:$('[name=cz0sx]'),
-    $cz0yy:$('[name=cz0yy]'),
-    $gz0sx:$('[name=gz0sx]'),
-    $gz0wl:$('[name=gz0wl]'),
-    $schedule:$('[name=schedule]')
+    $name: $('[name=name]'),
+    $grade: $('[name=grade]'),
+    $schoolName: $('[name=schoolName]'),
+    $qq: $('[name=qq]'),
+    $email: $('[name=email]'),
+    $phone: $('[name=phone]'),
+    $parentPhone: $('[name=parentPhone]'),
+    $cz0sx: $('[name=cz0sx]'),
+    $cz0yy: $('[name=cz0yy]'),
+    $gz0sx: $('[name=gz0sx]'),
+    $gz0wl: $('[name=gz0wl]'),
+    $schedule: $('[name=schedule]')
   };
 
   /**
@@ -33,7 +33,7 @@ $(function() {
 
   items.$name.data('rule', [
     { type: 'notNull', msg: '姓名不能为空，请输入' },
-    { type: 'length', min: 2, max: 20, msg: '姓名必须为2到10个汉字' }
+    { type: 'length', min: 2, max: 20, msg: '姓名长度为2到20个' }
   ])
 
   items.$grade.data('rule', [
@@ -45,45 +45,60 @@ $(function() {
   ])
 
   items.$qq.data('rule', [
-    { type: 'notNull', msg: 'qq号不能为空，请输入' }
+    { type: 'notNull', msg: 'qq号不能为空，请输入' },
+    { type: 'regex', regex: /[1-9]\d{4,14}/, msg: 'qq号格式不正确' }
+
   ])
 
   items.$email.data('rule', [
-    { type: 'notNull', msg: '邮箱不能为空，请输入' }
+    { type: 'notNull', msg: '邮箱不能为空，请输入' },
+    { type: 'regex', regex: /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/, msg: '邮箱格式不正确' }
   ])
 
   items.$phone.data('rule', [
     { type: 'notNull', msg: '你的手机号不能为空，请输入' },
-    { type: 'regex',regex:/^1\d{10}/, msg: '你的手机号格式不正确' }
+    { type: 'regex', regex: /^1\d{10}/, msg: '你的手机号格式不正确' }
   ])
 
   items.$parentPhone.data('rule', [
     { type: 'notNull', msg: '家长手机号不能为空，请输入' },
-    { type: 'regex',regex:/^1\d{10}/, msg: '家长手机号格式不正确' }
+    { type: 'regex', regex: /^1\d{10}/, msg: '家长手机号格式不正确' },
+    {
+      type: 'fun',
+      fun: function(value) {
+        var phone = $.trim(items.$phone.val());
+        if (phone == value) {
+          return { verify: false, msg: "家长手机号不能和学生手机号相同" }
+        } else {
+          return { verify: true, msg: "" }
+        }
+      }
+    }
   ])
 
   items.$cz0sx.data('rule', [
     { type: 'notNull', msg: '初中平均数学成绩不能为空，请输入' },
-    { type: 'regex',regex:/^\d{1,3}\(\d{1,3}\)$/, msg: '初中平均数学成绩格式不正确' }
+    { type: 'regex', regex: /^\d{1,3}(\.\d+)?[\(（]\d{1,3}[\)）]$/, msg: '初中平均数学成绩格式不正确' }
   ])
 
   items.$cz0yy.data('rule', [
     { type: 'notNull', msg: '初中平均英语成绩不能为空，请输入' },
-    { type: 'regex',regex:/^\d{1,3}\(\d{1,3}\)$/, msg: '初中平均英语成绩格式不正确' }
+    { type: 'regex', regex: /^\d{1,3}(\.\d+)?[\(（]\d{1,3}[\)）]$/, msg: '初中平均英语成绩格式不正确' }
   ])
 
   items.$gz0sx.data('rule', [
     { type: 'notNull', msg: '高中平均数学成绩不能为空，请输入' },
-    { type: 'regex',regex:/^\d{1,3}\(\d{1,3}\)$/, msg: '高中平均数学成绩格式不正确' }
+    { type: 'regex', regex: /^\d{1,3}(\.\d+)?[\(（]\d{1,3}[\)）]$/, msg: '高中平均数学成绩格式不正确' }
   ])
 
   items.$gz0wl.data('rule', [
     { type: 'notNull', msg: '高中平均物理成绩不能为空，请输入' },
-    { type: 'regex',regex:/^\d{1,3}\(\d{1,3}\)$/, msg: '高中平均物理成绩格式不正确' }
+    { type: 'regex', regex: /^\d{1,3}(\.\d+)?[\(（]\d{1,3}[\)）]$/, msg: '高中平均物理成绩格式不正确' }
   ])
 
   items.$schedule.data('rule', [
-    { type: 'notNull', msg: '目前学校进度不能为空，请输入' }
+    { type: 'notNull', msg: '目前学校进度不能为空，请输入' },
+    { type: 'length', min: 1, max: 50, msg: '学校进度长度为1到50个' }
   ])
 
   function validate(list, value) {
@@ -111,54 +126,55 @@ $(function() {
     return { verify: true };
   }
 
-  function Change(event){
+  function Change(event) {
     var $target = $(event.target)
-    if(event.type == 'focus'){
+    if (event.type == 'focus') {
       var groups = $target.closest('.form-group');
       groups.removeClass('error');
       groups.find('.msg').text('');
-    }else if(event.type == 'blur'){
+    } else if (event.type == 'blur') {
       checkItem($target);
     }
   }
 
-  function checkItem(dom,list,value){
-    var list = dom.data('rule'),value = $.trim(dom.val());
-    var result = validate(list,value);
+  function checkItem(dom, list, value) {
+    var list = dom.data('rule'),
+      value = $.trim(dom.val());
+    var result = validate(list, value);
     var groups = dom.closest('.form-group');
-    if(!result.verify){
+    if (!result.verify) {
       groups.addClass('error');
       groups.find('.msg').text(result.msg)
-    }else{
+    } else {
       groups.removeClass('error');
       groups.find('.msg').text('')
     }
     return value;
   }
 
-  function Submit(event){
-    var list = ['name','grade','schoolName','qq','email','phone','parentPhone','cz0sx','cz0yy','gz0sx','gz0wl','schedule'];
+  function Submit(event) {
+    var list = ['name', 'grade', 'schoolName', 'qq', 'email', 'phone', 'parentPhone', 'cz0sx', 'cz0yy', 'gz0sx', 'gz0wl', 'schedule'];
     var data = {};
-    var submit =  $('[name=submit]');
-    for(var i = 0; i<list.length; i++){
+    var submit = $('[name=submit]');
+    for (var i = 0; i < list.length; i++) {
       var key = list[i];
-      data[key] = checkItem(items['$'+key]);
+      data[key] = checkItem(items['$' + key]);
     }
     var error = $('.form-group.error');
-    if(error.length > 0){
-      return $('body').animate({scrollTop: error.offset().top}, 800);
+    if (error.length > 0) {
+      return $('body').animate({ scrollTop: error.offset().top }, 800);
     }
     submit.addClass('disabled')
     data.type = 'CZWQ';
     data.token = token;
-    data.avgScores = ['cz0sx:'+ data.cz0sx,'cz0yy:'+data.cz0yy,'gz0sx:'+data.gz0sx,'gz0wl:'+data.gz0wl].join('||');
+    data.avgScores = ['cz0sx:' + data.cz0sx, 'cz0yy:' + data.cz0yy, 'gz0sx:' + data.gz0sx, 'gz0wl:' + data.gz0wl].join('||');
     data.linkRecord = 1;
     data.remark = '';
-    common.actions.commonSurvey(data).done(function(res){
-      if(res.code == 0){
+    common.actions.commonSurvey(data).done(function(res) {
+      if (res.code == 0) {
         $('.container').hide();
         $('.success-msg').show();
-      }else{
+      } else {
         submit.removeClass('disabled');
         common.toast(res.message);
       }
@@ -166,6 +182,6 @@ $(function() {
   }
 
   $('[name=submit]').on('click', Submit);
-  $('input').on('focus blur',Change);
-  $('select').on('focus blur',Change);
+  $('input').on('focus blur', Change);
+  $('select').on('focus blur', Change);
 });

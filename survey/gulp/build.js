@@ -9,18 +9,19 @@ var htmlreplace = require('gulp-html-replace');
 var autoprefixer = require('gulp-autoprefixer');
 var minifycss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
-var zip = require('gulp-zip');
 var imagemin = require('gulp-imagemin');
+var gulpif = require('gulp-if');
 
 var config = require('../package.json');
 var rename = require("gulp-rename");
-
+var urlPrefixer = require('gulp-url-prefixer');
 
 var modules = ['index', 'login'];
 var buildPath = '../build/',
   srcPath = '../src/';
+var isDev = process.argv[6] == 'dev';
+var cdnHost = isDev ? '//zongjiewebimg.chaisenwuli.com/activitys/survey/' : '//zongjiewebimg.chaisenwuli.com/test/activitys/survey/';
 
-// =================   build =================
 gulp.task('clean', function(cb) {
   del([buildPath + '**/*'], cb);
 });
@@ -39,7 +40,10 @@ modules.forEach(key => {
         'css': 'css/style-' + config.version + '.css',
         'js': ['js/vender-' + config.version + '.js', 'js/' + key + '-' + config.version + '.js']
       }))
-      .pipe(htmlmin(htmlOptions))
+      .pipe(urlPrefixer.html({
+        prefix: cdnHost
+      }))
+      .pipe(gulpif(isDev,htmlmin(htmlOptions)))
       .pipe(gulp.dest(buildPath));
   });
 })
@@ -48,7 +52,7 @@ modules.forEach(key => {
   gulp.task('js:' + key, function() {
     gulp.src([srcPath + 'js/common.js', srcPath + 'js/' + key + '.js'])
       .pipe(concat(key + '.js'))
-      .pipe(uglify())
+      .pipe(gulpif(isDev,uglify()))
       .pipe(rename(key + "-" + config.version + ".js"))
       .pipe(gulp.dest(buildPath + 'js/'))
   });
@@ -58,7 +62,7 @@ gulp.task('css', function() {
   gulp.src(srcPath + 'scss/style.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(minifycss())
+    .pipe(gulpif(isDev,minifycss()))
     .pipe(rename("style-" + config.version + ".css"))
     .pipe(gulp.dest(buildPath + 'css/'));
 });
@@ -66,7 +70,7 @@ gulp.task('css', function() {
 gulp.task('js:vender', function() {
   gulp.src(srcPath + 'vender/**/*.js')
     .pipe(concat('vender.js'))
-    .pipe(uglify())
+    .pipe(gulpif(isDev,uglify()))
     .pipe(rename("vender-" + config.version + ".js"))
     .pipe(gulp.dest(buildPath + "js/"))
 });
