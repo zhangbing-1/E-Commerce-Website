@@ -104,15 +104,15 @@ $(function() {
   }
 
   function getLocalStroge(key) {
-    return localStorage.getItem('survey-' + key + '-' + version);
+    return localStorage.getItem('activity-' + key + '-' + version);
   }
 
   function setLocalStroge(key, value) {
-    localStorage.setItem('survey-' + key + '-' + version, value);
+    localStorage.setItem('activity-' + key + '-' + version, value);
   }
 
   function removeLocalStroge(key) {
-    localStorage.removeItem('survey-' + key + '-' + version);
+    localStorage.removeItem('activity-' + key + '-' + version);
   }
 
   common.verify = {

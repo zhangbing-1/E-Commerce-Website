@@ -1,6 +1,6 @@
 {
   "name": "hanchun-activity",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "调查问券",
   "main": "index.js",
   "scripts": {
