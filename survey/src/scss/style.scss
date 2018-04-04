@@ -21,22 +21,22 @@ input,select{
 }
 
 input::-webkit-input-placeholder {
-  font-size: 0.28rem;
+  font-size: 14px;
   color: #C3C4C4;
   font-weight: 300;
 }
 input:-ms-input-placeholder { // IE10+
-  font-size: 0.28rem;
+  font-size: 14px;
   color: #C3C4C4;
   font-weight: 300;
 }
 input:-moz-placeholder { // Firefox4-18
-  font-size: 0.28rem;
+  font-size: 14px;
   color: #C3C4C4;
   font-weight: 300;
 }
 input::-moz-placeholder { // Firefox19+
-  font-size: 0.28rem;
+  font-size: 14px;
   color: #C3C4C4;
   font-weight: 300;
 }

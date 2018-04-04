@@ -1,12 +1,12 @@
 $(function() {
   var token = common.getLocalStroge('token');
   if (token) {
-    common.actions.getUser({token:token}).done(function(res){
-      if(res.code == 0){
+    common.actions.getUser({ token: token }).done(function(res) {
+      if (res.code == 0) {
         items.$phone.val(res.data.phone)
       }
     })
-  }else{
+  } else {
     location.href = './login.html'
   }
 
@@ -14,6 +14,7 @@ $(function() {
   var items = {
     $name: $('[name=name]'),
     $grade: $('[name=grade]'),
+    $gradeOther: $('[name=gradeOther]'),
     $schoolName: $('[name=schoolName]'),
     $qq: $('[name=qq]'),
     $email: $('[name=email]'),
@@ -25,6 +26,8 @@ $(function() {
     $gz0wl: $('[name=gz0wl]'),
     $schedule: $('[name=schedule]')
   };
+
+  var $gradeOther = $('.grade-other');
 
   /**
    *
@@ -39,11 +42,23 @@ $(function() {
 
   items.$name.data('rule', [
     { type: 'notNull', msg: '姓名不能为空，请输入' },
-    { type: 'regex', regex:/^[\u4e00-\u9fa5 ]{2,20}$/, msg: '姓名长度为2到20个汉字'}
+    { type: 'regex', regex: /^[\u4e00-\u9fa5 ]{2,20}$/, msg: '姓名长度为2到20个汉字' }
   ])
 
-  items.$grade.data('rule', [
-    { type: 'notNull', msg: '请选择年级' }
+  items.$grade.data('rule', [{
+    type: 'fun',
+    fun: function(value) {
+      if (value < 0) {
+        return { verify: false, msg: "请选择年级" }
+      } else {
+        return { verify: true, msg: "" }
+      }
+    }
+  }])
+
+  items.$gradeOther.data('rule', [
+    { type: 'notNull', msg: '你的具体年级不能为空，请输入' },
+    { type: 'length', min: 1, max: 20, msg: '年级长度为20个字以内' }
   ])
 
   items.$schoolName.data('rule', [
@@ -53,7 +68,6 @@ $(function() {
   items.$qq.data('rule', [
     { type: 'notNull', msg: 'qq号不能为空，请输入' },
     { type: 'regex', regex: /[1-9]\d{4,14}/, msg: 'qq号格式不正确' }
-
   ])
 
   items.$email.data('rule', [
@@ -115,10 +129,10 @@ $(function() {
           if (!value) return { verify: false, msg: verify.msg }
           break;
         case 'length':
-          if (value.length > verify.max && value.length < verify.min) return { verify: false, msg: verify.msg }
+          if (value.length > verify.max || value.length < verify.min) return { verify: false, msg: verify.msg }
           break;
         case 'size':
-          if (value > verify.max && value < verify.min) return { verify: false, msg: verify.msg }
+          if (value > verify.max || value < verify.min) return { verify: false, msg: verify.msg }
           break;
         case 'regex':
           if (!verify.regex.test(value)) return { verify: false, msg: verify.msg }
@@ -143,7 +157,7 @@ $(function() {
     }
   }
 
-  function checkItem(dom, list, value) {
+  function checkItem(dom) {
     var list = dom.data('rule'),
       value = $.trim(dom.val());
     var result = validate(list, value);
@@ -158,12 +172,23 @@ $(function() {
     return value;
   }
 
+  function gradeChange(event) {
+    var value = event.target.value;
+    if (value == 0) {
+      $gradeOther.show();
+      items.$gradeOther.focus();
+    } else {
+      $gradeOther.hide();
+    }
+  }
+
   function Submit(event) {
-    var list = ['name', 'grade', 'schoolName', 'qq', 'email', 'phone', 'parentPhone', 'cz0sx', 'cz0yy', 'gz0sx', 'gz0wl', 'schedule'];
+    var list = ['name', 'grade', 'gradeOther', 'schoolName', 'qq', 'email', 'phone', 'parentPhone', 'cz0sx', 'cz0yy', 'gz0sx', 'gz0wl', 'schedule'];
     var data = {};
     var submit = $('[name=submit]');
     for (var i = 0; i < list.length; i++) {
       var key = list[i];
+      if (key == 'gradeOther' && $.trim(items.$grade.val()) != 0) continue;
       data[key] = checkItem(items['$' + key]);
     }
     var error = $('.form-group.error');
@@ -175,7 +200,12 @@ $(function() {
     data.token = token;
     data.avgScores = ['cz0sx:' + data.cz0sx, 'cz0yy:' + data.cz0yy, 'gz0sx:' + data.gz0sx, 'gz0wl:' + data.gz0wl].join('||');
     data.linkRecord = 1;
-    data.remark = '';
+    if(data.grade == 0){
+      data.remark = JSON.stringify({grade:data.gradeOther});
+    }else{
+      data.remark = '';
+    }
+
     common.actions.commonSurvey(data).done(function(res) {
       if (res.code == 0) {
         $('.container').hide();
@@ -186,8 +216,9 @@ $(function() {
       }
     })
   }
-
+  $gradeOther.hide();
   $('[name=submit]').on('click', Submit);
   $('input').on('focus blur', Change);
   $('select').on('focus blur', Change);
+  $('[name=grade]').on('change', gradeChange);
 });

@@ -61,7 +61,7 @@ $(function() {
     }, options)
     _options.type = _options.type.toUpperCase();
     _options.url = common.baseUrl + _options.url;
-    $.extend(_data, { source: 1 }, _options.data || {});
+    $.extend(_data, { source: 4 }, _options.data || {});
     _data.timestamp = new Date().Format();
     _data.sign = getSign(_data);
     _options.data = stringify(_data);
