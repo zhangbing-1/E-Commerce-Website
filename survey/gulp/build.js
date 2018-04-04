@@ -11,6 +11,7 @@ var minifycss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var gulpif = require('gulp-if');
+var gutil = require('gulp-util')
 
 var config = require('../package.json');
 var rename = require("gulp-rename");
@@ -52,7 +53,10 @@ modules.forEach(key => {
   gulp.task('js:' + key, function() {
     gulp.src([srcPath + 'js/common.js', srcPath + 'js/' + key + '.js'])
       .pipe(concat(key + '.js'))
-      .pipe(gulpif(isDev,uglify()))
+      .pipe(gulpif(isDev,uglify().on('error',function(err){
+        gutil.log(err);
+        this.emit('end');
+      })))
       .pipe(rename(key + "-" + config.version + ".js"))
       .pipe(gulp.dest(buildPath + 'js/'))
   });

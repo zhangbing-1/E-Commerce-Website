@@ -1,7 +1,7 @@
 $(function() {
   var token = common.getLocalStroge('token');
   if (token) {
-    common.actions.getUser({token:token}).done(res=>{
+    common.actions.getUser({token:token}).done(function(res){
       if(res.code == 0){
         items.$phone.val(res.data.phone)
       }
@@ -39,7 +39,7 @@ $(function() {
 
   items.$name.data('rule', [
     { type: 'notNull', msg: '姓名不能为空，请输入' },
-    { type: 'length', min: 2, max: 20, msg: '姓名长度为2到20个' }
+    { type: 'regex', regex:/^[\u4e00-\u9fa5 ]{2,20}$/, msg: '姓名长度为2到20个汉字'}
   ])
 
   items.$grade.data('rule', [

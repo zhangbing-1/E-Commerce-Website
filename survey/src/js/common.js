@@ -5,7 +5,7 @@ $(function() {
   common.prefix = './';
   if (location.href.indexOf("h5.test.chaisenwuli.com") !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/survey/";
-  } else if(location.href.indexOf('h5.chaisenwuli.com')!== -1 ) {
+  } else if(location.href.indexOf('h5.chaisenwuli.com') !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/survey/";
     common.baseUrl = "//api.chaisenwuli.com/";
   }
@@ -79,7 +79,6 @@ $(function() {
 
   function Loading() {
     this.elem = $('<div class="loading-layer"><div class="loading-inner"><img src="' + common.prefix + 'img/loading.png" /></div></div>');
-    console.log( common.prefix)
   }
   Loading.prototype.show = function() {
     this.elem.appendTo('body').fadeIn('fast');
