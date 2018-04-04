@@ -2,10 +2,10 @@ var common = {};
 $(function() {
   var version = '1.0.0';
   common.baseUrl = '//testapi.chaisenwuli.com/';
-  common.prefix = '';
-  if (location.href.indexOf("h5.test.chaisenwuli.com")) {
+  common.prefix = './';
+  if (location.href.indexOf("h5.test.chaisenwuli.com") !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/survey/";
-  } else if (location.href.indexOf('h5.chaisenwuli.com')) {
+  } else if(location.href.indexOf('h5.chaisenwuli.com')!== -1 ) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/survey/";
     common.baseUrl = "//api.chaisenwuli.com/";
   }
@@ -68,7 +68,8 @@ $(function() {
     return $.ajax(_options).done(function(res) {
       !isHideLoading && loading.hide();
       if (res.code == 1) {
-
+        removeLocalStroge('token')
+        location.href = './login.html';
       }
     }).fail(function() {
       !isHideLoading && loading.hide();
@@ -77,8 +78,8 @@ $(function() {
   }
 
   function Loading() {
-
-    this.elem = $('<div class="loading-layer"><div class="loading-inner"><img src="' + prefix + 'img/loading.png" /></div></div>');
+    this.elem = $('<div class="loading-layer"><div class="loading-inner"><img src="' + common.prefix + 'img/loading.png" /></div></div>');
+    console.log( common.prefix)
   }
   Loading.prototype.show = function() {
     this.elem.appendTo('body').fadeIn('fast');
@@ -129,6 +130,9 @@ $(function() {
     },
     commonSurvey: function(data) {
       return request({ url: 'user/addQuestionnaire', type: 'post', data: data });
+    },
+    getUser: function(data){
+      return request({ url: 'user/userInfo', data: data });
     }
   }
 

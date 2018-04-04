@@ -1,6 +1,12 @@
 $(function() {
   var token = common.getLocalStroge('token');
-  if (!token) {
+  if (token) {
+    common.actions.getUser({token:token}).done(res=>{
+      if(res.code == 0){
+        items.$phone.val(res.data.phone)
+      }
+    })
+  }else{
     location.href = './login.html'
   }
 
