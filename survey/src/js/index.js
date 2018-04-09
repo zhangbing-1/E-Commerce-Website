@@ -196,7 +196,7 @@ $(function() {
       return $('body').animate({ scrollTop: error.offset().top }, 800);
     }
     submit.addClass('disabled')
-    data.type = 'CZWQ';
+    data.type = 'GZWLKQWQ';
     data.token = token;
     data.avgScores = ['cz0sx:' + data.cz0sx, 'cz0yy:' + data.cz0yy, 'gz0sx:' + data.gz0sx, 'gz0wl:' + data.gz0wl].join('||');
     data.linkRecord = 1;
