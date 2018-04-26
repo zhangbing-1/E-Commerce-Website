@@ -1,0 +1,76 @@
+.container-detail{
+  background-color:#F8F8F8;
+  .top-image{
+    display:block;
+    width: 100%;
+    height:auto;
+  }
+  .header{
+    background-color:#fff;
+    padding: .3rem .3rem .4rem;
+  }
+  .group-price{
+    display:flex;
+    align-items:center;
+    .price{
+      font-size:.38rem;
+      color:#FF6D41;
+      line-height: .53rem;
+      padding-right: 0.3rem;
+    }
+    .original-price{
+      font-size:.24rem;
+      color:#666;
+      line-height:0.33rem;
+    }
+    .desc{
+      flex:1;
+      font-size:.24rem;
+      color:#FF6D41;
+      line-height:.33rem;
+      text-align: right;
+    }
+  }
+  .title{
+    font-size:.32rem;
+    line-height:.45rem;
+    color:#333;
+    padding-top: .2rem;
+  }
+  .other{
+    font-size:.24rem;
+    color:#666;
+    line-height:.33rem;
+    padding-top:0.15rem;
+  }
+
+  .group-shop{
+    padding:0.24rem 0.3rem;
+    background-color:#FFF2EE;
+    .shop-time{
+      font-size:.24rem;
+      color:#666666;
+      line-height:.4rem;
+    }
+    .tag{
+      display:inline-block;
+      height:.4rem;
+      font-size:.28rem;
+      line-height:.4rem;
+      color:#FF6D41;
+      padding:0 .2rem 0 .5rem ;
+      background-image: url(../img/icon-sand-clock.png);
+      background-size: .4rem .4rem;
+      background-position: 0 center;
+      background-repeat: no-repeat;
+    }
+    .desc{
+      font-size:.24rem;
+      color:#666;
+      line-height:.33rem;
+      padding-top: .18rem;
+    }
+  }
+
+
+}

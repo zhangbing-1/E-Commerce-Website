@@ -1,0 +1,95 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta http-equiv="Expires" CONTENT="0">
+  <meta http-equiv="Cache-Control" CONTENT="no-cache">
+  <meta http-equiv="Pragma" CONTENT="no-cache">
+  <title>爱总结</title>
+  <script type="text/javascript">
+  function adapt(designWidth, rem2px) {
+    var d = window.document.createElement('div');
+    d.style.width = '1rem';
+    d.style.display = "none";
+    var head = window.document.getElementsByTagName('head')[0];
+    head.appendChild(d);
+    var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+    document.documentElement.style.fontSize = window.innerWidth / designWidth * rem2px / defaultFontSize * 100 + '%';
+    var st = document.createElement('style');
+    var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+    var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+    st.innerHTML = portrait + landscape;
+    head.appendChild(st);
+    return defaultFontSize
+  };
+  var defaultFontSize = adapt(750, 100);
+  </script>
+  <!-- build:css -->
+  <!-- endbuild -->
+</head>
+
+<body>
+  <div class="container container-detail">
+    <img class="top-image" src="./img/icon-back.png">
+    <div class="header">
+      <div class="group-price">
+        <span class="price">¥ 2599</span>
+        <span class="original-price"> 原价 ¥2599 </span>
+        <span class="desc">2人成团各减200元</span>
+      </div>
+      <div class="title">八年级下寒春物理大撒上看</div>
+      <div class="other">柴森 3月1日-5月16日</div>
+    </div>
+
+
+    <div class="group-shop">
+      <div class="shop-time">
+        <span class="tag">限时拼团</span> 距离优惠结束还剩 22:23:04
+      </div>
+      <div class="desc">
+        <span>人数不足，自动退款</span>
+        <span>拼团须知</span>
+      </div>
+    </div>
+
+    <div class="course-detail">
+      <ul class="tabs">
+        <li>课程详情</li>
+        <li>课程目录</li>
+      </ul>
+
+      <div class="tab-container"></div>
+      <ul class="tab-container">
+        <li>
+          <div class="title">这里是课表大纲分类题目</div>
+          <ul>
+            <li class="title">
+              <div>开学典礼课程导学</div>
+              <div>
+                <span>柴森</span>
+                <span>3月1日</span>
+                <span>周一</span>
+                <span>16:00-18:30</span>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="btns">
+      <div class="btn-shop">¥2799 单独购买</div>
+      <div class="btn-shop-group">¥2599 发起团购</div>
+    </div>
+  </div>
+  <!-- build:js -->
+  <!-- endbuild -->
+  <script id="list" type="text/html">
+  </script>
+  <script id="test" type="text/html">
+  </script>
+</body>
+
+</html>
