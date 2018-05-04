@@ -7,7 +7,7 @@
   <meta http-equiv="Expires" CONTENT="0">
   <meta http-equiv="Cache-Control" CONTENT="no-cache">
   <meta http-equiv="Pragma" CONTENT="no-cache">
-  <title>爱总结</title>
+  <title>团购订单</title>
   <script type="text/javascript">
   function adapt(designWidth, rem2px) {
     var d = window.document.createElement('div');
@@ -32,30 +32,22 @@
 </head>
 
 <body>
-  <div class="container container-index" id="container"></div>
+  <div class="container container-my-order" id="container"></div>
   <!-- build:js -->
   <!-- endbuild -->
-  <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
   <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
   <script id="tpl-list" type="text/html">
     {{each list item}}
-    <li class="item link" data-link="./detail.html?id={{item.id}}">
-      <div class="header">{{item.title || item.activityTitle}}</div>
-      <div class="body">
-        <div class="avater" style="background-image:url({{item.titlePicUrl}});"></div>
-        <div class="body-right">
-          还剩 {{item.remainingTime | remainingTimeFilter}}
-          <br/><span class="num">{{item.bookingCount}}人已拼团</span>
+    <li class="item link" data-link="./order.html?id={{item.activityId}}">
+        <div class="header">
+          <div class="order-time">{{item.bookingCreatedTime | dateFormatFilter}}</div>
+          <div class="order-status">{{item.bookingStatus | bookStatusFilter}}</div>
         </div>
-      </div>
-      <div class="footer">
-        <div class="status">限时拼团</div>
-        <div class="footer-right">
-          <span class="original-price"> ¥ {{item.productPrice}} </span>
-          <span class="price">¥ {{item.activityPrice}}</span>
+        <div class="body">{{item.activityTitle}}</div>
+        <div class="footer">
+          共1项，总计：¥{{item.price}}
         </div>
-      </div>
-    </li>
+      </li>
     {{/each}}
   </script>
   <script id="tpl-main" type="text/html">

@@ -1,7 +1,13 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null;
+  var activity = null, product = null, address = null, user = null;
+
+  if(!common.getLocalStroge('token')){
+    location.href = './login.html?' + common.stringify({
+      callBackUrl:location.href
+    })
+  }
 
   function renderActivityInfo() {
     var data = {
@@ -15,11 +21,6 @@ $(function() {
       if (res.code == 0) {
         renderProductDetail(res.data);
         activity = res.data;
-        if(activity.activityRemainingTime <= 0 ){
-          activity.activityStatus = 2;
-        }
-
-        activity.surplusUser = new Array(activity.leftCount);
         wx.ready(function() {
           wx.showMenuItems({
             menuList: ['menuItem:share:appMessage','menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
@@ -32,7 +33,7 @@ $(function() {
             }),
             desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
             imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
-          };
+          }
           wx.onMenuShareAppMessage(wxData);
           wx.onMenuShareTimeline(wxData);
         })
@@ -85,6 +86,13 @@ $(function() {
     return {}
   }
 
+  function getAddress(id,addressList){
+    for (var i = 0; i < addressList.length; i++) {
+      if (addressList[i].id == id) return addressList[i];
+    }
+    return addressList[0]
+  }
+
   function formatProductData(activity, product, teachers) {
     product.descriptionList = product.description.split(';');
     var start = null,
@@ -122,74 +130,47 @@ $(function() {
     // 拼团单：0-创建 1-拼团中 2-拼团成功 3-拼团失败
     // 用户支付状态：0-支付中 1-支付失败 2-支付成功 3-已退款 4-退款失败
     // activity.activityStatus = 1;
-    // activity.bookingStatus = 1;
-    if (common.getLocalStroge('token')) {
-      common.actions.getUser().done(function(res) {
-        if(res.code == 0){
-          var isShop = false;
-          if(activity.bookingUsers){
-            for(var i = 0; i < activity.bookingUsers.length; i++){
-              if(activity.bookingUsers[i].userId == res.data.id) isShop = true;
+    // activity.bookingStatus = 3;
+    $.when(common.actions.getUser(),common.actions.getAddressList()).done(function(data1,data2){
+      var res1 = data1[0], res2 = data2[0];
+      if(res1.code == 0 && res2.code == 0){
+        var isShop = false;
+        if(activity.bookingUsers){
+          for(var i = 0; i < activity.bookingUsers.length; i++){
+            if(activity.bookingUsers[i].userId == res1.data.id){
+              isShop = true;
+              user = activity.bookingUsers[i];
             }
           }
-          var html = template('tpl-main', { activity: activity, product: product, isShop: isShop });
-          dom.html(html);
-          startCountDown();
         }
-      })
-    } else {
-      var html = template('tpl-main', { activity: activity, product: product, isShop: false });
-      dom.html(html);
-      startCountDown();
-    }
+        if(res2.data && res2.data.length > 0){
+          address = getAddress(params.addressId||res1.data.addressid,res2.data);
+        }
+        var html = template('tpl-main', { activity: activity, product: product, user: user, isShop: isShop ,address: address});
+        dom.html(html);
+      }
+    })
   }
 
-  function startCountDown(){
-    if(activity.activityStatus == 2) return;
-    if(activity.bookingStatus == 1){
-      countDown(activity.remainingTime);
-    }else{
-      countDown(activity.activityRemainingTime);
-    }
-
-    function countDown(time){
-      var days = Math.floor(time / (60 * 60 * 24));
-      var hours = Math.floor((time - days * 60 * 60 * 24) / (60 * 60));
-      var minute = Math.floor((time - days * 60 * 60 * 24 - hours * 60 * 60) / 60);
-      var second = Math.floor((time - days * 60 * 60 * 24 - hours * 60 * 60 - minute * 60));
-      dom.find('.time-box').html(' <span>'+days+'</span>天<span>'+hours+'</span>时<span>'+minute+'</span>分<span>'+second+'</span>秒')
-      setTimeout(function(){
-        if(time > 0){
-          countDown(--time);
-        }else{
-          renderActivityInfo();
-        }
-      },1000)
-    }
-  }
-
-  function pay(id,groupId) {
+  function pay() {
     if(common.isWxApp){
       wx.miniProgram.navigateTo({
         url:'/pages/h5/bridgeView?' + common.stringify({
-          groupActivityId: id,
-          groupBookingId: groupId,
-          expressAddress: '',
-          expressPhone: '',
-          expressName: '',
-          callBackUrl: common.shareUrl + "detail.html?" + common.stringify({
-            id: id,
-            groupId: groupId
-          })
+          groupActivityId: activity.activityId,
+          groupBookingId: activity.bookingId || 0,
+          expressAddress: address.all,
+          expressPhone: address.phone,
+          expressName: address.name,
+          callBackUrl:location.href
         })
       })
     }else{
       common.actions.groupActivityPay({
-        groupActivityId: id,
-        groupBookingId: groupId,
-        expressAddress: '',
-        expressPhone: '',
-        expressName: '',
+        groupActivityId: activity.activityId,
+        groupBookingId: activity.bookingId || 0,
+        expressAddress: address.all,
+        expressPhone: address.phone,
+        expressName: address.name,
         openId: common.getLocalStroge('openId'),
         payType: 1,
         orderSource: 3
@@ -197,10 +178,7 @@ $(function() {
         if (res.code == 0) {
           location.replace('//www.zongjie.com/pay.html?' + common.stringify({
             type: 'groupon',
-            callBackUrl: common.shareUrl + "detail.html?" + common.stringify({
-              id: id,
-              groupId: groupId
-            }),
+            callBackUrl: location.href,
             timeStamp: res.data.timeStamp,
             nonceStr: res.data.nonceStr,
             packageValue: res.data.packageValue,
@@ -215,47 +193,20 @@ $(function() {
   }
 
   function bindEvent() {
-    dom.on('click', '.group-pay', function(e) {
-      if (common.getLocalStroge('token')) {
-        if(product.merchandises.length > 0){
-          location.href = './order.html?' +  common.stringify({
-            id : activity.activityId,
-            groupId : activity.bookingId || 0,
-          })
-        }else{
-          pay(activity.activityId,activity.bookingId || 0);
-        }
-      }else{
-        location.href = './login.html?' + common.stringify({
-          callBackUrl: location.href
-        })
-      }
+    dom.on('click', '.btn-pay', function(e) {
+      if(!address) common.toast('请选择地址');
+      pay();
     })
 
-    dom.on('click','.group-repay',function(){
-      location.replace('./detail.html?' +  common.stringify({
-        id : activity.activityId,
-        groupId : 0,
-      }));
-    })
-
-    dom.on('click','.btn-message',function(){
-      var $html = $(template('tpl-rule',{}));
-      dom.append($html)
-    })
-
-    dom.on('click','.go-list',function(){
-      location.href = './index.html';
-    })
-
-    dom.on('click','.go-order',function(){
-      location.href = './order.html?' + common.stringify({
-        id : activity.activityId
+    dom.on('click','.go-address',function(){
+      var data = $.extend({},params,{
+        selectId: address ? address.id : -1 ,
+        callBackUrl: './order.html'
       })
+      location.href = './address.html?' + common.stringify(data);
     })
 
-    dom.on('click','.go-share',function(){
-
+    dom.on('click','.btn-share',function(){
       if(common.isWxApp){
         wx.miniProgram.navigateTo({
           url:'/pages/h5/shareView?' + common.stringify({
@@ -267,17 +218,13 @@ $(function() {
             shareTitle: '【团购】' + activity.activityTitle,
             shareDesc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
             shareImg: '',
-            callBackUrl: location.href
+            callBackUrl:location.href
           }),
         })
       }else{
         var share = common.createShare()
         dom.append(share);
       }
-    })
-
-    dom.on('click','.btn-close',function(){
-      $($(this).data('target')).remove();
     })
 
     dom.on('click','.go-my-course',function(){
@@ -291,22 +238,10 @@ $(function() {
       }
     })
 
-    dom.on('click','.share-layer',function(){
-      dom.find('.share-layer').remove()
-    })
-
     dom.on('click','.qrcode-layer',function(){
       dom.find('.qrcode-layer').remove()
     })
 
-    dom.on('click', '.tab', function(e) {
-      if ($(this).hasClass('current')) return;
-      var target = $(this).data('target');
-      dom.find('.tab').removeClass('current');
-      dom.find('.tab-container').hide();
-      $(this).addClass('current');
-      dom.find(target).show();
-    })
   }
 
   common.initialize(function(){

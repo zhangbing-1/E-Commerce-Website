@@ -31,6 +31,9 @@
       width: .98rem;
       height: .98rem;
       border-radius:50%;
+      background-position:center;
+      background-size:auto 100%;
+      background-repeat:no-repeat;
     }
     .body-right{
       padding-left:30px;
@@ -72,5 +75,10 @@
       color:#FF6D41;
     }
   }
-
+  .loadMore{
+    text-align:center;
+    font-size:0.24rem;
+    line-height:0.44rem;
+    color:#666;
+  }
 }

@@ -1,0 +1,154 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta http-equiv="Expires" CONTENT="0">
+  <meta http-equiv="Cache-Control" CONTENT="no-cache">
+  <meta http-equiv="Pragma" CONTENT="no-cache">
+  <title>订单详情</title>
+  <script type="text/javascript">
+  function adapt(designWidth, rem2px) {
+    var d = window.document.createElement('div');
+    d.style.width = '1rem';
+    d.style.display = "none";
+    var head = window.document.getElementsByTagName('head')[0];
+    head.appendChild(d);
+    var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+    document.documentElement.style.fontSize = window.innerWidth / designWidth * rem2px / defaultFontSize * 100 + '%';
+    var st = document.createElement('style');
+    var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+    var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+    st.innerHTML = portrait + landscape;
+    head.appendChild(st);
+    return defaultFontSize
+  };
+  var defaultFontSize = adapt(750, 100);
+  </script>
+  <!-- build:css -->
+  <!-- endbuild -->
+</head>
+
+<body>
+  <div class="container container-order" id="container"></div>
+  <!-- build:js -->
+  <!-- endbuild -->
+  <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+  <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script id="tpl-header" type="text/html">
+    <div class="header">
+    {{if isShop}}
+      {{if activity.bookingStatus == 1 }}
+      <div class="count-down-title">等待成团</div>
+      <div class="count-down">团购订单需在 {{ activity.remainingTime | remainingTimeFilter}} 内邀请1位好友参团</div>
+      {{else if activity.bookingStatus == 2 }}
+      <div class="count-down-title">已成团</div>
+      <div class="count-down">交易成功</div>
+      {{else if activity.bookingStatus == 3}}
+      <div class="count-down-title">拼团失败</div>
+      <div class="count-down">交易已关闭</div>
+      {{/if}}
+    {{else}}
+      {{if activity.bookingStatus == 1 }}
+      <div class="count-down-title">等待支付</div>
+      <div class="count-down">剩 {{ activity.remainingTime | remainingTimeFilter }} 此次团购结束</div>
+      {{else if activity.bookingStatus == 2 }}
+      <div class="count-down-title">交易成功</div>
+      <div class="count-down">此团已成功！你可以参加其他的团</div>
+      {{else if activity.bookingStatus == 3 }}
+      <div class="count-down-title">拼团失败</div>
+      <div class="count-down">交易已关闭</div>
+      {{/if}}
+    {{/if}}
+    </div>
+  </script>
+
+  <script id="tpl-btns" type="text/html">
+    {{ if isShop }}
+      {{ if activity.bookingStatus == 1 }}
+      <div class="btns block">
+        <div class="btn btn-share">邀请好友参团</div>
+      </div>
+      {{else if activity.bookingStatus == 2 }}
+      <div class="btns block">
+        <div class="btn go-my-course">我的课程</div>
+      </div>
+      {{/if}}
+    {{else}}
+      {{ if activity.bookingStatus == 1 || activity.bookingStatus == 0}}
+      <div class="btns block">
+        <div class="btn btn-pay">付款</div>
+      </div>
+      {{/if}}
+    {{/if}}
+  </script>
+
+   <script id="tpl-address" type="text/html">
+
+    {{if isShop}}
+    <div class="address-lable">收货地址</div>
+    <div class="address-wrapper">
+      <div class="address-title">{{user.expressName}} {{user.expressPhone}}</div>
+      <div class="address-detail">{{user.expressAddress}}</div>
+    </div>
+    {{else}}
+    <div class="address-lable">收货地址<span class="red">(必填)</span></div>
+    <div class="address-wrapper go-address">
+      {{ if address }}
+      <div class="address-title">{{address.name}} {{address.phone}}</div>
+      <div class="address-detail">{{address.provincename}} {{address.cityname}} {{address.areaname}} {{address.detail}}</div>
+      {{else}}
+      <div class="btn-add-address">新增地址</div>
+      {{/if}}
+    </div>
+    {{/if}}
+
+
+   </script>
+
+
+  <script id="tpl-main" type="text/html">
+    {{ if activity.bookingStatus != 0 }}
+      {{ include 'tpl-header' }}
+    {{/if}}
+    {{ if product.merchandises.length > 0}}
+      {{ include 'tpl-address' }}
+    {{/if}}
+
+    <div class="product-lable">课程信息</div>
+    <div class="product-wrapper">
+      <div class="product-title">{{activity.activityTitle}}</div>
+      <div class="product-title-sm">{{product.names}} {{product.timeSlot}}</div>
+      <div class="original-price"> 原价 ¥ {{activity.originalPrice}} </div>
+      <div class="group-price">拼团价 ¥ {{activity.price}}</div>
+      <div class="price">
+        {{ activity.bookingStatus != 0 ? '实付款：':'需支付：' }}
+        <span class="orange">¥ {{activity.price}}<span>
+      </div>
+    </div>
+
+    {{ if activity.bookingStatus == 3 }}
+    <div class="product-lable">退款信息</div>
+    <div class="group-refund">
+      <div class="item">
+        <span>退款至微信</span>
+        <span>¥ {{activity.price}}</span>
+      </div>
+      <div class="item">
+        <span>到账时间</span>
+        <span>三个工作日内，具体以微信为准</span>
+      </div>
+    </div>
+    {{/if}}
+
+    {{ if activity.bookingStatus != 0 }}
+    <div class="group-no">团购编号：{{activity.bookingId}}</div>
+    <div class="group-start">开团时间：{{activity.bookingCreatedTime | dateFormatFilter }}</div>
+    {{/if}}
+
+    {{ include 'tpl-btns' }}
+  </script>
+</body>
+
+</html>

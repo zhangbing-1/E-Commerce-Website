@@ -25,70 +25,196 @@
     return defaultFontSize
   };
   var defaultFontSize = adapt(750, 100);
+
   </script>
   <!-- build:css -->
   <!-- endbuild -->
 </head>
 
 <body>
-  <div class="container container-detail">
-    <img class="top-image" src="./img/icon-back.png">
-    <div class="header">
-      <div class="group-price">
-        <span class="price">¥ 2599</span>
-        <span class="original-price"> 原价 ¥2599 </span>
-        <span class="desc">2人成团各减200元</span>
-      </div>
-      <div class="title">八年级下寒春物理大撒上看</div>
-      <div class="other">柴森 3月1日-5月16日</div>
-    </div>
-
-
-    <div class="group-shop">
-      <div class="shop-time">
-        <span class="tag">限时拼团</span> 距离优惠结束还剩 22:23:04
-      </div>
-      <div class="desc">
-        <span>人数不足，自动退款</span>
-        <span>拼团须知</span>
-      </div>
-    </div>
-
-    <div class="course-detail">
-      <ul class="tabs">
-        <li>课程详情</li>
-        <li>课程目录</li>
-      </ul>
-
-      <div class="tab-container"></div>
-      <ul class="tab-container">
-        <li>
-          <div class="title">这里是课表大纲分类题目</div>
-          <ul>
-            <li class="title">
-              <div>开学典礼课程导学</div>
-              <div>
-                <span>柴森</span>
-                <span>3月1日</span>
-                <span>周一</span>
-                <span>16:00-18:30</span>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-
-    <div class="btns">
-      <div class="btn-shop">¥2799 单独购买</div>
-      <div class="btn-shop-group">¥2599 发起团购</div>
-    </div>
-  </div>
+  <div class="container container-detail" id="container"></div>
   <!-- build:js -->
   <!-- endbuild -->
-  <script id="list" type="text/html">
+  <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+  <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script id="tpl-rule" type="text/html">
+    <div class="rule-layer">
+      <div class="rule-inner">
+        <div class="rule-title">
+          团购须知
+          <img class="btn-close" data-target='.rule-layer' src="./img/icon-close.png">
+        </div>
+        <div class="rule-body">
+          1.团购商品下单后需要在30分钟之内完成支付，否则该订单会自动取消。<br/>
+          2.由团长发起团购，分享给好友，等待其他用户参团。此团有效期为24小时，有一位用户参团付款，即视为拼团成功。<br/>
+          3.若付款后24小时内，无用户参团，则团购失败，有短信通知用户，并发起退款。款项由原路返回，到账以微信为准。<br/>
+          4.商品售完时未能拼单者即视为拼团失败，将发起退款。
+        </div>
+      </div>
+    </div>
   </script>
-  <script id="test" type="text/html">
+
+  <script id="tpl-avater-list" type="text/html">
+    <div class="avater-list">
+      {{each activity.bookingUsers user}}
+      <img class="avater" src="{{user.avatarUrl || '//zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-join.png'}}">
+      {{/each}}
+      {{each activity.surplusUser}}
+      <img class="avater" src="{{'//zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-not-join.png'}}" />
+      {{/each}}
+    </div>
+  </script>
+
+  <script id="tpl-group-info" type="text/html">
+    {{if isShop}}
+      {{ if activity.bookingStatus == 1}}
+      <div class="group-shop">
+        {{ include 'tpl-avater-list'}}
+        <div class="booking-msg">邀请<span class="orange">{{activity.leftCount}}</span>个好友即可成团，快邀请好友参团吧！</div>
+      </div>
+
+      {{else if activity.bookingStatus == 2}}
+      <div class="group-shop">
+        {{ include 'tpl-avater-list'}}
+        <div class="booking-msg"> 恭喜，已顺利成团! 我们将会尽快为您发货 </div>
+      </div>
+      {{else if activity.bookingStatus == 3 }}
+      <div class="group-shop">
+        {{ include 'tpl-avater-list'}}
+        <div class="booking-msg">真遗憾～拼图失败 </div>
+      </div>
+      {{/if}}
+    {{else}}
+      {{if activity.bookingStatus == 1 }}
+      <div class="group-shop">
+        {{ include 'tpl-avater-list'}}
+        <div class="booking-msg">剩<span class="orange">{{activity.leftCount}}</span>个名额，加入团购享受优惠！</div>
+      </div>
+      {{else if activity.bookingStatus == 2 }}
+      <div class="group-shop">
+        {{ include 'tpl-avater-list'}}
+        <div class="booking-msg"> 哎呀～来晚了，本团满员啦</div>
+      </div>
+      {{else if activity.bookingStatus == 3 }}
+      <div class="group-shop">
+        {{ include 'tpl-avater-list'}}
+        <div class="booking-msg"> 真遗憾～本团结束啦 </div>
+      </div>
+      {{/if}}
+    {{/if}}
+  </script>
+
+  <script id="tpl-btns" type="text/html">
+    {{ if isShop }}
+      {{ if activity.bookingStatus == 1 }}
+      <div class="btns oval">
+        {{if activity.activityStatus == 2}}
+        <div class="btn  go-list">更多团购</div>
+        {{else}}
+        <div class="btn go-share">邀请好友参团</div>
+        {{/if}}
+        <div class="btn go-order">查看订单</div>
+      </div>
+      {{ else if activity.bookingStatus == 2 }}
+      <div class="btns oval">
+        <div class="btn go-my-course">我的课程</div>
+        <div class="btn  go-list">更多团购</div>
+      </div>
+      {{ else if activity.bookingStatus == 3 }}
+      <div class="btns oval">
+        <div class="btn go-list">更多团购</div>
+        {{if activity.activityStatus == 2}}
+        <div class="btn go-order">查看退款</div>
+        {{else}}
+        <div class="btn group-pay">重新开团</div>
+        {{/if}}
+      </div>
+      {{/if}}
+    {{else}}
+      {{if activity.activityStatus == 2 }}
+      <div class="btns">
+        <div class="btn disable">¥ {{activity.price}}团购结束</div>
+      </div>
+      {{else if activity.bookingStatus == 0 }}
+      <div class="btns">
+        <div class="btn group-pay">¥ {{activity.price}} 发起团购</div>
+      </div>
+      {{else if activity.bookingStatus == 1 }}
+      <div class="btns">
+        <div class="btn group-pay">¥ {{activity.price}} 我要参团</div>
+      </div>
+      {{else if activity.bookingStatus == 2 }}
+      <div class="btns oval">
+        <div class="btn group-repay">开新团</div>
+        <div class="btn  go-list">更多团购</div>
+      </div>
+      {{else if activity.bookingStatus == 3 }}
+      <div class="btns oval">
+        <div class="btn group-repay">开新团</div>
+        <div class="btn go-list">更多团购</div>
+      </div>
+      {{/if}}
+    {{/if}}
+  </script>
+
+  <script id="tpl-count-down" type="text/html">
+    {{ if activity.activityStatus == 2 }}
+    <div class="count-down"><span class="lable">此活动已结束</span></div>
+    {{else if activity.bookingStatus == 1}}
+    <div class="count-down">
+      <span class="lable">距本次团购结束仅剩</span>
+      <div class="time-box"></div>
+    </div>
+    {{else}}
+      <div class="count-down">
+        <span class="lable">距活动结束仅剩</span>
+        <div class="time-box"></div>
+      </div>
+    {{/if}}
+  </script>
+
+  <script id="tpl-main" type="text/html">
+    <img class="top-image" src="{{activity.productTitlePicUrl}}">
+    <div class="group-header">
+      <div class="group-price">
+        <span class="price">¥{{activity.price}}<span class="original-price">单买¥ {{activity.originalPrice}}</span></span>
+        <span class="desc"><span class="yellow">{{activity.activityGroupCount}}</span> 人成团各减 <span class="yellow">{{activity.originalPrice-activity.price}}</span>元</span>
+      </div>
+      {{ include 'tpl-count-down' }}
+    </div>
+    <div class="header">
+      <div class="title">{{activity.activityTitle}}</div>
+      <div class="message">（团购失败，24小时全额原路退款）</div>
+      <div class="other">{{product.names}} {{product.timeSlot}}</div>
+    </div>
+    {{ include 'tpl-group-info' }}
+    <div class="btn-message ">拼团须知</div>
+    <div class="course-detail">
+      <ul class="tabs">
+        <li class="tab current" data-target=".course-desc">课程详情</li>
+        <li class="tab" data-target=".course-catalog">课程目录</li>
+      </ul>
+      <div class="tab-container course-desc">
+        {{each product.descriptionList desc}} {{if desc}}
+        <img class="desc" src="{{desc}}"> {{/if}} {{/each}}
+      </div>
+      <ul class="tab-container course-catalog">
+        {{each product.classProducts classes}}
+        <li class="class">
+          <div class="class-title">{{classes.title}}</div>
+          <ul>
+            {{each classes.periodList period index}}
+            <li class="period">
+              <div class="period-title">{{index+1}}. {{period.title}}</div>
+              <div class="period-info">{{period.teacher.name}} {{ period.beginTime | dateFormatFilter 'MM月dd日'}} {{ period.beginTime | weekFilter }} {{period.beginTime | dateFormatFilter 'hh:mm'}}-{{period.endTime | dateFormatFilter 'hh:mm' }} </div>
+            </li>
+            {{/each}}
+          </ul>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{ include 'tpl-btns' }}
   </script>
 </body>
 

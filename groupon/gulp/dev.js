@@ -15,7 +15,7 @@ var imagemin = require('gulp-imagemin');
 var config = require('../package.json');
 var rename = require("gulp-rename");
 
-var modules = ['index','login','detail'];
+var modules = ['index','login','detail','order','address','myOrder'];
 
 var publicPath = '../public/',srcPath = '../src/';
 

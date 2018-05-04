@@ -46,7 +46,7 @@ $(function() {
         that.$elem.find('.btn-login').removeClass('disabled');
         if(res.code == 0){
           common.setLocalStroge('token',res.data.token);
-          location.href = './index.html';
+          location.replace(_obj.callBackUrl || './index.html');
         }else{
           common.toast(res.message);
         }
@@ -60,6 +60,8 @@ $(function() {
     that.bindEvent();
   }
 
-  var page = new Page();
-  page.init();
+  common.initialize(function(){
+    var page = new Page();
+    page.init();
+  })
 });

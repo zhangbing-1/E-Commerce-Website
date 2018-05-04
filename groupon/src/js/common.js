@@ -5,10 +5,22 @@ $(function() {
   common.prefix = './';
   if (location.href.indexOf("h5.test.chaisenwuli.com") !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/groupon/";
-  } else if(location.href.indexOf('h5.chaisenwuli.com') !== -1) {
+  }else if (location.href.indexOf('h5.chaisenwuli.com') !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/groupon/";
-    common.baseUrl = "//api.chaisenwuli.com/";
+    common.baseUrl = "//testapi.chaisenwuli.com/";
   }
+  var u = navigator.userAgent;
+  common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
+
+  if(getLocalStroge('__wxjs_environment')){
+    common.isWxApp = true;
+  }else{
+    common.isWxApp = window.__wxjs_environment === 'miniprogram';
+    if(common.isWxApp) setLocalStroge('__wxjs_environment',window.__wxjs_environment)
+  }
+
+  common.shareUrl = location.origin + "/activitys/groupon/";
+
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
     var o = {
@@ -66,10 +78,15 @@ $(function() {
     _data.sign = getSign(_data);
     _options.data = stringify(_data);
     return $.ajax(_options).done(function(res) {
-      !isHideLoading && loading.hide();
+      setTimeout(function(){
+        !isHideLoading && loading.hide();
+      },500)
+
       if (res.code == 1) {
         removeLocalStroge('token')
-        location.href = './login.html';
+        location.href = './login.html?' + stringify({
+          callBackUrl:location.href
+        });
       }
     }).fail(function() {
       !isHideLoading && loading.hide();
@@ -99,8 +116,30 @@ $(function() {
     });
   }
 
+  common.createShare = function(){
+    return '<div class="share-layer"><img src="' + common.prefix + '/img/icon-arrow.png"></div>';
+  }
+
+  common.createQrcode = function(){
+    return '<div class="qrcode-layer"><img src="' + common.prefix + '/img/icon-my-course.png"></div>';
+  }
+
   function createLoading() {
     return new Loading();
+  }
+
+  function createConfirm(title) {
+    var dtd = $.Deferred();
+    var confirm = $('<div class="confirm-layer"><div class="confirm-inner"><div class="title">' + title + '</div><div class="btns"><div class="btn-cancle">取消</div><div class="btn-ok">确定</div></div></div></div>')
+    confirm.appendTo('body').fadeIn('fast', function() {
+      confirm.on('click', '.btn-cancle', function() {
+        dtd.reject(confirm);
+      })
+      confirm.on('click', '.btn-ok', function() {
+        dtd.resolve(confirm);
+      })
+    })
+    return dtd;
   }
 
   function getLocalStroge(key) {
@@ -127,11 +166,59 @@ $(function() {
     login: function(data) {
       return request({ url: 'user/login', type: 'post', data: data });
     },
-    getList: function(data){
-      return request({ url: 'group/activity/list', data: data });
+    getActivityList: function(data) {
+      return request({ url: 'group/activity/list', data: data }, data.page != 1);
     },
-    getUser: function(data){
-      return request({ url: 'user/userInfo', data: data });
+    getActivityInfo: function(data) {
+      return request({ url: 'group/activity/groupbookingInfo', data: data })
+    },
+    groupActivityPay: function(data) {
+      data.token = getLocalStroge('token');
+      return request({ url: 'group/activity/pay', type: "POST", data: data });
+    },
+    getUser: function() {
+      return request({ url: 'user/userInfo', data: { token: getLocalStroge('token') } });
+    },
+    editUserInfo: function(user) {
+      user.token = getLocalStroge('token');
+      return request({ url: 'user/userUploadInfo', type: 'POST', data: user })
+    },
+    getAddressList: function() {
+      return request({ url: 'user/addressList', data: { token: getLocalStroge('token') } })
+    },
+    deleteAddress: function(addressId) {
+      return request({ url: 'user/deleteAddress', type: 'POST', data: { token: getLocalStroge('token'), addressId: addressId } })
+    },
+    addAddress: function(address) {
+      address.token = getLocalStroge('token');
+      return request({ url: '/user/addAddress', type: 'POST', data: address })
+    },
+    updateAddress: function(address) {
+      address.token = getLocalStroge('token');
+      return request({ url: 'user/updateAddress', type: 'POST', data: address })
+    },
+    getAreaList: function(type, parentId) {
+      return request({ url: 'area/select', data: { type: type, parentId: parentId, token: getLocalStroge('token') } })
+    },
+    getWxConfig: function() {
+      return request({ url: 'wx/createUrlSig', data: { url: location.href.split('#')[0] } });
+    },
+    getOpenId: function(code) {
+      return request({ url: 'wx/authInfo', data: { code: code } });
+    },
+    getProductDetail: function(data) { // 获取所有商品详情
+      return request({ url: 'product/detail', data: data })
+    },
+    getTeacherInfo: function(teacherId) {
+      return request({ url: 'user/teacherInfo', data: { teacherId: teacherId } })
+    },
+    getMyOrder: function(data){
+      data.token = getLocalStroge('token');
+      return request({ url: 'group/activity/groupbooingInfoList', data: data },data.page != 1)
+    },
+    getOrderInfo: function(data){
+      data.token = getLocalStroge('token');
+      return request({ url: 'group/activity/groupbookingInfo', data: data })
     }
   }
 
@@ -150,6 +237,126 @@ $(function() {
     return args;
   }
 
+  template.defaults.imports.remainingTimeFilter = function(time) {
+    var days = Math.floor(time / (60 * 60 * 24));
+    var hours = Math.floor((time - days * 60 * 60 * 24) / (60 * 60));
+    var minute = Math.floor((time - days * 60 * 60 * 24 - hours * 60 * 60) / 60);
+    var second = Math.floor((time - days * 60 * 60 * 24 - hours * 60 * 60 - minute * 60));
+    if (days > 0) {
+      return days + '天' + hours + '小时' + minute + '分钟';
+    } else if (hours > 0) {
+      return hours + '小时' + minute + '分钟';
+    } else if (minute > 0) {
+      return minute + '分钟';
+    } else {
+      return second + '秒';
+    }
+  }
+
+  template.defaults.imports.dateFormatFilter = function(str,format) {
+    return new Date(str).Format(format)
+  }
+
+  template.defaults.imports.weekFilter = function(str,format) {
+    return ["周日","周一","周二","周三","周四","周五","周六"][new Date(str).getDay()]
+  }
+
+  template.defaults.imports.bookStatusFilter = function(status) {
+    return ["","等待成团","已成团","拼团成功"][status]
+  }
+
+  function createAreaList(list) {
+    var arr = [];
+    for (var i = 0; i < list.length; i++) {
+      arr.push({ id: list[i].id, value: list[i].name });
+    }
+    return arr;
+  }
+
+  common.provinceData = function(callback) {
+    actions.getAreaList(1, 0).done(function(res) {
+      if (res.code == 0) {
+        callback(createAreaList(res.data))
+      }
+    });
+  }
+  common.cityData = function(province, callback) {
+    actions.getAreaList(2, province).done(function(res) {
+      if (res.code == 0) {
+        callback(createAreaList(res.data))
+      }
+    });
+  }
+  common.areaData = function(province, city, callback) {
+    actions.getAreaList(3, city).done(function(res) {
+      if (res.code == 0) {
+        callback(createAreaList(res.data))
+      }
+    });
+  }
+
+  common.getOpenId = function(){
+    var dtd = $.Deferred();
+    var redirectUri = location.href.replace(/#.*/, '')
+      .replace(/(code|state|t)=[^&]+[&]?/g, '')
+      .replace(/&$/, '')
+      .replace(/\?$/, '')
+      .replace(location.origin, 'http://codeproxy.chaisenwuli.com'),
+      _obj = urlGet();
+    redirectUri += redirectUri.indexOf('?') == -1 ? '?t=1' : '&t=1';
+    redirectUri = encodeURIComponent(redirectUri);
+    var baseUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb34a5e23b1078fad&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=null#wechat_redirect";
+    var openId = getLocalStroge('openId');
+    if (openId) {
+      dtd.resolve(openId);
+    } else if (_obj.code) {
+      actions.getOpenId(_obj.code).done(function(res) {
+        if (res.code == 0 && res.data.openId) {
+          setLocalStroge('openId', res.data.openId || '');
+          dtd.resolve(res.data.openId);
+        } else {
+          location.replace(baseUrl);
+        }
+      })
+    } else {
+      location.replace(baseUrl);
+    }
+    return dtd;
+  }
+
+  var jsApiList = [ 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'translateVoice', 'startRecord', 'stopRecord', 'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'closeWindow', 'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'];
+  common.initWeixinConfig = function() {
+    var dtd = $.Deferred();
+    actions.getWxConfig().done(function(res) {
+      if (res.code == 0) {
+        var config = res.data;
+        config.jsApiList = jsApiList;
+        wx.config(config);
+        wx.ready(function() {
+          wx.hideAllNonBaseMenuItem();
+        })
+        dtd.resolve();
+      }else{
+        dtd.reject();
+      }
+    })
+    return dtd;
+  }
+
+  common.initialize = function(callBack){
+    if(common.isWxApp){
+      var params = urlGet();
+      if(params.token) common.setLocalStroge('token',params.token)
+      callBack();
+    }else{
+      common.getOpenId().done(function(openId){
+        common.initWeixinConfig().done(function(){
+          callBack();
+        })
+      })
+    }
+  }
+
   $.extend(common, {
     version: version,
     actions: actions,
@@ -160,5 +367,66 @@ $(function() {
     toast: createToast,
     urlGet: urlGet,
     stringify: stringify,
+    createConfirm: createConfirm
   }, true);
 });
+
+(function(window) {
+  'use strict';
+  var isToBottom = false,isMoved = false;
+  var auiScroll = function (params,callback) {
+    this.extend(this.params, params);
+    this._init(params,callback);
+  }
+  auiScroll.prototype = {
+    params: {
+      listren:false,
+            distance: 100
+        },
+    _init : function(params,callback) {
+      var self = this;
+      if(self.params.listen){
+        document.body.addEventListener("touchmove", function(e){
+          self.scroll(callback);
+        });
+        document.body.addEventListener("touchend", function(e){
+          self.scroll(callback);
+        });
+      }
+      window.onscroll = function(){
+        self.scroll(callback);
+      }
+    },
+    scroll : function (callback) {
+      var self = this;
+      var clientHeight = document.documentElement.scrollTop === 0 ? document.body.clientHeight : document.documentElement.clientHeight;
+      var scrollTop = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+      var scrollHeight = document.documentElement.scrollTop === 0 ? document.body.scrollHeight : document.documentElement.scrollHeight;
+
+      if (scrollHeight-scrollTop-self.params.distance <= window.innerHeight) {
+            isToBottom = true;
+            if(isToBottom){
+              callback({
+                "scrollTop":scrollTop,
+                "isToBottom":true
+              })
+            }
+          }else{
+            isToBottom = false;
+            callback({
+              "scrollTop":scrollTop,
+              "isToBottom":false
+            })
+          }
+    },
+        extend: function(a, b) {
+      for (var key in b) {
+          if (b.hasOwnProperty(key)) {
+            a[key] = b[key];
+          }
+        }
+        return a;
+    }
+  }
+  window.auiScroll = auiScroll;
+})(window);
