@@ -12,12 +12,8 @@ $(function() {
   var u = navigator.userAgent;
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
 
-  if(getLocalStroge('__wxjs_environment')){
-    common.isWxApp = true;
-  }else{
-    common.isWxApp = window.__wxjs_environment === 'miniprogram';
-    if(common.isWxApp) setLocalStroge('__wxjs_environment',window.__wxjs_environment)
-  }
+
+  common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
 
   common.shareUrl = location.origin + "/activitys/groupon/";
 
@@ -84,9 +80,19 @@ $(function() {
 
       if (res.code == 1) {
         removeLocalStroge('token')
-        location.href = './login.html?' + stringify({
-          callBackUrl:location.href
-        });
+        setTimeout(function(){
+          if(common.isWxApp()){
+            wx.miniProgram.navigateTo({
+              url:'/pages/login/wxLogin?' + common.stringify({
+                callBackUrl: location.href
+              })
+            })
+          }else{
+            location.href = './login.html?' + stringify({
+              callBackUrl:location.href
+            });
+          }
+        },300)
       }
     }).fail(function() {
       !isHideLoading && loading.hide();
@@ -306,6 +312,7 @@ $(function() {
     redirectUri += redirectUri.indexOf('?') == -1 ? '?t=1' : '&t=1';
     redirectUri = encodeURIComponent(redirectUri);
     var baseUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb34a5e23b1078fad&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=null#wechat_redirect";
+
     var openId = getLocalStroge('openId');
     if (openId) {
       dtd.resolve(openId);
@@ -344,17 +351,19 @@ $(function() {
   }
 
   common.initialize = function(callBack){
-    if(common.isWxApp){
-      var params = urlGet();
-      if(params.token) common.setLocalStroge('token',params.token)
-      callBack();
-    }else{
-      common.getOpenId().done(function(openId){
-        common.initWeixinConfig().done(function(){
-          callBack();
+    var params = urlGet();
+    setTimeout(function(){
+      if(common.isWxApp()){
+        if(params.token) common.setLocalStroge('token',params.token)
+        callBack();
+      }else{
+        common.getOpenId().done(function(openId){
+          common.initWeixinConfig().done(function(){
+            callBack();
+          })
         })
-      })
-    }
+      }
+    },500)
   }
 
   $.extend(common, {

@@ -176,7 +176,7 @@ $(function() {
   }
 
   function pay(id,groupId) {
-    if(common.isWxApp){
+    if(common.isWxApp()){
       wx.miniProgram.navigateTo({
         url:'/pages/h5/bridgeView?' + common.stringify({
           groupActivityId: id,
@@ -227,7 +227,7 @@ $(function() {
           pay(activity.activityId,activity.bookingId || 0);
         }
       }else{
-        if(common.isWxApp){
+        if(common.isWxApp()){
           wx.miniProgram.navigateTo({
             url:'/pages/login/wxLogin?' +  common.stringify({
               callBackUrl: location.href
@@ -264,8 +264,7 @@ $(function() {
     })
 
     dom.on('click','.go-share',function(){
-
-      if(common.isWxApp){
+      if(common.isWxApp()){
         var timeSlot = new Date(activity.activityStartTime).Format('MM月dd日') + '-' + new Date(activity.activityEndTime).Format('MM月dd日');
         wx.miniProgram.navigateTo({
           url:'/pages/h5/shareView?' + common.stringify({
@@ -291,7 +290,7 @@ $(function() {
     })
 
     dom.on('click','.go-my-course',function(){
-      if(common.isWxApp){
+      if(common.isWxApp()){
         wx.miniProgram.switchTab({
           url: '/pages/mycourse/myCourse'
         })
