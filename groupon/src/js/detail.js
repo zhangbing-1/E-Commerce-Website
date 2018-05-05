@@ -15,6 +15,7 @@ $(function() {
       if (res.code == 0) {
         renderProductDetail(res.data);
         activity = res.data;
+
         if(activity.activityRemainingTime <= 0 ){
           activity.activityStatus = 2;
         }
@@ -126,7 +127,8 @@ $(function() {
     // 拼团单：0-创建 1-拼团中 2-拼团成功 3-拼团失败
     // 用户支付状态：0-支付中 1-支付失败 2-支付成功 3-已退款 4-退款失败
     // activity.activityStatus = 1;
-    // activity.bookingStatus = 1;
+    // activity.bookingStatus = 3;
+
     if (common.getLocalStroge('token')) {
       common.actions.getUser().done(function(res) {
         if(res.code == 0){

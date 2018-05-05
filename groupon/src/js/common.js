@@ -7,7 +7,7 @@ $(function() {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/groupon/";
   }else if (location.href.indexOf('h5.chaisenwuli.com') !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/groupon/";
-    common.baseUrl = "//tapi.chaisenwuli.com/";
+    common.baseUrl = "//api.chaisenwuli.com/";
   }
   var u = navigator.userAgent;
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";

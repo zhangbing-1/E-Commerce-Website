@@ -122,26 +122,29 @@
       </div>
       {{ else if activity.bookingStatus == 3 }}
       <div class="btns oval">
-        <div class="btn go-list">更多团购</div>
         {{if activity.activityStatus == 2}}
         <div class="btn go-order">查看退款</div>
         {{else}}
         <div class="btn group-pay">重新开团</div>
         {{/if}}
+        <div class="btn go-list">更多团购</div>
       </div>
       {{/if}}
     {{else}}
       {{if activity.activityStatus == 2 }}
       <div class="btns">
         <div class="btn disable">¥ {{activity.price}}团购结束</div>
+        <div class="btn  go-list">更多团购</div>
       </div>
       {{else if activity.bookingStatus == 0 }}
-      <div class="btns">
+      <div class="btns oval">
         <div class="btn group-pay">¥ {{activity.price}} 发起团购</div>
+        <div class="btn  go-list">更多团购</div>
       </div>
       {{else if activity.bookingStatus == 1 }}
-      <div class="btns">
+      <div class="btns oval">
         <div class="btn group-pay">¥ {{activity.price}} 我要参团</div>
+        <div class="btn  go-list">更多团购</div>
       </div>
       {{else if activity.bookingStatus == 2 }}
       <div class="btns oval">
