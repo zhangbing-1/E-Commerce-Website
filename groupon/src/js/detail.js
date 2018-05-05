@@ -19,6 +19,10 @@ $(function() {
           activity.activityStatus = 2;
         }
 
+        if(activity.remainingTime <= 0 && activity.bookingStatus == 1){
+          activity.bookingStatus = 3;
+        }
+
         activity.surplusUser = new Array(activity.leftCount);
         wx.ready(function() {
           wx.showMenuItems({
@@ -146,6 +150,7 @@ $(function() {
 
   function startCountDown(){
     if(activity.activityStatus == 2) return;
+
     if(activity.bookingStatus == 1){
       countDown(activity.remainingTime);
     }else{
@@ -177,10 +182,7 @@ $(function() {
           expressAddress: '',
           expressPhone: '',
           expressName: '',
-          callBackUrl: common.shareUrl + "detail.html?" + common.stringify({
-            id: id,
-            groupId: groupId
-          })
+          callBackUrl: common.shareUrl + "detail.html?id=" + id + "&groupId=" + groupId
         })
       })
     }else{
@@ -197,10 +199,7 @@ $(function() {
         if (res.code == 0) {
           location.replace('//www.zongjie.com/pay.html?' + common.stringify({
             type: 'groupon',
-            callBackUrl: common.shareUrl + "detail.html?" + common.stringify({
-              id: id,
-              groupId: groupId
-            }),
+            callBackUrl: common.shareUrl + "detail.html?id=" + id +"&groupId=" + groupId,
             timeStamp: res.data.timeStamp,
             nonceStr: res.data.nonceStr,
             packageValue: res.data.packageValue,
@@ -226,9 +225,17 @@ $(function() {
           pay(activity.activityId,activity.bookingId || 0);
         }
       }else{
-        location.href = './login.html?' + common.stringify({
-          callBackUrl: location.href
-        })
+        if(common.isWxApp){
+          wx.miniProgram.navigateTo({
+            url:'/pages/login/wxLogin?' +  common.stringify({
+              callBackUrl: location.href
+            })
+          })
+        }else{
+          location.href = './login.html?' + common.stringify({
+            callBackUrl: location.href
+          })
+        }
       }
     })
 
@@ -257,12 +264,13 @@ $(function() {
     dom.on('click','.go-share',function(){
 
       if(common.isWxApp){
+        var timeSlot = new Date(activity.activityStartTime).Format('MM月dd日') + '-' + new Date(activity.activityEndTime).Format('MM月dd日');
         wx.miniProgram.navigateTo({
           url:'/pages/h5/shareView?' + common.stringify({
             id: activity.activityId,
             bookingId: activity.bookingId,
             title: activity.activityTitle,
-            timeSlot: product.timeSlot,
+            timeSlot: timeSlot,
             desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
             shareTitle: '【团购】' + activity.activityTitle,
             shareDesc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',

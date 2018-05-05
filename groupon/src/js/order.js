@@ -4,9 +4,17 @@ $(function() {
   var activity = null, product = null, address = null, user = null;
 
   if(!common.getLocalStroge('token')){
-    location.href = './login.html?' + common.stringify({
-      callBackUrl:location.href
-    })
+    if(common.isWxApp){
+      wx.miniProgram.navigateTo({
+        url:'/pages/login/wxLogin?' + common.stringify({
+          callBackUrl: location.href
+        })
+      })
+    }else{
+      location.href = './login.html?' + common.stringify({
+        callBackUrl:location.href
+      })
+    }
   }
 
   function renderActivityInfo() {
@@ -208,12 +216,13 @@ $(function() {
 
     dom.on('click','.btn-share',function(){
       if(common.isWxApp){
+        var timeSlot = new Date(activity.activityStartTime).Format('MM月dd日') + '-' + new Date(activity.activityEndTime).Format('MM月dd日');
         wx.miniProgram.navigateTo({
           url:'/pages/h5/shareView?' + common.stringify({
             id: activity.activityId,
             bookingId: activity.bookingId,
             title: activity.activityTitle,
-            timeSlot: product.timeSlot,
+            timeSlot: timeSlot,
             desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
             shareTitle: '【团购】' + activity.activityTitle,
             shareDesc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
