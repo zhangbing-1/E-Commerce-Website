@@ -13,6 +13,11 @@ $(function() {
     }
     common.actions.getActivityInfo(data).done(function(res) {
       if (res.code == 0) {
+        if(res.data.activityId == 0){
+          dom.html('<div class="activity-null">活动不存在</div>');
+          return;
+        }
+
         renderProductDetail(res.data);
         activity = res.data;
 
@@ -120,7 +125,7 @@ $(function() {
       }
     }
 
-    product.timeSlot = end && start ? (start.Format("MM月dd日") + "-" + end.Format("MM月dd日")) : '';
+    product.timeSlot = end && start ? (start.Format("yyyy年MM月dd日") + "-" + end.Format("yyyy年MM月dd日")) : '';
     product.names = names.slice(0, 2).join(',');
 
     // 活动：0-创建 1-开始 2-结束
@@ -215,8 +220,27 @@ $(function() {
     }
   }
 
+  function iosPhonePay(){
+    if(common.isPhone && common.isWxApp()){
+      var html = template('tpl-ios-guide',{ isGroup:params.groupId && params.groupId != 0, url: location.href });
+      dom.html(html);
+      var clipboard = new ClipboardJS('.btn-copy');
+      clipboard.on('success', function(e) {
+        $('.copy-message').show();
+        setTimeout(function(){
+          $('.copy-message').hide();
+        },2000)
+      })
+      return true;
+    }
+    return false;
+  }
+
   function bindEvent() {
     dom.on('click', '.group-pay', function(e) {
+      if(iosPhonePay()){
+        return;
+      }
       if (common.getLocalStroge('token')) {
         if(product.merchandises.length > 0){
           location.href = './order.html?' +  common.stringify({
@@ -230,7 +254,7 @@ $(function() {
         if(common.isWxApp()){
           wx.miniProgram.navigateTo({
             url:'/pages/login/wxLogin?' +  common.stringify({
-              callBackUrl: location.href
+              callBackUrl: common.getHref()
             })
           })
         }else{
@@ -242,6 +266,9 @@ $(function() {
     })
 
     dom.on('click','.group-repay',function(){
+      if(iosPhonePay()){
+        return;
+      }
       location.replace('./detail.html?' +  common.stringify({
         id : activity.activityId,
         groupId : 0,
@@ -254,6 +281,9 @@ $(function() {
     })
 
     dom.on('click','.go-list',function(){
+      if(iosPhonePay()){
+        return;
+      }
       location.href = './index.html';
     })
 
@@ -276,7 +306,7 @@ $(function() {
             shareTitle: '【团购】' + activity.activityTitle,
             shareDesc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
             shareImg: '',
-            callBackUrl: location.href
+            callBackUrl: common.getHref()
           }),
         })
       }else{

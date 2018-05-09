@@ -53,6 +53,9 @@
   <script id="tpl-main" type="text/html">
     <ul class="list">
       {{ include 'tpl-list'}}
+      {{ if list.length == 0}}
+      <div class="list-null">暂无团购单</div>
+      {{/if}}
     </ul>
     <div class="loadMore"> 加载中... </div>
   </script>

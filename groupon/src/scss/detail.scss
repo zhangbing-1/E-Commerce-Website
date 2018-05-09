@@ -1,6 +1,12 @@
 .container-detail{
   background-color:#F8F8F8;
   padding-bottom: 1rem;
+  .activity-null{
+    line-height:1rem;
+    font-size: .32rem;
+    color:#666;
+    text-align:center;
+  }
   .top-image{
     display:block;
     width: 100%;
@@ -336,4 +342,50 @@
     transform:translate(-50%,-50%);
   }
 }
-
+.ios-layer{
+  position:absolute;
+  top: 0;
+  width:100%;
+  z-index: 10000;
+  background-color:#fff;
+  .copy-message{
+    text-align:center;
+    font-size:0.22rem;
+    color:red;
+    line-height:.5rem;
+    display:none;
+  }
+  .copy-wrapper{
+    display:flex;
+    padding:.2rem .3rem;
+    align-items:center;
+    textarea{
+      display:block;
+      resize:none;
+      width:100%;
+      border: none;
+      font-size:0.26rem;
+      line-height:0.4rem;
+      padding:0.1rem 0.2rem;
+      height:1rem;
+      background-color:#f5f5f5;
+    }
+    .btn-copy{
+      display:block;
+      font-size:0.26rem;
+      line-height:0.5rem;
+      height:0.5rem;
+      width:0.8rem;
+      text-align:center;
+      background-color:#ddd;
+      border-radius:0.05rem;
+      align-self:flex-end;
+      margin:0 0.2rem;
+    }
+  }
+  img{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+}

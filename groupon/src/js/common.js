@@ -7,14 +7,13 @@ $(function() {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/groupon/";
   }else if (location.href.indexOf('h5.chaisenwuli.com') !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/groupon/";
-    common.baseUrl = "//api.chaisenwuli.com/";
+    common.baseUrl = "//testapi.chaisenwuli.com/";
   }
   var u = navigator.userAgent;
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
-
-
+  common.isPhone = u.indexOf('iPhone') > -1;
+  common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
   common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
-
   common.shareUrl = location.origin + "/activitys/groupon/";
 
   Date.prototype.Format = function(fmt) {
@@ -84,7 +83,7 @@ $(function() {
           if(common.isWxApp()){
             wx.miniProgram.navigateTo({
               url:'/pages/login/wxLogin?' + common.stringify({
-                callBackUrl: location.href
+                callBackUrl: common.getHref()
               })
             })
           }else{
@@ -103,6 +102,7 @@ $(function() {
   function Loading() {
     this.elem = $('<div class="loading-layer"><div class="loading-inner"><img src="' + common.prefix + 'img/loading.png" /></div></div>');
   }
+
   Loading.prototype.show = function() {
     this.elem.appendTo('body').fadeIn('fast');
   }
@@ -111,6 +111,10 @@ $(function() {
     this.elem.fadeOut('fast', function() {
       that.elem.remove();
     });
+  }
+
+  common.getHref = function(){
+    return location.href.replace(/(token|a)=[^&]+[&]?/g, '').replace(/&$/, '').replace(/\?$/, '');
   }
 
   function createToast(text) {
@@ -428,7 +432,7 @@ $(function() {
             })
           }
     },
-        extend: function(a, b) {
+    extend: function(a, b) {
       for (var key in b) {
           if (b.hasOwnProperty(key)) {
             a[key] = b[key];

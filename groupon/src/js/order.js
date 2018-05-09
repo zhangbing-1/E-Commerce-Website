@@ -7,7 +7,7 @@ $(function() {
     if(common.isWxApp()){
       wx.miniProgram.navigateTo({
         url:'/pages/login/wxLogin?' + common.stringify({
-          callBackUrl: location.href
+          callBackUrl: common.getHref()
         })
       })
     }else{
@@ -169,7 +169,7 @@ $(function() {
           expressAddress: address.all,
           expressPhone: address.phone,
           expressName: address.name,
-          callBackUrl:location.href
+          callBackUrl: common.getHref()
         })
       })
     }else{
@@ -227,7 +227,7 @@ $(function() {
             shareTitle: '【团购】' + activity.activityTitle,
             shareDesc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
             shareImg: '',
-            callBackUrl:location.href
+            callBackUrl: common.getHref()
           }),
         })
       }else{
