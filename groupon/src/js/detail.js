@@ -222,7 +222,8 @@ $(function() {
 
   function iosPhonePay(){
     if(common.isPhone && common.isWxApp()){
-      var html = template('tpl-ios-guide',{ isGroup:params.groupId && params.groupId != 0, url: location.href });
+      var html = template('tpl-ios-guide',{ isGroup:params.groupId && params.groupId != 0 && activity.bookingStatus == 1,
+        url: 'https://h5.chaisenwuli.com/activitys/groupon/detail.html?id=' + params.id +'&groupId=' + params.groupId||0 });
       dom.html(html);
       var clipboard = new ClipboardJS('.btn-copy');
       clipboard.on('success', function(e) {
