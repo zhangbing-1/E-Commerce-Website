@@ -131,7 +131,7 @@ $(function() {
   }
 
   common.createQrcode = function(){
-    return '<div class="qrcode-layer"><img src="' + common.prefix + '/img/icon-my-course.png"></div>';
+    return '<div class="qrcode-layer"><img src="' + common.prefix + '/img/icon-my-course2.png"></div>';
   }
 
   function createLoading() {
