@@ -1,0 +1,47 @@
+{
+  "name": "group-buying-activity",
+  "version": "0.0.1",
+  "description": "爱总结送书活动",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/gulp --gulpfile gulp/dev.js dev",
+    "test": "./node_modules/.bin/gulp --gulpfile gulp/build.js build --env test",
+    "build": "./node_modules/.bin/gulp --gulpfile gulp/build.js build --env dev",
+    "deploy": "bash ./gulp/deploy.sh",
+    "upyun": "node ./gulp/upyun.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git clone ssh://liucy@47.104.171.221:29418/fe-wx-web"
+  },
+  "author": "liuchengyong",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "del": "^3.0.0",
+    "gp-cdn-image": "^0.2.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-cached": "^1.1.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-custom-css-urls": "^0.3.0",
+    "gulp-html-replace": "^1.6.2",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^3.4.0",
+    "gulp-jshint": "^2.0.4",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-prefix": "^0.0.15",
+    "gulp-remember": "^0.3.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
+    "gulp-ruby-sass": "^2.1.1",
+    "gulp-sass": "^3.2.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-url-prefixer": "^0.0.6",
+    "gulp-util": "^3.0.8",
+    "gulp-zip": "^4.0.0",
+    "minimist": "^1.2.0",
+    "upyun": "^3.3.4"
+  }
+}

@@ -1,0 +1,109 @@
+.container-address {
+  .list {
+    list-style: none;
+    padding-top: .3rem;
+    .address {
+      font-size: .28rem;
+      color: #333;
+      line-height: .4rem;
+      padding: .2rem .3rem 0;
+      background-color: #fff;
+      margin-bottom: .26rem;
+      background-image: url(../img/icon-check.png);
+      background-repeat: no-repeat;
+      background-position: right 0.3rem top 0.6rem;
+      background-size: .38rem .38rem;
+      &.checked {
+        background-image: url(../img/icon-checked.png);
+      }
+      .name,
+      .phone {
+        display: inline-block;
+      }
+      .detail {
+        padding: .1rem 0 .2rem;
+      }
+      .btns {
+        display: flex;
+        align-items: center;
+        height: .8rem;
+        font-size: .28rem;
+        color: #999;
+        line-height: .4rem;
+        border-top: 1px solid #F4F4F4;
+      }
+      .btn-default {
+        flex: 1;
+      }
+      .btn-edit {
+        margin-right: .8rem;
+      }
+    }
+    .address-btns{
+      position:fixed;
+      left:0; right:0;
+      bottom:.5rem;
+      padding: .6rem 0.3rem 0;
+      .btn-add{
+        display:flex;
+        height:0.88rem;
+        font-size:0.3rem;
+        color:#fff;
+        align-items: center;
+        justify-content: center;
+        background-color:#FF6D41;
+        border-radius: 5px;
+      }
+    }
+  }
+  .address-wrapper {
+    display:none;
+    .from-groups{
+      padding: 0 0.3rem;
+      background-color: #fff;
+      margin-bottom: 0.3rem;
+      border-top: 1px solid #F4F4F4;
+      border-bottom: 1px solid #F4F4F4;
+    }
+
+    .from-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 0.88rem;
+      border-bottom: 1px solid #F4F4F4;
+      font-size: 0.32rem;
+      color: #333;
+      .lable {
+        width: 1.6rem;
+      }
+      input {
+        flex: 1;
+      }
+      .icon-arrow{
+        display:block;
+        height:0.35rem;
+        width:auto;
+      }
+      &:last-child {
+        border-bottom: none;
+        .info {
+          border-bottom: none;
+        }
+      }
+    }
+    .btns{
+      padding: .6rem 0.3rem 0;
+      .btn-save{
+        display:flex;
+        height:0.88rem;
+        font-size:0.3rem;
+        color:#fff;
+        align-items: center;
+        justify-content: center;
+        background-color:#FF6D41;
+        border-radius: 5px;
+      }
+    }
+  }
+}
