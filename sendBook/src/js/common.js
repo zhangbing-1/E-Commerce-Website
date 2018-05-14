@@ -77,23 +77,12 @@ $(function() {
     return $.ajax(_options).done(function(res) {
       setTimeout(function() {
         !isHideLoading && loading.hide();
-      }, 500)
-
+      }, 800)
       if (res.code == 1) {
         removeLocalStroge('token')
-        setTimeout(function() {
-          if (common.isWxApp()) {
-            wx.miniProgram.navigateTo({
-              url: '/pages/login/wxLogin?' + common.stringify({
-                callBackUrl: common.getHref()
-              })
-            })
-          } else {
-            location.href = './login.html?' + stringify({
-              callBackUrl: location.href
-            });
-          }
-        }, 300)
+        location.href = './login.html?' + stringify({
+          callBackUrl: location.href
+        });
       }
     }).fail(function() {
       !isHideLoading && loading.hide();
@@ -217,6 +206,21 @@ $(function() {
     },
     getTeacherInfo: function(teacherId) {
       return request({ url: 'user/teacherInfo', data: { teacherId: teacherId } })
+    },
+    orderCommit: function(data){
+      return request({ url: 'order/create', type:'post', data: data })
+    },
+    orderPay: function(data) { // 获取支付信息
+      return request({ url: 'pay/api/v1/pay', type: 'post', data: data })
+    },
+    getActivity:function(data){
+      return request({ url: 'wxActivity/getActivityInfo', data: data })
+    },
+    bindUserRelationship:function(data){
+      return request({ url: 'wxActivity/bindUserRelationship', data: data })
+    },
+    modifyActivityStatus:function(data){
+      return request({ url: 'wxActivity/modifyActivityStatus', data: data })
     }
   }
 

@@ -1,0 +1,163 @@
+.container-index{
+  position: relative;
+  background-color: #ff5e49;
+  padding-bottom: 1rem;
+
+  .header-img{
+    display:block;
+    width: 100%;
+    height: auto;
+  }
+
+  .body{
+    position:relative;
+    width:100%;
+    padding: 0 .3rem;
+  }
+
+  .activity-info{
+    width:100%;
+    margin-top:0.3rem;
+    padding:0.3rem .5rem .4rem;
+    border-radius: 5px;
+    border:1px solid #ff9817;
+    background-color:#fff;
+    .title{
+      font-size: .3rem;
+      color:#333;
+    }
+    .price{
+      display:inline-block;
+      font-size:.6rem;
+      padding:0 .2rem 0 .1rem;
+      color:#ff3300;
+    }
+    .title-sm{
+      font-size:.28rem;
+      color:#430000;
+    }
+    .time{
+      display:block;
+      margin-top:0.1rem;
+      font-size:.24rem;
+      color:#430000;
+    }
+    .time-over{
+      display:block;
+      margin-top:0.1rem;
+      font-size:.24rem;
+      color:#ff3300;
+    }
+    .desc{
+      display:flex;
+      margin-top:0.2rem;
+      font-size:.24rem;
+      color:#999999;
+      .num{
+        flex:1;
+        text-align: right;
+      }
+    }
+  }
+
+  .activity-status{
+    width:100%;
+    display:flex;
+    text-align:center;
+    margin-top:0.2rem;
+    padding:0.28rem 0;
+    font-size:.24rem;
+    border-radius: 5px;
+    border:1px solid #ff9817;
+    background-color:#fff;
+    color:#333;
+    .left{
+      flex:1;
+      text-align:right;
+      padding-right: 0.2rem;
+      border-right: 2px solid #333;
+    }
+    .right{
+      flex:1;
+      text-align:left;
+      padding-left: 0.2rem;
+    }
+    .big{
+      font-size:.3rem;
+      color:#ff4b00;
+    }
+    .success{
+      flex:1;
+      padding:0 0.3rem;
+      font-size:.3rem;
+      color:#ff4b00;
+      text-align:center;
+    }
+  }
+
+  .user-address{
+    width:100%;
+    margin-top:0.2rem;
+    padding:0.3rem;
+    font-size:.3rem;
+    border-radius: 5px;
+    border:1px solid #ff9817;
+    color:#999;
+    background-repeat: no-repeat;
+    background-size: 0.15rem 0.28rem;
+    background-position: right .3rem center;
+    background-color: #fff;
+    &.go-address{
+      background-image: url(../img/icon-arrow-d8.png);
+    }
+    .address-title{
+      font-size:.3rem;
+      color:#333;
+      line-height: 1.8em;
+    }
+    .address-detail{
+      font-size:.3rem;
+      color:#999;
+      line-height:1.8em;
+    }
+  }
+
+  .user-avater{
+    width:100%;
+    overflow:hidden;
+    padding:0.3rem .5rem .36rem;
+    border-radius: 5px;
+    border:1px solid #ff9817;
+    background-color:#fff;
+    .avater-list{
+      padding: 0.1rem 0 0.2rem;
+      white-space: nowrap;
+      overflow-y: hidden;
+      overflow-x: scroll;
+    }
+    .icon-avater{
+      display:inline-block;
+      width: 0.8rem;
+      height:0.8rem;
+      border-radius:50%;
+      margin:0 0.1rem;
+    }
+    .btn-get,.btn-unfinished,.btn-order{
+      display:block;
+      height:.67rem;
+      margin:0.3rem auto 0;
+    }
+  }
+
+  .icon-arule,.icon-rule,.icon-detail,.icon-course{
+    display:block;
+    width:100%;
+    height:auto;
+    margin-top:.2rem;
+  }
+
+  .icon-arule{
+    margin-top:1rem;
+  }
+
+}

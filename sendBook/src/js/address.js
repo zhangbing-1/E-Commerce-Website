@@ -61,9 +61,9 @@ $(function(){
 
     dom.on('click','.go-select',function(){
       location.href = params.callBackUrl + '?' + common.stringify($.extend({},{
-        id: params.id,
-        groupId: params.groupId,
-        addressId: $(this).data('id')
+        activityId: params.activityId,
+        addressId: $(this).data('id'),
+        sourceOpenId: params.sourceOpenId
       }))
     })
 

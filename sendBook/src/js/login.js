@@ -54,7 +54,6 @@ $(function() {
     })
   }
 
-
   Page.prototype.init = function(){
     var that = this;
     that.bindEvent();

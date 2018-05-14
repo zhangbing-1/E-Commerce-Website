@@ -33,29 +33,88 @@
 
 <body>
   <div class="container container-index" id="container">
-    <h1>学好不难送书活动第8期</h1>
-    <h2>活动日期：2018年3月22-5月20日</h2>
-    <p>
-      运费：免运费
-      剩余：324件
-    </p>
-    <div>收获地址（必填）</div>
-    <a href="./address.html">选择地址></a>
-    <h2>下面的x名好友已为你助力</h2>
-    <p>
-      <img src="" />
-    </p>
-    <p>还差一人即可领书</p>
-    <h2>活动规则</h2>
-    <p>1 将个人专属海报分享给想学习的朋友，9位好友助力即可领取</p>
-    <p>2 邀请新用户扫码达到指定数即可在此状态登记邮寄信息（好友助力都会收到系统的提醒，请您放心）</p>
-    <h2>发货规则</h2>
-    <p>1 免费包邮，为了回馈粉丝，保证真实有效。</p>
-    <p>2 青海、西藏、宁夏、新疆等偏远地区邮寄时间可能较长，请您耐心等待一下，谢谢您的理解</p>
-    <p>3 信息一定要填写正确，活动结束统一发货。</p>
-    <h2>书籍介绍</h2>
+    <img class="header-img" src="./img/icon-header.png">
+    <div class="body">
+     <!--  <div class="activity-info">
+        <div class="title">¥<span class="price">0.00</span> <span class="title-sm">(此书应用于家长)</span></div>
+        <div class="time">活动日期：2018.05.08-2018.05.12</div>
+        <div class="desc">运费：免运费<span class="num">剩余：324件</span></div>
+      </div>
+      <div class="activity-status">
+        <div class="left">已有<span class="big">2</span>名好友为你助力</div>
+        <div class="right">还差<span class="big">4</span>人即可领书</div>
+      </div>
+      <div class="user-avater">
+        <div class="avater-list">
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+        </div>
+        <img class="btn-get" src="./img/icon-get.png">
+      </div> -->
+      <img class="icon-arule" src="./img/icon-activity-rule.png">
+      <img class="icon-rule" src="./img/icon-rule.png">
+      <img class="icon-detail" src="./img/icon-detail.png">
+      <img class="icon-course" src="./img/icon-course.png">
+    </div>
   </div>
   <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script id="tpl-index" type="text/html">
+    <div class="activity-info">
+      <div class="title">¥<span class="price">0.00</span> <span class="title-sm">(此书适用于家长)</span></div>
+      {{if isStop && activity.userActivityInfo.status != 2}}
+      <div class="time-over">很遗憾，本次书已经送完～下次活动再来吧！</div>
+      {{else}}
+      <div class="time">活动日期：{{activity.mpActivityInfo.begintime | dateFormatFilter 'yyyy.MM.dd'}} - {{activity.mpActivityInfo.endtime | dateFormatFilter 'yyyy.MM.dd'}}</div>
+      {{/if}}
+      <div class="desc">运费：免运费<span class="num">剩余：{{activity.mpActivityInfo.productnum - activity.mpActivityInfo.receivenum}}件</span></div>
+    </div>
+
+
+    {{if activity.userActivityInfo && activity.userActivityInfo.status == 1 }}
+    <div class="user-address go-address">
+      {{if address}}
+      <div class="address-title">{{address.name}} {{address.phone}}</div>
+      <div class="address-detail">{{address.provincename}} {{address.cityname}} {{address.areaname}} {{address.detail}}</div>
+      {{else}}
+      <div>选择地址</div>
+      {{/if}}
+    </div>
+    {{/if}}
+
+    <div class="activity-status">
+      {{if activity.mpActivityInfo.limitnum - activity.wechatUserInfoLists.length == 0}}
+      <div class="success">助力成功</div>
+      {{else}}
+      <div class="left">已有<span class="big">{{activity.wechatUserInfoLists.length}}</span>名好友为你助力</div>
+      <div class="right">还差<span class="big">{{activity.mpActivityInfo.limitnum - activity.wechatUserInfoLists.length}}</span>人即可领书</div>
+      {{/if}}
+    </div>
+    <div class="user-avater">
+      <div class="avater-list">
+        <%for(var i =0; i < activity.mpActivityInfo.limitnum;i++){%>
+          {{if i < activity.wechatUserInfoLists.length }}
+          <img class="icon-avater" src="{{activity.wechatUserInfoLists[i].avatarurl}}">
+          {{else}}
+          <img class="icon-avater" src="./img/icon-avater-default.png">
+          {{/if}}
+        <%}%>
+      </div>
+
+      {{if activity.userActivityInfo && activity.userActivityInfo.status == 2}}
+      <img class="btn-order" src="./img/icon-order.png">
+      {{else if activity.wechatUserInfoLists.length >= activity.mpActivityInfo.limitnum}}
+      <img class="btn-get" src="./img/icon-get.png">
+      {{else}}
+      <img class="btn-unfinished" src="./img/icon-get-disable.png">
+      {{/if}}
+    </div>
+  </script>
   <!-- build:js -->
   <!-- endbuild -->
 </body>
