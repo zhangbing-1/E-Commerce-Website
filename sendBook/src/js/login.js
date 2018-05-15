@@ -42,7 +42,12 @@ $(function() {
       var code = $.trim(that.$elem.find('input[name=code]').val());
       if(!common.verify.captcha.test(code)) return common.toast('请输入正确的4位数字验证码');
       that.$elem.find('.btn-login').addClass('disabled');
-      common.actions.login({phone:phone,code:code}).done(function(res){
+      common.actions.login({
+        phone:phone,
+        code:code,
+        openId:common.getLocalStroge('openId')||'',
+        unionId:common.getLocalStroge('unionId')||''
+      }).done(function(res){
         that.$elem.find('.btn-login').removeClass('disabled');
         if(res.code == 0){
           common.setLocalStroge('token',res.data.token);

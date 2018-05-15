@@ -24,7 +24,7 @@ $(function() {
     isStop = nowTime.getTime() >= startTime.getTime() && nowTime.getTime() <= endTime.getTime();
     isStop = activity.mpActivityInfo.productnum == activity.mpActivityInfo.receivenum;
     var html = template('tpl-index',{activity:activity,address:address,isStop:isStop})
-    dom.find('.body').prepend(html);
+    dom.find('.body').html(html);
   }
 
   function initialize() {
@@ -162,7 +162,7 @@ $(function() {
       activityId: activityId,
     }).done(function(res){
       if(res.code == 0){
-        location.reload();
+       initialize();
       }
     })
   }
