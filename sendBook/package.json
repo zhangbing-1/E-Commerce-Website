@@ -1,6 +1,6 @@
 {
   "name": "group-buying-activity",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "爱总结送书活动",
   "main": "index.js",
   "scripts": {
