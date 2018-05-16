@@ -126,7 +126,8 @@ $(function() {
         location.href = './address.html?' + common.stringify({
           callBackUrl:'./index.html',
           activityId: _obj.activityId,
-          sourceOpenId:_obj.sourceOpenId
+          sourceOpenId:_obj.sourceOpenId,
+          selectId: address ? address.id : -1
         })
       } else {
         location.href = './login.html?' + common.stringify({
