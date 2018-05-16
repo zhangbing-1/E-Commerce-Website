@@ -36,7 +36,7 @@ $(function() {
         }
         if(activity.userActivityInfo && activity.userActivityInfo.status == 2){
           common.actions.isBuyClass(activity.mpActivityInfo.productid).done(function(res){
-            if(res.code == 0 && res.data.isBuy == 'true'){
+            if(res.code == 0 && res.data.isBuy){
               orderId = res.data.orderId;
             }
           })
