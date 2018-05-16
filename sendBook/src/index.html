@@ -65,12 +65,12 @@
       <div class="success">助力成功</div>
       {{else}}
       <div class="left">已有<span class="big">{{activity.wechatUserInfoLists.length}}</span>名好友为你助力</div>
-      <div class="right">还差<span class="big">{{activity.mpActivityInfo.limitnum - activity.wechatUserInfoLists.length}}</span>人即可领书</div>
+      <div class="right">还差<span class="big">{{ activity.mpActivityInfo.limitnum < activity.wechatUserInfoLists.length ? 0 : (activity.mpActivityInfo.limitnum < activity.wechatUserInfoLists.length) }}</span>人即可领书</div>
       {{/if}}
     </div>
     <div class="user-avater">
       <div class="avater-list">
-        <%for(var i =0; i < activity.mpActivityInfo.limitnum;i++){%>
+        <%for(var i =0; i < (activity.wechatUserInfoLists.length > activity.mpActivityInfo.limitnum ? activity.wechatUserInfoLists.length : activity.mpActivityInfo.limitnum );i++){%>
           {{if i < activity.wechatUserInfoLists.length }}
           <img class="icon-avater" src="{{activity.wechatUserInfoLists[i].avatarurl}}">
           {{else}}
