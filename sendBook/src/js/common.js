@@ -295,7 +295,7 @@ $(function() {
   common.getOpenId = function(type) {
     var dtd = $.Deferred(),
       _obj = urlGet(),
-      baseUrl = common.createRedirectUri();
+      baseUrl = common.createRedirectUri(type);
     var openId = getLocalStroge('openId'),
       unionId = getLocalStroge('unionId');
     if (unionId && openId) {

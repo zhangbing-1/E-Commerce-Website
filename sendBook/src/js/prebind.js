@@ -24,6 +24,6 @@ $(function() {
     //   wx.onMenuShareAppMessage(wxData);
     //   wx.onMenuShareTimeline(wxData);
     // })
-  },'info')
+  },'user')
 
 });

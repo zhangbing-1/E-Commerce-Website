@@ -97,7 +97,8 @@ $(function() {
       price: product.price,
       expressAddress: address.all,
       expressName: address.name,
-      expressPhone: address.phone
+      expressPhone: address.phone,
+      orderType:3
     }).done(function(res) {
       if(res.code == 0){
         var orderId = res.data.orderId;
@@ -118,8 +119,6 @@ $(function() {
       }
     })
   }
-
-
 
   function bindEvent() {
     dom.on('click', '.go-address', function() {
