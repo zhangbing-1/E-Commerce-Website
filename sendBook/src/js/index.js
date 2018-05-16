@@ -162,7 +162,8 @@ $(function() {
       activityId: activityId,
     }).done(function(res){
       if(res.code == 0){
-       initialize();
+        common.createAlert('领取成功');
+        initialize();
       }
     })
   }
