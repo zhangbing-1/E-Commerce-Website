@@ -233,7 +233,11 @@ $(function() {
     },
     modifyActivityStatus:function(data){
       return request({ url: 'wxActivity/modifyActivityStatus', data: data })
+    },
+    isBuyClass:function(productId){
+      return request({ url: 'product/isBuyClass', data: { productId:productId, token: getLocalStroge('token') } })
     }
+
   }
 
   function urlGet() {

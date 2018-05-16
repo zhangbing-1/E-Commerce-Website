@@ -5,6 +5,7 @@ $(function() {
     addressList = [],
     address = null,
     user = null,
+    orderId = '',
     token = common.getLocalStroge('token'),
     _obj = common.urlGet();
 
@@ -32,6 +33,13 @@ $(function() {
       $.when(getActivity(),getAddressList(), getUser()).done(function(res1, res2, res3) {
         if (user && addressList.length > 0) {
           address = getAddress(_obj.addressId || user.addressid, addressList);
+        }
+        if(activity.userActivityInfo && activity.userActivityInfo.status == 2){
+          common.actions.isBuyClass(activity.mpActivityInfo.productid).done(function(res){
+            if(res.code == 0 && res.data.isBuy == 'true'){
+              orderId = res.data.orderId;
+            }
+          })
         }
         renderPage();
       })
@@ -152,7 +160,7 @@ $(function() {
     })
 
     dom.on('click','.btn-order',function(){
-      location.href = (location.origin.indexOf('h5.chaisenwuli.com') != -1 ? '//www.zongjie.com' : '//www.test.chaisenwuli.com') + '/setting/orders'
+      location.href = (location.origin.indexOf('h5.chaisenwuli.com') != -1 ? '//www.zongjie.com' : '//www.test.chaisenwuli.com') + ( orderId ? ('/setting/order/detail/' + orderId) :'/setting/orders')
     })
   }
 
@@ -181,18 +189,18 @@ $(function() {
     })
 
     bindEvent();
-    wx.ready(function() {
-      wx.showMenuItems({
-        menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
-      });
-      var wxData = {
-        title: '【团购】好课成团立享优惠',
-        link: common.shareUrl,
-        desc: '2人成团，即可立享优惠,24小时内，拼团失败，全额原路退回',
-        imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
-      }
-      wx.onMenuShareAppMessage(wxData);
-      wx.onMenuShareTimeline(wxData);
-    })
+    // wx.ready(function() {
+    //   wx.showMenuItems({
+    //     menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
+    //   });
+    //   var wxData = {
+    //     title: '【团购】好课成团立享优惠',
+    //     link: common.shareUrl,
+    //     desc: '2人成团，即可立享优惠,24小时内，拼团失败，全额原路退回',
+    //     imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+    //   }
+    //   wx.onMenuShareAppMessage(wxData);
+    //   wx.onMenuShareTimeline(wxData);
+    // })
   }, 'user')
 });
