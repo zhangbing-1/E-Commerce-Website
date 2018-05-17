@@ -1,6 +1,5 @@
 $(function() {
   var dom = $('#container'),_obj = common.urlGet();
-
   function bindUserRelationship() {
     common.actions.bindUserRelationship({
       sourceOpenId: _obj.sourceOpenId,
