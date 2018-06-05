@@ -154,7 +154,7 @@ $(function() {
   function getActivityList(activity,product,isShop){
     common.actions.getActivityList(1).done(function(res){
       if(res.code == 0){
-        var isMore = res.data.length > 0;
+        var isMore = res.data.length > 1;
         var html = template('tpl-main', { activity: activity, product: product, isShop: false, isMore:isMore });
         dom.html(html);
         startCountDown();
