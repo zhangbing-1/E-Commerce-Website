@@ -143,16 +143,23 @@ $(function() {
               if(activity.bookingUsers[i].userId == res.data.id) isShop = true;
             }
           }
-          var html = template('tpl-main', { activity: activity, product: product, isShop: isShop });
-          dom.html(html);
-          startCountDown();
+          getActivityList(activity,product,isShop);
         }
       })
     } else {
-      var html = template('tpl-main', { activity: activity, product: product, isShop: false });
-      dom.html(html);
-      startCountDown();
+      getActivityList(activity,product,false);
     }
+  }
+
+  function getActivityList(activity,product,isShop){
+    common.actions.getActivityList(1).done(function(res){
+      if(res.code == 0){
+        var isMore = res.data.length > 0;
+        var html = template('tpl-main', { activity: activity, product: product, isShop: false, isMore:isMore });
+        dom.html(html);
+        startCountDown();
+      }
+    })
   }
 
   function startCountDown(){
@@ -302,10 +309,10 @@ $(function() {
             id: activity.activityId,
             bookingId: activity.bookingId,
             title: activity.activityTitle,
-            timeSlot: timeSlot,
-            desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
+            timeSlot: '拼团活动' + timeSlot,
+            desc: activity.activityGroupCount + '人成团,每人' + activity.price + '元',
             shareTitle: '【团购】' + activity.activityTitle,
-            shareDesc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
+            shareDesc: activity.activityGroupCount + '人成团,每人' + activity.price + '元',
             shareImg: '',
             callBackUrl: common.getHref()
           }),

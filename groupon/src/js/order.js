@@ -162,6 +162,7 @@ $(function() {
 
   function pay() {
     if(common.isWxApp()){
+      alert('dasdas');
       wx.miniProgram.navigateTo({
         url:'/pages/h5/bridgeView?' + common.stringify({
           groupActivityId: activity.activityId,
@@ -222,10 +223,10 @@ $(function() {
             id: activity.activityId,
             bookingId: activity.bookingId,
             title: activity.activityTitle,
-            timeSlot: timeSlot,
-            desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
+            timeSlot: '拼团活动' + timeSlot,
+            desc: activity.activityGroupCount + '人成团,每人' + activity.price + '元',
             shareTitle: '【团购】' + activity.activityTitle,
-            shareDesc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
+            shareDesc: activity.activityGroupCount + '人成团,每人' + activity.price + '元',
             shareImg: '',
             callBackUrl: common.getHref()
           }),

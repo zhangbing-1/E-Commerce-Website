@@ -88,7 +88,6 @@
         {{ include 'tpl-avater-list'}}
         <div class="booking-msg">邀请<span class="orange">{{activity.leftCount}}</span>个好友即可成团，快邀请好友参团吧！</div>
       </div>
-
       {{else if activity.bookingStatus == 2}}
       <div class="group-shop">
         {{ include 'tpl-avater-list'}}
@@ -125,7 +124,7 @@
       {{ if activity.bookingStatus == 1 }}
       <div class="btns oval">
         {{if activity.activityStatus == 2}}
-        <div class="btn  go-list">更多团购</div>
+        {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
         {{else}}
         <div class="btn go-share">邀请好友参团</div>
         {{/if}}
@@ -134,7 +133,7 @@
       {{ else if activity.bookingStatus == 2 }}
       <div class="btns oval">
         <div class="btn go-my-course">我的课程</div>
-        <div class="btn  go-list">更多团购</div>
+        {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
       </div>
       {{ else if activity.bookingStatus == 3 }}
       <div class="btns oval">
@@ -143,29 +142,29 @@
         {{else}}
         <div class="btn group-pay">重新开团</div>
         {{/if}}
-        <div class="btn go-list">更多团购</div>
+        {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
       </div>
       {{/if}}
     {{else}}
       {{if activity.activityStatus == 2 }}
       <div class="btns">
         <div class="btn disable">¥ {{activity.price}}团购结束</div>
-        <div class="btn  go-list">更多团购</div>
+        {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
       </div>
       {{else if activity.bookingStatus == 0 }}
       <div class="btns oval">
         <div class="btn group-pay">¥ {{activity.price}} 发起团购</div>
-        <div class="btn  go-list">更多团购</div>
+        {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
       </div>
       {{else if activity.bookingStatus == 1 }}
       <div class="btns oval">
         <div class="btn group-pay">¥ {{activity.price}} 我要参团</div>
-        <div class="btn  go-list">更多团购</div>
+        {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
       </div>
       {{else if activity.bookingStatus == 2 }}
       <div class="btns oval">
         <div class="btn group-repay">开新团</div>
-        <div class="btn  go-list">更多团购</div>
+        {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
       </div>
       {{else if activity.bookingStatus == 3 }}
       <div class="btns oval">

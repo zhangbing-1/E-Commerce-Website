@@ -238,15 +238,15 @@
         border-radius: 0.68rem;
         height:0.68rem;
         margin:0 .15rem;
-        &:first-child{
-          background-color:#FF6D41;
-        }
         &:last-child{
           color:#FF6D41;
           background-color:#F8F8F8;
         }
+        &:first-child{
+          color:#fff;
+          background-color:#FF6D41;
+        }
       }
-
     }
     .btn{
       font-size:0.3rem;
@@ -255,11 +255,11 @@
       flex:1;
       align-items:center;
       justify-content:center;
-      &:first-child{
-        background-color:#FF9D80;
-      }
       &:last-child{
         background-color:#FF6D41;
+      }
+      &:first-child{
+        background-color:#FF9D80;
       }
     }
     .btn.disable{
