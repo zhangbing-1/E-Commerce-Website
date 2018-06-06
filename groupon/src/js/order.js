@@ -162,7 +162,6 @@ $(function() {
 
   function pay() {
     if(common.isWxApp()){
-      alert('dasdas');
       wx.miniProgram.navigateTo({
         url:'/pages/h5/bridgeView?' + common.stringify({
           groupActivityId: activity.activityId,
