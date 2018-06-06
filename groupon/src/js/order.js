@@ -216,20 +216,7 @@ $(function() {
 
     dom.on('click','.btn-share',function(){
       if(common.isWxApp()){
-        var timeSlot = new Date(activity.activityStartTime).Format('MM月dd日') + '-' + new Date(activity.activityEndTime).Format('MM月dd日');
-        wx.miniProgram.navigateTo({
-          url:'/pages/h5/shareView?' + common.stringify({
-            id: activity.activityId,
-            bookingId: activity.bookingId,
-            title: activity.activityTitle,
-            timeSlot: '拼团活动' + timeSlot,
-            desc: activity.activityGroupCount + '人成团,每人' + activity.price + '元',
-            shareTitle: '【团购】' + activity.activityTitle,
-            shareDesc: activity.activityGroupCount + '人成团,每人' + activity.price + '元',
-            shareImg: '',
-            callBackUrl: common.getHref()
-          }),
-        })
+        common.toAppShare(activity);
       }else{
         var share = common.createShare()
         dom.append(share);

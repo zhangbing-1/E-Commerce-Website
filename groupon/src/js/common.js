@@ -229,6 +229,9 @@ $(function() {
     getOrderInfo: function(data){
       data.token = getLocalStroge('token');
       return request({ url: 'group/activity/groupbookingInfo', data: data })
+    },
+    getPoster: function(data){
+      return request({ url: 'activity/getPoster', data: data })
     }
   }
 
@@ -368,6 +371,32 @@ $(function() {
         })
       }
     },500)
+  }
+
+  common.toAppShare = function(activity){
+    var reqContent = common.shareUrl + "detail.html?" + common.stringify({
+      id: activity.activityId,
+      groupId: activity.bookingId || 0
+    })
+    var timeSlot = new Date(activity.activityStartTime).Format('MM月dd日') + '-' + new Date(activity.activityEndTime).Format('MM月dd日');
+    common.actions.getPoster({bizId:activity.activityId,reqContent:reqContent}).done(function(res){
+      if(res.code == 0){
+        wx.miniProgram.navigateTo({
+          url:'/pages/h5/shareImageView?' + common.stringify({
+            id: activity.activityId,
+            bookingId: activity.bookingId,
+            title: activity.activityTitle,
+            timeSlot: '拼团活动' + timeSlot,
+            desc: activity.activityGroupCount + '人成团,每人' + activity.price + '元',
+            shareTitle: '【团购】' + activity.activityTitle,
+            shareDesc: activity.activityGroupCount + '人成团,每人' + activity.price + '元',
+            shareImg: '',
+            img: res.data,
+            callBackUrl: common.getHref()
+          }),
+        })
+      }
+    })
   }
 
   $.extend(common, {
