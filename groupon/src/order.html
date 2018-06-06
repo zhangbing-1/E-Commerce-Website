@@ -41,7 +41,7 @@
     {{if isShop}}
       {{if activity.bookingStatus == 1 }}
       <div class="count-down-title">等待成团</div>
-      <div class="count-down">团购订单需在 {{ activity.remainingTime | remainingTimeFilter}} 内邀请1位好友参团</div>
+      <div class="count-down">团购订单需在 {{ activity.remainingTime | remainingTimeFilter}} 内邀请{{activity.leftCount}}位好友参团</div>
       {{else if activity.bookingStatus == 2 }}
       <div class="count-down-title">已成团</div>
       <div class="count-down">交易成功</div>
