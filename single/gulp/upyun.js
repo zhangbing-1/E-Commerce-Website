@@ -37,7 +37,7 @@ function uploadFile(path, file, callback) {
     console.log(path + ' ===== success');
     callback();
   }).catch(res => {
-    console.log(`${fileName} 上传失败`)
+    console.log(`${path} 上传失败`)
   })
 }
 
