@@ -304,6 +304,16 @@ $(function() {
     dom.on('click','.go-share',function(){
       if(common.isWxApp()){
         common.toAppShare(activity);
+      }else if(common.isClient){
+        bridge.call('callNavShare',{
+          title: '【团购】' + activity.activityTitle,
+          link: common.shareUrl + "detail.html?" + common.stringify({
+            id: activity.activityId,
+            groupId: activity.bookingId || 0
+          }),
+          desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
+          imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+        });
       }else{
         var share = common.createShare()
         dom.append(share);

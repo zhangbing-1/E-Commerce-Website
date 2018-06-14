@@ -11,6 +11,7 @@ $(function() {
   }
   var u = navigator.userAgent;
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
+  common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie";
   common.isPhone = u.indexOf('iPhone') > -1;
   common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
   common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
@@ -361,6 +362,12 @@ $(function() {
     var params = urlGet();
     setTimeout(function(){
       if(common.isWxApp()){
+        if(params.token) common.setLocalStroge('token',params.token)
+        callBack();
+      }else if(common.isClient){
+        if(params.token) common.setLocalStroge('token',params.token)
+        callBack();
+      }else if(location.href.indexOf('http://h5.test.chaisenwuli.com/') != -1){
         if(params.token) common.setLocalStroge('token',params.token)
         callBack();
       }else{
