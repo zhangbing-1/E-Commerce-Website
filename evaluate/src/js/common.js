@@ -155,6 +155,9 @@ $(function() {
   var actions = {
     getEvaluateDetail: function(id){
       return request({ url:'answer/api/v1/reploy/detail', type:'POST', data:{id:id} })
+    },
+    commitEvaluate: function(data){
+      return request({ url:'answer/api/v1/reploy', type:'POST', data:data })
     }
   }
 
