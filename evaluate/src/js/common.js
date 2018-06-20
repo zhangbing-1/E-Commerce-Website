@@ -10,13 +10,13 @@ $(function() {
     common.baseUrl = "//api.chaisenwuli.com/";
   }
   var u = navigator.userAgent;
+  common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie";
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
   common.isPhone = u.indexOf('iPhone') > -1;
   common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
   common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
   common.shareUrl = location.origin + "/activitys/appDownload/";
 
-  setLocalStroge('token','c7714088bf8e486fb9669e10f2e0581c');
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
     var o = {
@@ -83,7 +83,7 @@ $(function() {
 
       if (res.code == 1) {
         removeLocalStroge('token')
-
+        tokenExpire();
       }
     }).fail(function() {
       !isHideLoading && loading.hide();
@@ -151,6 +151,11 @@ $(function() {
   function removeLocalStroge(key) {
     localStorage.removeItem('activity-' + key + '-' + version);
   }
+  function tokenExpire(){
+    if(common.isClient){
+      bridge.call('tokenExpire');
+    }
+  }
 
   var actions = {
     getEvaluateDetail: function(id){
@@ -176,51 +181,6 @@ $(function() {
     return args;
   }
 
-  template.defaults.imports.dateFormatFilter = function(str,format) {
-    return new Date(str).Format(format)
-  }
-
-  template.defaults.imports.weekFilter = function(str,format) {
-    return ["周日","周一","周二","周三","周四","周五","周六"][new Date(str).getDay()]
-  }
-
-  template.defaults.imports.bookStatusFilter = function(status) {
-    return ["","等待成团","已成团","拼团成功"][status]
-  }
-
-  function createAreaList(list) {
-    var arr = [];
-    for (var i = 0; i < list.length; i++) {
-      arr.push({ id: list[i].id, value: list[i].name });
-    }
-    return arr;
-  }
-
-  common.provinceData = function(callback) {
-    actions.getAreaList(1, 0).done(function(res) {
-      if (res.code == 0) {
-        callback(createAreaList(res.data))
-      }
-    });
-  }
-  common.cityData = function(province, callback) {
-    actions.getAreaList(2, province).done(function(res) {
-      if (res.code == 0) {
-        callback(createAreaList(res.data))
-      }
-    });
-  }
-  common.areaData = function(province, city, callback) {
-    actions.getAreaList(3, city).done(function(res) {
-      if (res.code == 0) {
-        callback(createAreaList(res.data))
-      }
-    });
-  }
-
-
-
-
 
 
   $.extend(common, {
@@ -233,6 +193,7 @@ $(function() {
     toast: createToast,
     urlGet: urlGet,
     stringify: stringify,
-    createConfirm: createConfirm
+    createConfirm: createConfirm,
+    tokenExpire:tokenExpire
   }, true);
 });

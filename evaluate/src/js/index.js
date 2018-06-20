@@ -1,4 +1,12 @@
 $(function() {
+  FastClick.attach(document.body);
+  var token = bridge.call('getToken');
+  if(token){
+    common.setLocalStroge("token",token)
+  }else{
+    common.tokenExpire();
+  }
+
   var dom = $('#container'),
     params = common.urlGet(),
     reployScore = 3,
