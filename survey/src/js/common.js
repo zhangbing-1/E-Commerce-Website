@@ -9,6 +9,13 @@ $(function() {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/survey/";
     common.baseUrl = "//api.chaisenwuli.com/";
   }
+
+  var u = navigator.userAgent;
+  common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie";
+  common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
+  common.isPhone = u.indexOf('iPhone') > -1;
+  common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
     var o = {
@@ -68,15 +75,21 @@ $(function() {
     return $.ajax(_options).done(function(res) {
       !isHideLoading && loading.hide();
       if (res.code == 1) {
-        removeLocalStroge('token')
-        location.href = './login.html';
+        tokenExpire();
       }
     }).fail(function() {
       !isHideLoading && loading.hide();
       !isHideToast && common.toast('网络异常,请刷新重试');
     });
   }
-
+  function tokenExpire(){
+    removeLocalStroge('token')
+    if(common.isClient){
+      bridge.call('tokenExpire');
+    }else{
+      location.href = './login.html';
+    }
+  }
   function Loading() {
     this.elem = $('<div class="loading-layer"><div class="loading-inner"><img src="' + common.prefix + 'img/loading.png" /></div></div>');
   }
@@ -132,6 +145,9 @@ $(function() {
     },
     getUser: function(data){
       return request({ url: 'user/userInfo', data: data });
+    },
+    commonNewSurvey: function(data){
+      return request({ url: 'user/api/v1/archives/add', type: 'post', data: data });
     }
   }
 
@@ -160,5 +176,6 @@ $(function() {
     toast: createToast,
     urlGet: urlGet,
     stringify: stringify,
+    tokenExpire:tokenExpire
   }, true);
 });

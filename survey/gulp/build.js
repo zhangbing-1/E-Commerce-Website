@@ -17,7 +17,7 @@ var config = require('../package.json');
 var rename = require("gulp-rename");
 var urlPrefixer = require('gulp-url-prefixer');
 
-var modules = ['index', 'login'];
+var modules = ['index', 'login','new'];
 var buildPath = '../build/',
   srcPath = '../src/';
 var isDev = process.argv[6] == 'dev';
