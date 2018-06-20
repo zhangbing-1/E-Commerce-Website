@@ -1,0 +1,95 @@
+.container-evaluate{
+  position: relative;
+  height:100%;
+  padding: .3rem .3rem 0;
+  .wrapper{
+    width: 100%;
+    padding:.3rem 0;
+    border-radius: 6px;
+    background-color: #fff;
+    .title{
+      padding:0 .3rem;
+      font-size: .38rem;
+      color: #333;
+      line-height: .53rem;
+    }
+    .answer-teacher-name,.answer-num{
+      padding: .2rem .3rem 0;
+      font-size: .26rem;
+      color: #666;
+      line-height: .37rem;
+    }
+    .answer-num{
+      padding: .06rem .3rem .3rem;
+    }
+    .evaluate-result{
+      display:flex;
+      height:1.2rem;
+      align-items:center;
+      font-size: .26rem;
+      color: #666;
+      line-height: .37rem;
+      padding: 0 .3rem;
+      border-top: 1px solid #D9D9D9;
+      border-bottom: 1px solid #D9D9D9;
+      .star{
+        display:flex;
+        height:.4rem;
+        align-items:center;
+        margin-right:.3rem;
+        .icon-gray,.icon-light{
+          display:block;
+          width:.4rem;
+          height:100%;
+          margin-right: .3rem;
+          background-position: left center;
+          background-repeat: no-repeat;
+          background-size: 100% auto;
+        }
+        .icon-gray{
+          background-image: url(../img/icon-star-gray.png);
+        }
+        .icon-light{
+          background-image:url(../img/icon-start-light.png);
+        }
+      }
+    }
+    .textarea{
+      padding:.3rem .3rem 0;
+      textarea{
+        width: 100%;
+        height: 4rem;
+        background-color: #fff;
+        outline: none;
+        font-size: .3rem;
+        line-height: .42rem;
+        color: #333;
+      }
+    }
+  }
+  .submit{
+    display:flex;
+    margin-top: .6rem;
+    align-items:center;
+    justify-content:center;
+    font-size:.32rem;
+    line-height:.45rem;
+    color:#fff;
+    width:100%;
+    height:.88rem;
+    border-radius:6px;
+    background-color:#FF6D41;
+  }
+  .complaint{
+    position:fixed;
+    font-size:.28rem;
+    line-height:.4rem;
+    text-align: center;
+    color:#333;
+    left: 50%;
+    width:1rem;
+    margin-left: -.5rem;
+    bottom: .42rem;
+    display:inline-block;
+  }
+}
