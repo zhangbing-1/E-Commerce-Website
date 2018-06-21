@@ -9,7 +9,7 @@ $(function() {
 
   var dom = $('#container'),
     params = common.urlGet(),
-    reployScore = 3,
+    reployScore = 0,
     lable = '答题数不一致',
     isComplete = false;
 
@@ -18,12 +18,12 @@ $(function() {
     lable = data.reployLabel ? data.reployLabel : lable;
     $(".select:contains(" + lable + ")").addClass('current');
     dom.find('.answer-num').text('答疑数量： ' + data.count);
-    reployScore = data.reployScore ? data.reployScore : 1;
+    reployScore = data.reployScore;
     if(reployScore == 1){
       dom.find('.select-group').show();
       dom.find('.reployContent').attr('placeholder','详细描述你所遇到的问题，不超过200字')
     }
-    renderStar(data.reployScore ? data.reployScore : 3);
+    renderStar(reployScore);
     dom.find('.reployContent').val(data.reployContent);
     if(data.reployContent){
       dom.find('.submit').hide();
@@ -57,6 +57,8 @@ $(function() {
       case 5:
         starStr = '5分，非常好';
         break;
+      default:
+        break;
     }
     dom.find('.star').html(domStr);
     dom.find('.star-text').html(starStr);
@@ -88,6 +90,9 @@ $(function() {
 
     dom.on('click','.submit',function(){
       if(isComplete) return common.toast('已经提交过');
+      if(reployScore == 0){
+         return common.toast('请选择星级');
+      }
       var content = dom.find('.reployContent').val();
       if(!content){
         return common.toast(reployScore == 1 ? '请输入你的问题' : '请输入你的感受');
@@ -104,15 +109,18 @@ $(function() {
       }).done(function(res){
         if(res.code == 0){
           common.toast('提交成功');
+          init();
         }
       })
     })
   }
-
-  common.actions.getEvaluateDetail(params.id).done(function(res){
-    if(res.code == 0){
-      renderPage(res.data);
-    }
-    bindEvent();
-  })
+  function init(){
+    common.actions.getEvaluateDetail(params.id).done(function(res){
+      if(res.code == 0){
+        renderPage(res.data);
+      }
+      bindEvent();
+    })
+  }
+  init();
 });
