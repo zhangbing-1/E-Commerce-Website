@@ -84,6 +84,7 @@ $(function() {
     })
 
     dom.on('click','.select',function(){
+      if(isComplete) return;
       dom.find('.select').removeClass('current');
       $(this).addClass('current');
       lable = $(this).text();
