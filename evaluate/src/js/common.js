@@ -141,15 +141,15 @@ $(function() {
   }
 
   function getLocalStroge(key) {
-    return localStorage.getItem('activity-' + key + '-' + version);
+    return localStorage.getItem(key);
   }
 
   function setLocalStroge(key, value) {
-    localStorage.setItem('activity-' + key + '-' + version, value);
+    localStorage.setItem(key, value);
   }
 
   function removeLocalStroge(key) {
-    localStorage.removeItem('activity-' + key + '-' + version);
+    localStorage.removeItem(key);
   }
   function tokenExpire(){
     if(common.isClient){

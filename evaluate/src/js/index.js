@@ -1,6 +1,6 @@
 $(function() {
   FastClick.attach(document.body);
-  var token = bridge.call('getToken');
+  var token = common.isClient ? bridge.call('getToken') : common.getLocalStroge('');
   if(token){
     common.setLocalStroge("token",token)
   }else{
@@ -27,7 +27,8 @@ $(function() {
     dom.find('.reployContent').val(data.reployContent);
     if(data.reployContent){
       dom.find('.submit').hide();
-      dom.find('.reployContent').prop('disabled', true)
+      dom.find('.reployContent').prop('readonly', true)
+      dom.find('.status').show();
       isComplete = true;
     }
   }
@@ -88,15 +89,19 @@ $(function() {
       lable = $(this).text();
     })
 
+    dom.on('click','.close',function(){
+      dom.find('.success-wrapper').hide();
+    })
+
     dom.on('click','.submit',function(){
       if(isComplete) return common.toast('已经提交过');
       if(reployScore == 0){
          return common.toast('请选择星级');
       }
       var content = dom.find('.reployContent').val();
-      if(!content){
-        return common.toast(reployScore == 1 ? '请输入你的问题' : '请输入你的感受');
-      }
+      // if(!content){
+      //   return common.toast(reployScore == 1 ? '请输入你的问题' : '请输入你的感受');
+      // }
       if(content.length > 200){
         return common.toast('内容不能超过200字');
       }
@@ -108,7 +113,7 @@ $(function() {
         label: reployScore == 1 ? lable : ''
       }).done(function(res){
         if(res.code == 0){
-          common.toast('提交成功');
+          dom.find('.success-wrapper').show();
           init();
         }
       })
