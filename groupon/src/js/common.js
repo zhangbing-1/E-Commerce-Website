@@ -15,6 +15,7 @@ $(function() {
   common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
   common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
   common.shareUrl = location.origin + "/activitys/groupon/";
+  common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie";
 
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
@@ -68,7 +69,17 @@ $(function() {
     }, options)
     _options.type = _options.type.toUpperCase();
     _options.url = common.baseUrl + _options.url;
-    $.extend(_data, { source: 4 }, _options.data || {});
+    $.extend(_data, {source: 4}, _options.data || {});
+
+    if (!_data.token && getLocalStroge('token')) {
+      _data.token = getLocalStroge('token');
+    }
+    if(!_data.openId && getLocalStroge('openId')){
+      _data.openId = getLocalStroge('openId');
+    }
+    if(!_data.unionId && getLocalStroge('unionId')){
+      _data.unionId = getLocalStroge('unionId');
+    }
     _data.timestamp = new Date().Format();
     _data.sign = getSign(_data);
     _options.data = stringify(_data);
@@ -173,6 +184,9 @@ $(function() {
     getCode: function(data) {
       return request({ url: 'user/verifyCode', data: data });
     },
+    getToken: function(data){
+      return request({ url: 'user/getToken' })
+    },
     login: function(data) {
       return request({ url: 'user/login', type: 'post', data: data });
     },
@@ -213,8 +227,8 @@ $(function() {
     getWxConfig: function() {
       return request({ url: 'wx/createUrlSig', data: { url: location.href.split('#')[0] } });
     },
-    getOpenId: function(code) {
-      return request({ url: 'wx/authInfo', data: { code: code } });
+    getOpenId: function(data) {
+      return request({ url: 'wx/authInfo', data: data });
     },
     getProductDetail: function(data) { // 获取所有商品详情
       return request({ url: 'product/detail', data: data })
@@ -310,24 +324,34 @@ $(function() {
 
   common.getOpenId = function(){
     var dtd = $.Deferred();
+    var appid = 'wxb34a5e23b1078fad';
     var redirectUri = location.href.replace(/#.*/, '')
       .replace(/(code|state|t)=[^&]+[&]?/g, '')
       .replace(/&$/, '')
       .replace(/\?$/, '')
       .replace(location.origin, 'http://codeproxy.chaisenwuli.com'),
       _obj = urlGet();
-    redirectUri += redirectUri.indexOf('?') == -1 ? '?t=1' : '&t=1';
+    if(location.href.indexOf('h5.test.chaisenwuli.com') != -1){
+      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=3' : '&t=3';
+    }else{
+      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=1' : '&t=1';
+    }
     redirectUri = encodeURIComponent(redirectUri);
-    var baseUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb34a5e23b1078fad&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=null#wechat_redirect";
+    var baseUrl =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=null#wechat_redirect";
 
-    var openId = getLocalStroge('openId');
-    if (openId) {
-      dtd.resolve(openId);
+    var openId = getLocalStroge('openId'), unionId = getLocalStroge('unionId');
+    if (openId && unionId) {
+      dtd.resolve(openId,unionId);
     } else if (_obj.code) {
-      actions.getOpenId(_obj.code).done(function(res) {
+      actions.getOpenId({
+        code: _obj.code,
+        scope: 1,
+        appId: appid,
+      }).done(function(res) {
         if (res.code == 0 && res.data.openId) {
           setLocalStroge('openId', res.data.openId || '');
-          dtd.resolve(res.data.openId);
+          setLocalStroge('unionId', res.data.unionId || '');
+          dtd.resolve(res.data.openId,res.data.unionId);
         } else {
           location.replace(baseUrl);
         }
@@ -366,7 +390,13 @@ $(function() {
       }else{
         common.getOpenId().done(function(openId){
           common.initWeixinConfig().done(function(){
-            callBack();
+            actions.getToken().done(function(res){
+               if(res.code == 0 && res.data.token){
+                  common.setLocalStroge('token',res.data.token)
+               }
+               callBack();
+            })
+
           })
         })
       }
