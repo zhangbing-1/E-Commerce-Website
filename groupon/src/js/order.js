@@ -3,20 +3,6 @@ $(function() {
   var dom = $('#container');
   var activity = null, product = null, address = null, user = null;
 
-  if(!common.getLocalStroge('token')){
-    if(common.isWxApp()){
-      wx.miniProgram.navigateTo({
-        url:'/pages/login/wxLogin?' + common.stringify({
-          callBackUrl: common.getHref()
-        })
-      })
-    }else{
-      location.href = './login.html?' + common.stringify({
-        callBackUrl:location.href
-      })
-    }
-  }
-
   function renderActivityInfo() {
     var data = {
       groupActivityId: params.id,
@@ -241,6 +227,19 @@ $(function() {
   }
 
   common.initialize(function(){
+    if(!common.getLocalStroge('token')){
+      if(common.isWxApp()){
+        wx.miniProgram.navigateTo({
+          url:'/pages/login/wxLogin?' + common.stringify({
+            callBackUrl: common.getHref()
+          })
+        })
+      }else{
+        location.href = './login.html?' + common.stringify({
+          callBackUrl:location.href
+        })
+      }
+    }
     renderActivityInfo();
     bindEvent();
   })
