@@ -17,11 +17,10 @@ var config = require('../package.json');
 var rename = require("gulp-rename");
 var urlPrefixer = require('gulp-url-prefixer');
 
-var modules = ['index', 'login','new'];
-var buildPath = '../build/',
-  srcPath = '../src/';
+var modules = ['index','complain'];
+var buildPath = '../build/',srcPath = '../src/';
 var isDev = process.argv[6] == 'dev';
-var cdnHost = isDev ? '//zongjiewebimg.chaisenwuli.com/activitys/survey/' : '//zongjiewebimg.chaisenwuli.com/test/activitys/survey/';
+var cdnHost = isDev ? '//zongjiewebimg.chaisenwuli.com/activitys/evaluate/' : '//zongjiewebimg.chaisenwuli.com/test/activitys/evaluate/';
 
 gulp.task('clean', function(cb) {
   del([buildPath + '**/*'], cb);

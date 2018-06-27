@@ -15,7 +15,7 @@ var imagemin = require('gulp-imagemin');
 var config = require('../package.json');
 var rename = require("gulp-rename");
 
-var modules = ['index','login','new'];
+var modules = ['index','complain'];
 
 var publicPath = '../public/',srcPath = '../src/';
 
@@ -95,11 +95,11 @@ gulp.task('dev', devTask, function() {
     gulp.watch(srcPath + 'js/' + key + '.js', ['js:' + key]);
   });
 
-  var htmlTask = [];
-  modules.forEach(key => { htmlTask.push('html:' + key) });
-  gulp.watch(srcPath + '**/*.html', htmlTask);
+  modules.forEach(key => {
+    gulp.watch(srcPath + key +'.html', ['html:'+key]);
+  });
 
   gulp.watch(srcPath + 'vender/**/*.js', ['js:vender']);
   gulp.watch(srcPath + 'scss/**/*.scss', ['sass']);
-  gulp.watch(srcPath + 'img/**/*', ['image']);
+  gulp.watch(srcPath + 'img/**/*', ['img']);
 });

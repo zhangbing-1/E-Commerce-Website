@@ -4,17 +4,18 @@ $(function() {
   common.baseUrl = '//testapi.chaisenwuli.com/';
   common.prefix = './';
   if (location.href.indexOf("h5.test.chaisenwuli.com") !== -1) {
-    common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/survey/";
-  } else if(location.href.indexOf('h5.chaisenwuli.com') !== -1) {
-    common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/survey/";
+    common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/appDownload/";
+  }else if (location.href.indexOf('h5.chaisenwuli.com') !== -1) {
+    common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/appDownload/";
     common.baseUrl = "//api.chaisenwuli.com/";
   }
-
   var u = navigator.userAgent;
   common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie";
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
   common.isPhone = u.indexOf('iPhone') > -1;
   common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+  common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
+  common.shareUrl = location.origin + "/activitys/appDownload/";
 
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
@@ -70,11 +71,18 @@ $(function() {
     _options.url = common.baseUrl + _options.url;
     $.extend(_data, { source: 4 }, _options.data || {});
     _data.timestamp = new Date().Format();
+    if(getLocalStroge('token')){
+      _data.token = getLocalStroge('token');
+    }
     _data.sign = getSign(_data);
     _options.data = stringify(_data);
     return $.ajax(_options).done(function(res) {
-      !isHideLoading && loading.hide();
+      setTimeout(function(){
+        !isHideLoading && loading.hide();
+      },500)
+
       if (res.code == 1) {
+        removeLocalStroge('token')
         tokenExpire();
       }
     }).fail(function() {
@@ -82,17 +90,11 @@ $(function() {
       !isHideToast && common.toast('网络异常,请刷新重试');
     });
   }
-  function tokenExpire(){
-    removeLocalStroge('token')
-    if(common.isClient){
-      bridge.call('tokenExpire');
-    }else{
-      location.href = './login.html';
-    }
-  }
+
   function Loading() {
     this.elem = $('<div class="loading-layer"><div class="loading-inner"><img src="' + common.prefix + 'img/loading.png" /></div></div>');
   }
+
   Loading.prototype.show = function() {
     this.elem.appendTo('body').fadeIn('fast');
   }
@@ -101,6 +103,10 @@ $(function() {
     this.elem.fadeOut('fast', function() {
       that.elem.remove();
     });
+  }
+
+  common.getHref = function(){
+    return location.href.replace(/(token|a)=[^&]+[&]?/g, '').replace(/&$/, '').replace(/\?$/, '');
   }
 
   function createToast(text) {
@@ -112,42 +118,51 @@ $(function() {
     });
   }
 
+  common.createShare = function(){
+    return '<div class="share-layer"><span>点击右上角按钮，<br/>选择浏览器打开</span><img src="' + common.prefix + '/img/icon-arrow.png"></div>';
+  }
+
   function createLoading() {
     return new Loading();
   }
 
+  function createConfirm(title) {
+    var dtd = $.Deferred();
+    var confirm = $('<div class="confirm-layer"><div class="confirm-inner"><div class="title">' + title + '</div><div class="btns"><div class="btn-cancle">取消</div><div class="btn-ok">确定</div></div></div></div>')
+    confirm.appendTo('body').fadeIn('fast', function() {
+      confirm.on('click', '.btn-cancle', function() {
+        dtd.reject(confirm);
+      })
+      confirm.on('click', '.btn-ok', function() {
+        dtd.resolve(confirm);
+      })
+    })
+    return dtd;
+  }
+
   function getLocalStroge(key) {
-    return localStorage.getItem('activity-' + key + '-' + version);
+    return localStorage.getItem(key);
   }
 
   function setLocalStroge(key, value) {
-    localStorage.setItem('activity-' + key + '-' + version, value);
+    localStorage.setItem(key, value);
   }
 
   function removeLocalStroge(key) {
-    localStorage.removeItem('activity-' + key + '-' + version);
+    localStorage.removeItem(key);
   }
-
-  common.verify = {
-    phone: /^1\d{10}$/,
-    captcha: /^\d{4}$/
+  function tokenExpire(){
+    if(common.isClient){
+      bridge.call('tokenExpire');
+    }
   }
 
   var actions = {
-    getCode: function(data) {
-      return request({ url: 'user/verifyCode', data: data });
+    getEvaluateDetail: function(id){
+      return request({ url:'answer/api/v1/reploy/detail', type:'POST', data:{id:id} })
     },
-    login: function(data) {
-      return request({ url: 'user/login', type: 'post', data: data });
-    },
-    commonSurvey: function(data) {
-      return request({ url: 'user/addQuestionnaire', type: 'post', data: data });
-    },
-    getUser: function(data){
-      return request({ url: 'user/userInfo', data: data });
-    },
-    commonNewSurvey: function(data){
-      return request({ url: 'user/api/v1/archives/add', type: 'post', data: data });
+    commitEvaluate: function(data){
+      return request({ url:'answer/api/v1/reploy', type:'POST', data:data })
     }
   }
 
@@ -166,6 +181,8 @@ $(function() {
     return args;
   }
 
+
+
   $.extend(common, {
     version: version,
     actions: actions,
@@ -176,6 +193,7 @@ $(function() {
     toast: createToast,
     urlGet: urlGet,
     stringify: stringify,
+    createConfirm: createConfirm,
     tokenExpire:tokenExpire
   }, true);
 });
