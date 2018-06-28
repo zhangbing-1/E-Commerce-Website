@@ -6,12 +6,12 @@ $(function() {
   }else{
     common.tokenExpire();
   }
-
   var dom = $('#container'),
     params = common.urlGet(),
     reployScore = 0,
     lable = '答题数不一致',
-    isComplete = false;
+    isComplete = false,
+    isEnterClose = false;
 
   function renderPage(data){
     dom.find('.answer-teacher-name').text('答疑老师： ' + data.teacherName);
@@ -92,9 +92,14 @@ $(function() {
 
     dom.on('click','.close',function(){
       dom.find('.success-wrapper').hide();
+      if(common.isClient && !isEnterClose){
+        isEnterClose = true;
+        bridge.call('callBarBack');
+      }
     })
 
     dom.on('click','.submit',function(){
+      dom.find('.success-wrapper').show();
       if(isComplete) return common.toast('已经提交过');
       if(reployScore == 0){
          return common.toast('请选择星级');

@@ -165,14 +165,22 @@
         font-size:.3rem;
         color: #666666;
         border-bottom:1px solid #D9D9D9;
-        > img{
+        .close{
           position:absolute;
           display:block;
-          top:50%;
-          right:.3rem;
-          width:.3rem; height:auto;
-          transform:translate(0,-50%);
+          height:.88rem;
+          width:.88rem;
+          top:0; right:0;
+           > img{
+            position:absolute;
+            display:block;
+            top:50%;
+            right:.3rem;
+            width:.3rem; height:auto;
+            transform:translate(0,-50%);
+          }
         }
+
       }
       > img{
         margin:1rem auto 0;

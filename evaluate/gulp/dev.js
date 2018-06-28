@@ -84,7 +84,7 @@ gulp.task('dev', devTask, function() {
     },
     notify: false,
     open: 'external', // 决定Browsersync启动时自动打开的网址 external 表示 可外部打开 url, 可以在同一 wifi 下不同终端测试
-    port: 3500
+    port: 3502
   });
 
   var commonTask = [];
