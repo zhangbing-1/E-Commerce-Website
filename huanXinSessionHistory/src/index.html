@@ -1,0 +1,163 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>爱总结</title>
+  <!-- build:css -->
+  <!-- endbuild -->
+  <style type="text/css">
+    .huanxin-session-controller > .more{
+      line-height: 30px;
+      text-align: center;
+      color: #999;
+    }
+    .huanxin-session-msg{
+       padding: 15px;
+    }
+    .huanxin-session-msg-header{
+      line-height: 30px;
+    }
+    .huanxin-session-msg-header > .name{
+      padding: 0 15px 0 0;
+      font-size: 16px;
+      color: #4a9430;
+    }
+    .huanxin-session-msg-header > .time{
+      color: #c3c4c4;
+      font-size: 14px;
+    }
+    .huanxin-session-msg-body{
+      padding: 10px 10px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .huanxin-session-msg-body > img {
+      display: block;
+      width: 300px;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="width: 400px; height: 600px; border: 1px solid #ddd">
+    <div class="huanxin-session-controller">
+    </div>
+   </div>
+
+  <!-- build:js -->
+  <!-- endbuild -->
+  <script type="text/javascript">
+    Date.prototype.Format = function(fmt) {
+      fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
+      var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+      };
+      if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+      for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+      return fmt;
+    }
+    function HuanXinSessionPage(){
+      this.elem = $('.huanxin-session-controller');
+      this.url = 'https://api.chaisenwuli.com/';
+      this.fetch = false;
+      this.startTime = 0;
+      this.pageSize = 13;
+      this.id = '53874017763329';
+    }
+    HuanXinSessionPage.prototype.init = function(){
+      var that = this,
+        $wrapper = this.elem,
+        $parent = $wrapper.parent();
+      $wrapper.css({
+        width:$parent.width(),
+        height:$parent.height(),
+        'overflow-y':'scroll'
+      });
+
+      $wrapper.on('scroll',function(){
+        var height = $wrapper.height();
+        var top = $wrapper.scrollTop();
+        var scrollHeight = $wrapper[0].scrollHeight
+        if( height + top + 50 > scrollHeight && !that.fetch){
+          that.fetch = true;
+          that.getData();
+        }
+      })
+    }
+    HuanXinSessionPage.prototype.renderList = function(data){
+      var list = [];
+      for(var i = 0; i < data.length; i++){
+        var item = data[i];
+        if(i == data.length - 1){
+          this.startTime = item.timestamp;
+        }
+        list.push('<div class="huanxin-session-msg">');
+          list.push('<div class="huanxin-session-msg-header">');
+            list.push('<span class="name">' + item.from +'</span>');
+            list.push('<span class="time">' + new Date(item.timestamp).Format() +'</span>');
+          list.push('</div>');
+          list.push('<div class="huanxin-session-msg-body">');
+            // TXT("txt"), IMG("img"), AUDIO("audio"), VIDEO("video"), CMD("cmd");
+            if(item.msgType == 'txt'){
+              list.push('<span class="text">' + item.msg + '</span>');
+            }else if(item.msgType == 'img'){
+              list.push('<img src="' + item.url + '"></span>');
+            }else if(item.msgType == 'audio'){
+              list.push('<audio src="' + item.url + '" controls></audio>');
+            }else if(item.msgType == 'video'){
+              list.push('<span class="video"></span>');
+            }else{
+              list.push('<span class="other">暂不支持此消息</span>');
+            }
+          list.push('</div>');
+        list.push('</div>');
+      }
+      return list.join('');
+    }
+    HuanXinSessionPage.prototype.getData = function(){
+
+      var that = this;
+      $.ajax({
+        url: this.url + 'unsign/api/v1/chatmessage/' + this.id + '/' + this.startTime + '/' + this.pageSize ,
+        type: 'POST',
+        dataType: 'json',
+        data: { token:'d6a00b805e40474e976de7de43200c36' },
+      }).done(function(res) {
+        if(res.code == 0){
+          if(that.startTime == 0){
+            that.elem.html(that.renderList(res.data));
+          }else{
+            that.elem.append(that.renderList(res.data));
+          }
+          if(res.data.length >= that.pageSize){
+            that.fetch = false;
+          }else{
+            that.fetch = true;
+            that.elem.append('<div class="more">加载完毕</div>')
+          }
+        }else{
+          alert(res.message)
+        }
+      })
+      .fail(function() {
+        console.log("error");
+      })
+    }
+
+    $(function(){
+      var page = new HuanXinSessionPage();
+      page.init();
+      page.getData();
+    })
+  </script>
+</body>
+
+</html>
