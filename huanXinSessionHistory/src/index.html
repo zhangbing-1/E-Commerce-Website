@@ -43,7 +43,7 @@
   <div style="width: 400px; height: 600px; border: 1px solid #ddd">
     <div class="huanxin-session-controller">
     </div>
-   </div>
+  </div>
 
   <!-- build:js -->
   <!-- endbuild -->
@@ -70,7 +70,7 @@
       this.fetch = false;
       this.startTime = 0;
       this.pageSize = 13;
-      this.id = '53874017763329';
+      this.id = '53967364096002';
     }
     HuanXinSessionPage.prototype.init = function(){
       var that = this,
@@ -99,6 +99,20 @@
         if(i == data.length - 1){
           this.startTime = item.timestamp;
         }
+        function renderAudio(abj){
+          var xhr = new XMLHttpRequest();
+          xhr.open("get", abj.url, true);
+          xhr.setRequestHeader("Accept", "audio/mp3");
+          xhr.responseType = "blob";
+          xhr.onload = function() {
+              if (this.status == 200) {
+                  var blob = this.response;
+                  var href = window.URL.createObjectURL(blob);
+                  $('#' + abj.id).attr('src',href)
+              }
+          }
+          xhr.send();
+        }
         list.push('<div class="huanxin-session-msg">');
           list.push('<div class="huanxin-session-msg-header">');
             list.push('<span class="name">' + item.from +'</span>');
@@ -111,7 +125,9 @@
             }else if(item.msgType == 'img'){
               list.push('<img src="' + item.url + '"></span>');
             }else if(item.msgType == 'audio'){
-              list.push('<audio src="' + item.url + '" controls></audio>');
+              // list.push('<a href="' + item.url + '" download="' + item.timestamp + '.amr">立即下载</a>');
+              list.push('<audio id="' + item.id + '" controls></audio>');
+              renderAudio(item);
             }else if(item.msgType == 'video'){
               list.push('<span class="video"></span>');
             }else{
