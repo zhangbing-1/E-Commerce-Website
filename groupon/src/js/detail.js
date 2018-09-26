@@ -199,6 +199,38 @@ $(function() {
           callBackUrl: common.shareUrl + "detail.html?id=" + id + "&groupId=" + groupId
         })
       })
+    }else if(common.isClient){
+      var payType = 1;
+      common.actions.groupActivityPay({
+        groupActivityId: id,
+        groupBookingId: groupId,
+        expressAddress: '',
+        expressPhone: '',
+        expressName: '',
+        payType: 1,
+        orderSource: 5
+      }).done(function(res) {
+        if (res.code == 0) {
+          var params = null, config = res.data;
+          if(payType == 1){
+            params = {
+              partnerid:config.partnerId,
+              prepayid:config.prepayId,
+              noncestr:config.nonceStr,
+              timestamp:config.timeStamp,
+              packageName:config.packageValue,
+              sign:config.sign
+            }
+          } else {
+            params = {
+              orderInfo: config,
+            }
+          }
+          bridge.call('callNavPay', { ptype: payType, params:params })
+        } else {
+          common.toast(res.message);
+        }
+      })
     }else{
       common.actions.groupActivityPay({
         groupActivityId: id,
@@ -224,6 +256,14 @@ $(function() {
           common.toast(res.message);
         }
       })
+    }
+  }
+
+  function payResult(res){
+    if(res == 1){
+      location.reload()
+    }else{
+      common.toast('支付失败');
     }
   }
 
@@ -341,6 +381,10 @@ $(function() {
       $(this).addClass('current');
       dom.find(target).show();
     })
+
+    if(common.isClient){
+      bridge.register('payResult',payResult);
+    }
   }
 
   common.initialize(function(){
