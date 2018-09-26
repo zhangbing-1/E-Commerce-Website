@@ -199,6 +199,38 @@ $(function() {
           callBackUrl: common.shareUrl + "detail.html?id=" + id + "&groupId=" + groupId
         })
       })
+    }else if(common.isClient){
+      var payType = 1;
+      common.actions.groupActivityPay({
+        groupActivityId: id,
+        groupBookingId: groupId,
+        expressAddress: '',
+        expressPhone: '',
+        expressName: '',
+        payType: 1,
+        orderSource: 5
+      }).done(function(res) {
+        if (res.code == 0) {
+          var params = null, config = res.data;
+          if(payType == 1){
+            params = {
+              partnerid:config.partnerId,
+              prepayid:config.prepayId,
+              noncestr:config.nonceStr,
+              timestamp:config.timeStamp,
+              packageName:config.packageValue,
+              sign:config.sign
+            }
+          } else {
+            params = {
+              orderInfo: config,
+            }
+          }
+          bridge.call('callNavPay', { ptype: payType, params:params })
+        } else {
+          common.toast(res.message);
+        }
+      })
     }else{
       common.actions.groupActivityPay({
         groupActivityId: id,
@@ -224,6 +256,14 @@ $(function() {
           common.toast(res.message);
         }
       })
+    }
+  }
+
+  function payResult(res){
+    if(res == 1){
+      location.reload()
+    }else{
+      common.toast('支付失败');
     }
   }
 
@@ -304,6 +344,16 @@ $(function() {
     dom.on('click','.go-share',function(){
       if(common.isWxApp()){
         common.toAppShare(activity);
+      }else if(common.isClient){
+        bridge.call('callNavShare',{
+          title: '【团购】' + activity.activityTitle,
+          link: common.shareUrl + "detail.html?" + common.stringify({
+            id: activity.activityId,
+            groupId: activity.bookingId || 0
+          }),
+          desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
+          imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+        });
       }else{
         var share = common.createShare()
         dom.append(share);
@@ -341,6 +391,10 @@ $(function() {
       $(this).addClass('current');
       dom.find(target).show();
     })
+
+    if(common.isClient){
+      bridge.register('payResult',payResult);
+    }
   }
 
   common.initialize(function(){

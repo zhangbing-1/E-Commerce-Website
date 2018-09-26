@@ -11,6 +11,7 @@ $(function() {
   }
   var u = navigator.userAgent;
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
+  common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie";
   common.isPhone = u.indexOf('iPhone') > -1;
   common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
   common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
@@ -56,6 +57,16 @@ $(function() {
     return paramStr.join('&');
   }
 
+  function getInterfaceSource() {
+    if (common.isClient) {
+      return common.isPhone ? 7 : 6;
+    } else if (common.isWeixin) {
+      return 4;
+    } else {
+      return common.isPhone ? 3 : 2;
+    }
+  }
+
   function request(options, isHideLoading, isHideToast) {
     var loading = common.loading(),
       _options = {},
@@ -68,7 +79,7 @@ $(function() {
     }, options)
     _options.type = _options.type.toUpperCase();
     _options.url = common.baseUrl + _options.url;
-    $.extend(_data, { source: 4 }, _options.data || {});
+    $.extend(_data, { source: getInterfaceSource() }, _options.data || {});
     _data.timestamp = new Date().Format();
     _data.sign = getSign(_data);
     _options.data = stringify(_data);
@@ -361,6 +372,12 @@ $(function() {
     var params = urlGet();
     setTimeout(function(){
       if(common.isWxApp()){
+        if(params.token) common.setLocalStroge('token',params.token)
+        callBack();
+      }else if(common.isClient){
+        if(params.token) common.setLocalStroge('token',params.token)
+        callBack();
+      }else if(location.href.indexOf('http://h5.test.chaisenwuli.com/') != -1){
         if(params.token) common.setLocalStroge('token',params.token)
         callBack();
       }else{
