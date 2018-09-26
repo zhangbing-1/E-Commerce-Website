@@ -107,6 +107,8 @@ $(function() {
                 callBackUrl: common.getHref()
               })
             })
+          }else if(common.isClient){
+            bridge.call('tokenExpire');
           }else{
             location.href = './login.html?' + stringify({
               callBackUrl:location.href
@@ -397,6 +399,12 @@ $(function() {
       if(common.isWxApp()){
         if(params.token) common.setLocalStroge('token',params.token)
         callBack();
+      }else if(common.isClient){
+        common.setLocalStroge('token',bridge.call('getToken'))
+        callBack();
+      }else if(location.href.indexOf('http://h5.test.chaisenwuli.com/') != -1){
+        if(params.token) common.setLocalStroge('token',params.token)
+        callBack()
       }else{
         common.getOpenId().done(function(openId){
           common.initWeixinConfig().done(function(){
