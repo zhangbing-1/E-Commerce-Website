@@ -1,21 +1,21 @@
-var bridge = {
-  default: this,
-  call: function(b, a, c) { var e = ""; "function" == typeof a && (c = a, a = {});
-    a = { data: void 0 === a ? null : a }; if ("function" == typeof c) { var g = "dscb" + window.dscb++;
-      window[g] = c;
-      a._dscbstub = g } a = JSON.stringify(a); if (window._dsbridge) e = _dsbridge.call(b, a);
-    else if (window._dswk || -1 != navigator.userAgent.indexOf("_dsbridge")) e = prompt("_dsbridge=" + b, a); return JSON.parse(e || "{}").data },
-  register: function(b, a, c) {
-    c = c ? window._dsaf : window._dsf;
-    window._dsInit || (window._dsInit = !0, setTimeout(function() { bridge.call("_dsb.dsinit") },
-      0));
-    "object" == typeof a ? c._obs[b] = a : c[b] = a
-  },
-  registerAsyn: function(b, a) { this.register(b, a, !0) },
-  hasNativeMethod: function(b, a) { return this.call("_dsb.hasNativeMethod", { name: b, type: a || "all" }) },
-  disableJavascriptDialogBlock: function(b) { this.call("_dsb.disableJavascriptDialogBlock", { disable: !1 !== b }) }
-};
-! function() {
+!function() {
+  window.bridge = {
+    default: this,
+    call: function(b, a, c) { var e = ""; "function" == typeof a && (c = a, a = {});
+      a = { data: void 0 === a ? null : a }; if ("function" == typeof c) { var g = "dscb" + window.dscb++;
+        window[g] = c;
+        a._dscbstub = g } a = JSON.stringify(a); if (window._dsbridge) e = _dsbridge.call(b, a);
+      else if (window._dswk || -1 != navigator.userAgent.indexOf("_dsbridge")) e = prompt("_dsbridge=" + b, a); return JSON.parse(e || "{}").data },
+    register: function(b, a, c) {
+      c = c ? window._dsaf : window._dsf;
+      window._dsInit || (window._dsInit = !0, setTimeout(function() { bridge.call("_dsb.dsinit") },
+        0));
+      "object" == typeof a ? c._obs[b] = a : c[b] = a
+    },
+    registerAsyn: function(b, a) { this.register(b, a, !0) },
+    hasNativeMethod: function(b, a) { return this.call("_dsb.hasNativeMethod", { name: b, type: a || "all" }) },
+    disableJavascriptDialogBlock: function(b) { this.call("_dsb.disableJavascriptDialogBlock", { disable: !1 !== b }) }
+  };
   if (!window._dsf) {
     var b = {
         _dsf: { _obs: {} },

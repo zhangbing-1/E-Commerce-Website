@@ -48,17 +48,7 @@ $(function() {
 
   common.initialize(function(){
     if(!common.getLocalStroge('token')){
-      if(common.isWxApp()){
-        wx.miniProgram.navigateTo({
-          url:'/pages/login/wxLogin?' + common.stringify({
-            callBackUrl: common.getHref()
-          })
-        })
-      }else{
-        location.href = './login.html?' + common.stringify({
-          callBackUrl:location.href
-        })
-      }
+      common.tokenExpire()
     }
     renderList();
     bindEvent();

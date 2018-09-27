@@ -102,6 +102,32 @@
       }
     }
   }
+  .pay-method{
+    padding: 0 .3rem;
+    background-color:#fff;
+    .item{
+      display:flex;
+      align-items:center;
+      font-size:.3rem;
+      color: #333;
+      line-height:.42rem;
+      height:1.1rem;
+      background-image:url(../img/icon-radio.png);
+      background-repeat:no-repeat;
+      background-size:.4rem;
+      background-position: right .3rem center;
+      border-bottom:1px solid #F4F4F4;
+      &.selected{
+        background-image:url(../img/icon-radio-selected.png)
+      }
+      img{
+        display:block;
+        height:.48rem;
+        width: auto;
+        margin-right: .2rem;
+      }
+    }
+  }
   .group-no,.group-start{
     padding:.2rem .3rem 0;
     font-size:0.24rem;

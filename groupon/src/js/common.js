@@ -101,21 +101,7 @@ $(function() {
 
       if (res.code == 1) {
         removeLocalStroge('token')
-        setTimeout(function(){
-          if(common.isWxApp()){
-            wx.miniProgram.navigateTo({
-              url:'/pages/login/wxLogin?' + common.stringify({
-                callBackUrl: common.getHref()
-              })
-            })
-          }else if(common.isClient){
-            bridge.call('tokenExpire');
-          }else{
-            location.href = './login.html?' + stringify({
-              callBackUrl:location.href
-            });
-          }
-        },300)
+        setTimeout(common.tokenExpire,300)
       }
     }).fail(function() {
       !isHideLoading && loading.hide();
@@ -135,6 +121,23 @@ $(function() {
     this.elem.fadeOut('fast', function() {
       that.elem.remove();
     });
+  }
+
+  common.tokenExpire = function(){
+    removeLocalStroge('token')
+    if(common.isWxApp()){
+      wx.miniProgram.navigateTo({
+        url:'/pages/login/wxLogin?' + common.stringify({
+          callBackUrl: common.getHref()
+        })
+      })
+    }else if(common.isClient){
+      bridge.call('tokenExpire');
+    }else{
+      location.href = './login.html?' + stringify({
+        callBackUrl: location.href
+      });
+    }
   }
 
   common.getHref = function(){
@@ -403,15 +406,12 @@ $(function() {
       }else if(common.isClient){
         common.setLocalStroge('token',bridge.call('getToken'))
         callBack();
-      }else if(location.href.indexOf('http://h5.test.chaisenwuli.com/') != -1){
-        if(params.token) common.setLocalStroge('token',params.token)
-        callBack()
       }else{
         common.getOpenId().done(function(openId){
           common.initWeixinConfig().done(function(){
             actions.getToken().done(function(res){
                if(res.code == 0 && res.data.token){
-                  common.setLocalStroge('token',res.data.token)
+                  // common.setLocalStroge('token',res.data.token)
                }
                callBack();
             })

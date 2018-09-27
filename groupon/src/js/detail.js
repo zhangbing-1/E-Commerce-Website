@@ -290,7 +290,7 @@ $(function() {
         return;
       }
       if (common.getLocalStroge('token')) {
-        if(product.merchandises.length > 0){
+        if(product.merchandises.length > 0 || common.isClient){
           location.href = './order.html?' +  common.stringify({
             id : activity.activityId,
             groupId : activity.bookingId || 0,
@@ -299,17 +299,7 @@ $(function() {
           pay(activity.activityId,activity.bookingId || 0);
         }
       }else{
-        if(common.isWxApp()){
-          wx.miniProgram.navigateTo({
-            url:'/pages/login/wxLogin?' +  common.stringify({
-              callBackUrl: common.getHref()
-            })
-          })
-        }else{
-          location.href = './login.html?' + common.stringify({
-            callBackUrl: location.href
-          })
-        }
+        common.tokenExpire();
       }
     })
 
@@ -369,6 +359,19 @@ $(function() {
         wx.miniProgram.switchTab({
           url: '/pages/mycourse/myCourse'
         })
+      }else if(common.isClient){
+        if(product.classProducts.length == 1){
+          bridge.call('callNavPage', {
+            "page": "page_my_course_detail",
+            "params": {
+              "class_id":product.classProducts[0].id,
+              "product_id":product.id,
+              "course_id":product.courseId
+            }
+          });
+        }else{
+          bridge.call('callNavPage', {page:'page_my_course'});
+        }
       }else{
         var qrcode = common.createQrcode()
         dom.append(qrcode);

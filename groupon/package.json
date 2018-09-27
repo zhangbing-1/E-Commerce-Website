@@ -1,6 +1,6 @@
 {
   "name": "group-buying-activity",
-  "version": "0.0.47",
+  "version": "0.0.51",
   "description": "爱总结团购",
   "main": "index.js",
   "scripts": {

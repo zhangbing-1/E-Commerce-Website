@@ -1,7 +1,7 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, address = null, user = null;
+  var activity = null, product = null, address = null, user = null, payType = 1;
 
   function renderActivityInfo() {
     var data = {
@@ -140,7 +140,7 @@ $(function() {
         if(res2.data && res2.data.length > 0){
           address = getAddress(params.addressId||res1.data.addressid,res2.data);
         }
-        var html = template('tpl-main', { activity: activity, product: product, user: user, isShop: isShop ,address: address});
+        var html = template('tpl-main', { activity: activity, product: product, user: user, isShop: isShop ,address: address, isClient: common.isClient});
         dom.html(html);
       }
     })
@@ -159,7 +159,6 @@ $(function() {
         })
       })
     }else if(common.isClient){
-      var payType = 1;
       common.actions.groupActivityPay({
         groupActivityId: activity.activityId,
         groupBookingId: activity.bookingId || 0,
@@ -167,7 +166,7 @@ $(function() {
         expressPhone: address.phone,
         expressName: address.name,
         payType: payType,
-        orderSource: 5
+        orderSource: common.isPhone ? 6 : 5
       }).done(function(res) {
         if (res.code == 0) {
           var params = null, config = res.data;
@@ -264,6 +263,19 @@ $(function() {
         wx.miniProgram.switchTab({
           url: '/pages/mycourse/myCourse'
         })
+      }else if(common.isClient){
+        if(product.classProducts.length == 1){
+          bridge.call('callNavPage', {
+            "page": "page_my_course_detail",
+            "params": {
+              "class_id":product.classProducts[0].id,
+              "product_id":product.id,
+              "course_id":product.courseId
+            }
+          });
+        }else{
+          bridge.call('callNavPage', {page:'page_my_course'});
+        }
       }else{
         var qrcode = common.createQrcode()
         dom.append(qrcode);
@@ -276,23 +288,19 @@ $(function() {
 
     if(common.isClient){
       bridge.register('payResult',payResult);
+
+      dom.on('click','.pay-method .item',function(){
+        payType = $(this).data('id');
+        dom.find('.pay-method .item').removeClass('selected');
+        $(this).addClass('selected')
+      })
     }
 
   }
 
   common.initialize(function(){
     if(!common.getLocalStroge('token')){
-      if(common.isWxApp()){
-        wx.miniProgram.navigateTo({
-          url:'/pages/login/wxLogin?' + common.stringify({
-            callBackUrl: common.getHref()
-          })
-        })
-      }else{
-        location.href = './login.html?' + common.stringify({
-          callBackUrl:location.href
-        })
-      }
+      common.tokenExpire();
     }
     renderActivityInfo();
     bindEvent();
