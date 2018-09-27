@@ -11,12 +11,11 @@ $(function() {
   }
   var u = navigator.userAgent;
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
-  common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie";
   common.isPhone = u.indexOf('iPhone') > -1;
   common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
   common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
   common.shareUrl = location.origin + "/activitys/groupon/";
-  common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie";
+  common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie" || (common.isPhone && bridge.hasNativeMethod('getVersionCode') == 1);
 
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
