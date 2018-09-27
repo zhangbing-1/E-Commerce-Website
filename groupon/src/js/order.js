@@ -158,6 +158,38 @@ $(function() {
           callBackUrl: common.getHref()
         })
       })
+    }else if(common.isClient){
+      var payType = 1;
+      common.actions.groupActivityPay({
+        groupActivityId: activity.activityId,
+        groupBookingId: activity.bookingId || 0,
+        expressAddress: address.all,
+        expressPhone: address.phone,
+        expressName: address.name,
+        payType: payType,
+        orderSource: 5
+      }).done(function(res) {
+        if (res.code == 0) {
+          var params = null, config = res.data;
+          if(payType == 1){
+            params = {
+              partnerid:config.partnerId,
+              prepayid:config.prepayId,
+              noncestr:config.nonceStr,
+              timestamp:config.timeStamp,
+              packageName:config.packageValue,
+              sign:config.sign
+            }
+          } else {
+            params = {
+              orderInfo: config,
+            }
+          }
+          bridge.call('callNavPay', { ptype: payType, params:params })
+        } else {
+          common.toast(res.message);
+        }
+      })
     }else{
       common.actions.groupActivityPay({
         groupActivityId: activity.activityId,
@@ -186,6 +218,14 @@ $(function() {
     }
   }
 
+  function payResult(res){
+    if(res == 1){
+      location.reload()
+    }else{
+      common.toast('支付失败');
+    }
+  }
+
   function bindEvent() {
     dom.on('click', '.btn-pay', function(e) {
       if(!address) common.toast('请选择地址');
@@ -203,6 +243,16 @@ $(function() {
     dom.on('click','.btn-share',function(){
       if(common.isWxApp()){
         common.toAppShare(activity);
+      }else if(common.isClient){
+        bridge.call('callNavShare',{
+          title: '【团购】' + activity.activityTitle,
+          link: common.shareUrl + "detail.html?" + common.stringify({
+            id: activity.activityId,
+            groupId: activity.bookingId || 0
+          }),
+          desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
+          imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+        });
       }else{
         var share = common.createShare()
         dom.append(share);
@@ -223,6 +273,10 @@ $(function() {
     dom.on('click','.qrcode-layer',function(){
       dom.find('.qrcode-layer').remove()
     })
+
+    if(common.isClient){
+      bridge.register('payResult',payResult);
+    }
 
   }
 
