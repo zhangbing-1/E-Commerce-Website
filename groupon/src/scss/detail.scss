@@ -133,6 +133,16 @@
       justify-content:center;
       align-items:center;
       padding:.3rem 0 .1rem;
+      &.more{
+        display:flex;
+        justify-content:left;
+        flex-wrap:wrap;
+        align-items:center;
+        padding:.1rem 0;
+        .avater{
+          margin-top:.2rem;
+        }
+      }
       .avater{
         display:block;
         height:.88rem;
