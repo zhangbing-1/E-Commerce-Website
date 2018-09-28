@@ -153,7 +153,7 @@ $(function() {
   }
 
   common.createShare = function(){
-    return '<div class="share-layer"><img src="' + common.prefix + '/img/icon-arrow.png"></div>';
+    return '<div class="share-layer"><img src="' + common.prefix + '/img/icon-arrow-1.png"></div>';
   }
 
   common.createQrcode = function(){
@@ -179,15 +179,15 @@ $(function() {
   }
 
   function getLocalStroge(key) {
-    return localStorage.getItem('activity-' + key + '-' + version);
+    return localStorage.getItem(key);
   }
 
   function setLocalStroge(key, value) {
-    localStorage.setItem('activity-' + key + '-' + version, value);
+    localStorage.setItem(key, value);
   }
 
   function removeLocalStroge(key) {
-    localStorage.removeItem('activity-' + key + '-' + version);
+    localStorage.removeItem(key);
   }
 
   common.verify = {
@@ -409,10 +409,10 @@ $(function() {
         common.getOpenId().done(function(openId){
           common.initWeixinConfig().done(function(){
             actions.getToken().done(function(res){
-               if(res.code == 0 && res.data.token){
-                  // common.setLocalStroge('token',res.data.token)
-               }
-               callBack();
+              if(res.code == 0 && res.data.token){
+                common.setLocalStroge('token',res.data.token)
+              }
+              callBack();
             })
 
           })
