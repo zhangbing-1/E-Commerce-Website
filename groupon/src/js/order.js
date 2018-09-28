@@ -227,7 +227,7 @@ $(function() {
 
   function bindEvent() {
     dom.on('click', '.btn-pay', function(e) {
-      if(!address) common.toast('请选择地址');
+      if(product.merchandises.length > 0 && !address) return common.toast('请选择地址');
       pay();
     })
 
