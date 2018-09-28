@@ -152,9 +152,9 @@ $(function() {
         url:'/pages/h5/bridgeView?' + common.stringify({
           groupActivityId: activity.activityId,
           groupBookingId: activity.bookingId || 0,
-          expressAddress: address.all,
-          expressPhone: address.phone,
-          expressName: address.name,
+          expressAddress: address ? address.all : '',
+          expressPhone: address ? address.phone : '',
+          expressName: address ? address.name : '',
           callBackUrl: common.getHref()
         })
       })
@@ -162,9 +162,9 @@ $(function() {
       common.actions.groupActivityPay({
         groupActivityId: activity.activityId,
         groupBookingId: activity.bookingId || 0,
-        expressAddress: address.all,
-        expressPhone: address.phone,
-        expressName: address.name,
+        expressAddress: address ? address.all : '',
+        expressPhone: address ? address.phone : '',
+        expressName: address ? address.name : '',
         payType: payType,
         orderSource: common.isPhone ? 6 : 5
       }).done(function(res) {
@@ -193,9 +193,9 @@ $(function() {
       common.actions.groupActivityPay({
         groupActivityId: activity.activityId,
         groupBookingId: activity.bookingId || 0,
-        expressAddress: address.all,
-        expressPhone: address.phone,
-        expressName: address.name,
+        expressAddress: address ? address.all : '',
+        expressPhone: address ? address.phone : '',
+        expressName: address ? address.name : '',
         openId: common.getLocalStroge('openId'),
         payType: 1,
         orderSource: 3
@@ -227,7 +227,9 @@ $(function() {
 
   function bindEvent() {
     dom.on('click', '.btn-pay', function(e) {
-      if(product.merchandises.length > 0 && !address) return common.toast('请选择地址');
+      if(product.merchandises.length > 0 && !address) {
+        return common.toast('请选择地址');
+      }
       pay();
     })
 
