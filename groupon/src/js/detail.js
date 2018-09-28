@@ -40,7 +40,7 @@ $(function() {
               id: activity.activityId,
               groupId: activity.bookingId || 0
             }),
-            desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
+            desc: activity.activityGroupCount + '人成团，各减' + (activity.originalPrice-activity.price) + '元',
             imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
           };
           wx.onMenuShareAppMessage(wxData);
