@@ -373,8 +373,7 @@ $(function() {
           bridge.call('callNavPage', {page:'page_my_course'});
         }
       }else{
-        var qrcode = common.createQrcode()
-        dom.append(qrcode);
+        location.href = location.origin + '/activitys/appDownload/'
       }
     })
 
