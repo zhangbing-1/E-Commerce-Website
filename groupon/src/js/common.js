@@ -178,6 +178,20 @@ $(function() {
     return dtd;
   }
 
+  function createAlert(title) {
+    var dtd = $.Deferred();
+    var confirm = $('<div class="confirm-layer"><div class="confirm-inner"><div class="title">' + title + '</div><div class="btns"><div class="btn-ok">确定</div></div></div></div>')
+    confirm.appendTo('body').fadeIn('fast', function() {
+      confirm.on('click', '.btn-cancle', function() {
+        dtd.reject(confirm);
+      })
+      confirm.on('click', '.btn-ok', function() {
+        dtd.resolve(confirm);
+      })
+    })
+    return dtd;
+  }
+
   function getLocalStroge(key) {
     return localStorage.getItem(key);
   }
@@ -457,7 +471,8 @@ $(function() {
     toast: createToast,
     urlGet: urlGet,
     stringify: stringify,
-    createConfirm: createConfirm
+    createConfirm: createConfirm,
+    createAlert:createAlert
   }, true);
 });
 
