@@ -290,14 +290,14 @@ $(function() {
         return;
       }
       if (common.getLocalStroge('token')) {
-        if(product.merchandises.length > 0 || common.isClient){
-          location.href = './order.html?' +  common.stringify({
-            id : activity.activityId,
-            groupId : activity.bookingId || 0,
-          })
-        }else{
-          pay(activity.activityId,activity.bookingId || 0);
-        }
+        location.href = './order.html?' +  common.stringify({
+          id : activity.activityId,
+          groupId : activity.bookingId || 0,
+        })
+        // if(product.merchandises.length > 0 || common.isClient){
+        // }else{
+        //   pay(activity.activityId,activity.bookingId || 0);
+        // }
       }else{
         common.tokenExpire();
       }

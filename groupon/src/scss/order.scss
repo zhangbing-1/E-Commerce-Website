@@ -102,6 +102,34 @@
       }
     }
   }
+  .product-coupon{
+    position:relative;
+    display:flex;
+    height:1rem;
+    margin-top: .1rem;
+    background-color:#fff;
+    align-items:center;
+    padding: 0 .3rem;
+    .coupon-lable{
+      font-size: .3rem;
+      line-height: .42rem;
+      color: #333;
+    }
+    .coupon-info{
+      flex:1;
+      font-size: .3rem;
+      line-height: .42rem;
+      color: #333;
+      text-align:right;
+    }
+    .go-coupon-list{
+      margin-left: .2rem;
+      display:block;
+      width:auto;
+      height:.3rem;
+    }
+
+  }
   .pay-method{
     padding: 0 .3rem;
     background-color:#fff;
@@ -197,5 +225,4 @@
       border:1px solid #FF6D41;
     }
   }
-
 }

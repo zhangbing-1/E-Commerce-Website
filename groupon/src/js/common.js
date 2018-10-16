@@ -275,6 +275,12 @@ $(function() {
     },
     getPoster: function(data){
       return request({ url: 'activity/getPoster', data: data })
+    },
+    getCouponMatchProduct: function(data){
+      return request({ url: 'coupon/optimalMatch', data })
+    },
+    getCouponProductSuitList: function(data){
+      return request({ url: 'coupon/availablePayList', data })
     }
   }
 

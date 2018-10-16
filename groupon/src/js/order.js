@@ -1,7 +1,7 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, address = null, user = null, payType = 1;
+  var activity = null, product = null, address = null, user = null, coupon = null ,payType = 1;
 
   function renderActivityInfo() {
     var data = {
@@ -125,9 +125,16 @@ $(function() {
     // 用户支付状态：0-支付中 1-支付失败 2-支付成功 3-已退款 4-退款失败
     // activity.activityStatus = 1;
     // activity.bookingStatus = 3;
-    $.when(common.actions.getUser(),common.actions.getAddressList()).done(function(data1,data2){
-      var res1 = data1[0], res2 = data2[0];
-      if(res1.code == 0 && res2.code == 0){
+    $.when(
+      common.actions.getUser(),
+      common.actions.getAddressList(),
+      common.actions.getCouponMatchProduct({
+        courseId: product.courseId,
+        productId: product.id,
+        orderPrice: activity.price
+      })).done(function(data1,data2,data3){
+      var res1 = data1[0], res2 = data2[0], res3 = data3[0];
+      if(res1.code == 0 && res2.code == 0 && res3.code == 0){
         var isShop = false;
         if(activity.bookingUsers){
           for(var i = 0; i < activity.bookingUsers.length; i++){
@@ -140,7 +147,23 @@ $(function() {
         if(res2.data && res2.data.length > 0){
           address = getAddress(params.addressId||res1.data.addressid,res2.data);
         }
-        var html = template('tpl-main', { activity: activity, product: product, user: user, isShop: isShop ,address: address, isClient: common.isClient});
+
+        if(params.couponId){
+          coupon = {
+            id: params.couponId,
+            thresholdPrice: params.thresholdPrice,
+            denomination: params.choosePrice
+          }
+        }else{
+          coupon = res3.data;
+        }
+        var html = template('tpl-main', { activity: activity,
+          product: product,
+          user: user,
+          isShop: isShop,
+          address: address,
+          isClient: common.isClient,
+          coupon: coupon });
         dom.html(html);
       }
     })
@@ -166,6 +189,8 @@ $(function() {
         expressPhone: address ? address.phone : '',
         expressName: address ? address.name : '',
         payType: payType,
+        userCouponId: coupon ? coupon.id : 0,
+        couponDiscountPrice: coupon ? coupon.denomination : 0,
         orderSource: common.isPhone ? 6 : 5
       }).done(function(res) {
         if (res.code == 0) {
@@ -197,6 +222,8 @@ $(function() {
         expressPhone: address ? address.phone : '',
         expressName: address ? address.name : '',
         openId: common.getLocalStroge('openId'),
+        userCouponId: coupon ? coupon.id : 0,
+        couponDiscountPrice: coupon ? coupon.denomination : 0,
         payType: 1,
         orderSource: 3
       }).done(function(res) {
@@ -239,6 +266,17 @@ $(function() {
         callBackUrl: './order.html'
       })
       location.href = './address.html?' + common.stringify(data);
+    })
+
+    dom.on('click','.go-coupon',function(){
+      location.href = '/wap/index.html?'
+        + common.stringify($.extend({},params,{
+          callBackUrl: location.origin + location.pathname,
+          type: 'groupon'
+        })) + '#/usecoupons?' + common.stringify({
+          courseId: product.courseId,
+          productId: product.id,
+          couponId: coupon ? coupon.id : -1 })
     })
 
     dom.on('click','.btn-share',function(){
