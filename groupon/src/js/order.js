@@ -149,7 +149,10 @@ $(function() {
         }
 
         if(params.couponId){
-          coupon = {
+          coupon = params.couponId == -1 ? {
+            id:0,
+            denomination:0,
+          } : {
             id: params.couponId,
             thresholdPrice: params.thresholdPrice,
             denomination: params.choosePrice

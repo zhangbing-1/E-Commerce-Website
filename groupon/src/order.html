@@ -129,7 +129,9 @@
     {{ if !isShop }}
     <div class="product-coupon go-coupon">
       <div class="coupon-lable">优惠券</div>
-      {{ if coupon }}
+      {{ if coupon && coupon.id == 0}}
+      <div class="coupon-info">不使用优惠券</div>
+      {{else if coupon}}
       <div class="coupon-info">满{{coupon.thresholdPrice}}元减{{coupon.denomination}}元</div>
       {{else}}
       <div class="coupon-info">暂无可用</div>
