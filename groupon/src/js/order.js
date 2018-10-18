@@ -160,11 +160,21 @@ $(function() {
         }else{
           coupon = res3.data;
         }
+
+        if(isShop){
+          activity.infactPrice = common.floatTool.subtract(activity.price,user.couponDiscountPrice);
+        }else if(coupon){
+          activity.infactPrice =  common.floatTool.subtract(activity.price,coupon.denomination);
+        }else{
+          activity.infactPrice = activity.price;
+        }
+
         var html = template('tpl-main', { activity: activity,
           product: product,
           user: user,
           isShop: isShop,
           address: address,
+          isWxApp: common.isWxApp(),
           isClient: common.isClient,
           coupon: coupon });
         dom.html(html);

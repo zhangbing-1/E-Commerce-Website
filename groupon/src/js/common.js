@@ -5,7 +5,7 @@ $(function() {
   common.prefix = './';
   if (location.href.indexOf("h5.test.chaisenwuli.com") !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/groupon/";
-  }else if (location.href.indexOf('h5.chaisenwuli.com') !== -1) {
+  } else if (location.href.indexOf('h5.chaisenwuli.com') !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/groupon/";
     common.baseUrl = "//api.chaisenwuli.com/";
   }
@@ -13,7 +13,7 @@ $(function() {
   common.isWeixin = u.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
   common.isPhone = u.indexOf('iPhone') > -1;
   common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
-  common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
+  common.isWxApp = function() { return window.__wxjs_environment == 'miniprogram' };
   common.shareUrl = location.origin + "/activitys/groupon/";
   common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie" || (common.isPhone && bridge.hasNativeMethod('getVersionCode') == 1);
 
@@ -84,23 +84,23 @@ $(function() {
     if (!_data.token && getLocalStroge('token')) {
       _data.token = getLocalStroge('token');
     }
-    if(!_data.openId && getLocalStroge('openId')){
+    if (!_data.openId && getLocalStroge('openId')) {
       _data.openId = getLocalStroge('openId');
     }
-    if(!_data.unionId && getLocalStroge('unionId')){
+    if (!_data.unionId && getLocalStroge('unionId')) {
       _data.unionId = getLocalStroge('unionId');
     }
     _data.timestamp = new Date().Format();
     _data.sign = getSign(_data);
     _options.data = stringify(_data);
     return $.ajax(_options).done(function(res) {
-      setTimeout(function(){
+      setTimeout(function() {
         !isHideLoading && loading.hide();
-      },500)
+      }, 500)
 
       if (res.code == 1) {
         removeLocalStroge('token')
-        setTimeout(common.tokenExpire,300)
+        setTimeout(common.tokenExpire, 300)
       }
     }).fail(function() {
       !isHideLoading && loading.hide();
@@ -122,24 +122,24 @@ $(function() {
     });
   }
 
-  common.tokenExpire = function(){
+  common.tokenExpire = function() {
     removeLocalStroge('token')
-    if(common.isWxApp()){
+    if (common.isWxApp()) {
       wx.miniProgram.navigateTo({
-        url:'/pages/login/wxLogin?' + common.stringify({
+        url: '/pages/login/wxLogin?' + common.stringify({
           callBackUrl: common.getHref()
         })
       })
-    }else if(common.isClient){
+    } else if (common.isClient) {
       bridge.call('tokenExpire');
-    }else{
+    } else {
       location.href = './login.html?' + stringify({
         callBackUrl: location.href
       });
     }
   }
 
-  common.getHref = function(){
+  common.getHref = function() {
     return location.href.replace(/(token|a)=[^&]+[&]?/g, '').replace(/&$/, '').replace(/\?$/, '');
   }
 
@@ -152,11 +152,11 @@ $(function() {
     });
   }
 
-  common.createShare = function(){
+  common.createShare = function() {
     return '<div class="share-layer"><img src="' + common.prefix + '/img/icon-arrow-1.png"></div>';
   }
 
-  common.createQrcode = function(){
+  common.createQrcode = function() {
     return '<div class="qrcode-layer"><img src="' + common.prefix + '/img/icon-my-course2.png"></div>';
   }
 
@@ -213,7 +213,7 @@ $(function() {
     getCode: function(data) {
       return request({ url: 'user/verifyCode', data: data });
     },
-    getToken: function(data){
+    getToken: function(data) {
       return request({ url: 'user/getToken' })
     },
     login: function(data) {
@@ -265,21 +265,21 @@ $(function() {
     getTeacherInfo: function(teacherId) {
       return request({ url: 'user/teacherInfo', data: { teacherId: teacherId } })
     },
-    getMyOrder: function(data){
+    getMyOrder: function(data) {
       data.token = getLocalStroge('token');
-      return request({ url: 'group/activity/groupbooingInfoList', data: data },data.page != 1)
+      return request({ url: 'group/activity/groupbooingInfoList', data: data }, data.page != 1)
     },
-    getOrderInfo: function(data){
+    getOrderInfo: function(data) {
       data.token = getLocalStroge('token');
       return request({ url: 'group/activity/groupbookingInfo', data: data })
     },
-    getPoster: function(data){
+    getPoster: function(data) {
       return request({ url: 'activity/getPoster', data: data })
     },
-    getCouponMatchProduct: function(data){
+    getCouponMatchProduct: function(data) {
       return request({ url: 'coupon/optimalMatch', data })
     },
-    getCouponProductSuitList: function(data){
+    getCouponProductSuitList: function(data) {
       return request({ url: 'coupon/availablePayList', data })
     }
   }
@@ -315,16 +315,16 @@ $(function() {
     }
   }
 
-  template.defaults.imports.dateFormatFilter = function(str,format) {
+  template.defaults.imports.dateFormatFilter = function(str, format) {
     return new Date(str).Format(format)
   }
 
-  template.defaults.imports.weekFilter = function(str,format) {
-    return ["周日","周一","周二","周三","周四","周五","周六"][new Date(str).getDay()]
+  template.defaults.imports.weekFilter = function(str, format) {
+    return ["周日", "周一", "周二", "周三", "周四", "周五", "周六"][new Date(str).getDay()]
   }
 
   template.defaults.imports.bookStatusFilter = function(status) {
-    return ["","等待成团","已成团","拼团成功"][status]
+    return ["", "等待成团", "已成团", "拼团成功"][status]
   }
 
   function createAreaList(list) {
@@ -357,7 +357,7 @@ $(function() {
     });
   }
 
-  common.getOpenId = function(){
+  common.getOpenId = function() {
     var dtd = $.Deferred();
     var appid = 'wxb34a5e23b1078fad';
     var redirectUri = location.href.replace(/#.*/, '')
@@ -366,17 +366,18 @@ $(function() {
       .replace(/\?$/, '')
       .replace(location.origin, 'http://codeproxy.chaisenwuli.com'),
       _obj = urlGet();
-    if(location.href.indexOf('h5.test.chaisenwuli.com') != -1){
+    if (location.href.indexOf('h5.test.chaisenwuli.com') != -1) {
       redirectUri += redirectUri.indexOf('?') == -1 ? '?t=3' : '&t=3';
-    }else{
+    } else {
       redirectUri += redirectUri.indexOf('?') == -1 ? '?t=1' : '&t=1';
     }
     redirectUri = encodeURIComponent(redirectUri);
-    var baseUrl =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=null#wechat_redirect";
+    var baseUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=null#wechat_redirect";
 
-    var openId = getLocalStroge('openId'), unionId = getLocalStroge('unionId');
+    var openId = getLocalStroge('openId'),
+      unionId = getLocalStroge('unionId');
     if (openId && unionId) {
-      dtd.resolve(openId,unionId);
+      dtd.resolve(openId, unionId);
     } else if (_obj.code) {
       actions.getOpenId({
         code: _obj.code,
@@ -386,7 +387,7 @@ $(function() {
         if (res.code == 0 && res.data.openId) {
           setLocalStroge('openId', res.data.openId || '');
           setLocalStroge('unionId', res.data.unionId || '');
-          dtd.resolve(res.data.openId,res.data.unionId);
+          dtd.resolve(res.data.openId, res.data.unionId);
         } else {
           location.replace(baseUrl);
         }
@@ -397,7 +398,7 @@ $(function() {
     return dtd;
   }
 
-  var jsApiList = [ 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'translateVoice', 'startRecord', 'stopRecord', 'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'closeWindow', 'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'];
+  var jsApiList = ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'translateVoice', 'startRecord', 'stopRecord', 'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'closeWindow', 'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'];
   common.initWeixinConfig = function() {
     var dtd = $.Deferred();
     actions.getWxConfig().done(function(res) {
@@ -409,28 +410,28 @@ $(function() {
           wx.hideAllNonBaseMenuItem();
         })
         dtd.resolve();
-      }else{
+      } else {
         dtd.reject();
       }
     })
     return dtd;
   }
 
-  common.initialize = function(callBack){
+  common.initialize = function(callBack) {
     var params = urlGet();
-    setTimeout(function(){
-      if(common.isWxApp()){
-        if(params.token) common.setLocalStroge('token',params.token)
+    setTimeout(function() {
+      if (common.isWxApp()) {
+        if (params.token) common.setLocalStroge('token', params.token)
         callBack();
-      }else if(common.isClient){
-        common.setLocalStroge('token',bridge.call('getToken'))
+      } else if (common.isClient) {
+        common.setLocalStroge('token', bridge.call('getToken'))
         callBack();
-      }else{
-        common.getOpenId().done(function(openId){
-          common.initWeixinConfig().done(function(){
-            actions.getToken().done(function(res){
-              if(res.code == 0 && res.data.token){
-                common.setLocalStroge('token',res.data.token)
+      } else {
+        common.getOpenId().done(function(openId) {
+          common.initWeixinConfig().done(function() {
+            actions.getToken().done(function(res) {
+              if (res.code == 0 && res.data.token) {
+                common.setLocalStroge('token', res.data.token)
               }
               callBack();
             })
@@ -438,19 +439,19 @@ $(function() {
           })
         })
       }
-    },500)
+    }, 500)
   }
 
-  common.toAppShare = function(activity){
+  common.toAppShare = function(activity) {
     var reqContent = common.shareUrl + "detail.html?" + common.stringify({
       id: activity.activityId,
       groupId: activity.bookingId || 0
     })
     var timeSlot = new Date(activity.activityStartTime).Format('MM月dd日') + '-' + new Date(activity.activityEndTime).Format('MM月dd日');
-    common.actions.getPoster({bizId:activity.activityId,reqContent:reqContent}).done(function(res){
-      if(res.code == 0){
+    common.actions.getPoster({ bizId: activity.activityId, reqContent: reqContent }).done(function(res) {
+      if (res.code == 0) {
         wx.miniProgram.navigateTo({
-          url:'/pages/h5/shareImageView?' + common.stringify({
+          url: '/pages/h5/shareImageView?' + common.stringify({
             id: activity.activityId,
             bookingId: activity.bookingId,
             title: activity.activityTitle,
@@ -467,6 +468,96 @@ $(function() {
     })
   }
 
+  function floatTool() {
+
+    function isInteger(obj) {
+      return Math.floor(obj) === obj
+    }
+
+    function toInteger(floatNum) {
+      var ret = { times: 1, num: 0 }
+      if (isInteger(floatNum)) {
+        ret.num = floatNum
+        return ret
+      }
+
+      var strfi = floatNum + ''
+      var dotPos = strfi.indexOf('.')
+      var len = strfi.substr(dotPos + 1).length
+      var times = Math.pow(10, len)
+      var intNum = parseInt(floatNum * times + 0.5, 10)
+      ret.times = times
+      ret.num = intNum
+
+      return ret
+    }
+
+    function operation(a, b, op) {
+      var o1 = toInteger(a)
+      var o2 = toInteger(b)
+      var n1 = o1.num
+      var n2 = o2.num
+      var t1 = o1.times
+      var t2 = o2.times
+      var max = t1 > t2 ? t1 : t2
+      var result = null
+      switch (op) {
+        case 'add':
+          if (t1 === t2) { // 两个小数位数相同
+            result = n1 + n2
+          } else if (t1 > t2) { // o1 小数位 大于 o2
+            result = n1 + n2 * (t1 / t2)
+          } else { // o1 小数位 小于 o2
+            result = n1 * (t2 / t1) + n2
+          }
+          return result / max
+        case 'subtract':
+          if (t1 === t2) {
+            result = n1 - n2
+          } else if (t1 > t2) {
+            result = n1 - n2 * (t1 / t2)
+          } else {
+            result = n1 * (t2 / t1) - n2
+          }
+          return result / max
+        case 'multiply':
+          result = (n1 * n2) / (t1 * t2)
+          return result
+        case 'divide':
+          return result = function() {
+            var r1 = n1 / n2
+            var r2 = t2 / t1
+            return operation(r1, r2, 'multiply')
+          }()
+      }
+    }
+
+    function add(a, b) {
+      return operation(a, b, 'add')
+    }
+
+    function subtract(a, b) {
+      return operation(a, b, 'subtract')
+    }
+
+    function multiply(a, b) {
+      return operation(a, b, 'multiply')
+    }
+
+    function divide(a, b) {
+      return operation(a, b, 'divide')
+    }
+    // exports
+    return {
+      add: add,
+      subtract: subtract,
+      multiply: multiply,
+      divide: divide
+    }
+
+
+  }
+
   $.extend(common, {
     version: version,
     actions: actions,
@@ -478,65 +569,67 @@ $(function() {
     urlGet: urlGet,
     stringify: stringify,
     createConfirm: createConfirm,
-    createAlert:createAlert
+    createAlert: createAlert,
+    floatTool: floatTool()
   }, true);
 });
 
 (function(window) {
   'use strict';
-  var isToBottom = false,isMoved = false;
-  var auiScroll = function (params,callback) {
+  var isToBottom = false,
+    isMoved = false;
+  var auiScroll = function(params, callback) {
     this.extend(this.params, params);
-    this._init(params,callback);
+    this._init(params, callback);
   }
   auiScroll.prototype = {
     params: {
-      listren:false,
-            distance: 100
-        },
-    _init : function(params,callback) {
+      listren: false,
+      distance: 100
+    },
+    _init: function(params, callback) {
       var self = this;
-      if(self.params.listen){
-        document.body.addEventListener("touchmove", function(e){
+      if (self.params.listen) {
+        document.body.addEventListener("touchmove", function(e) {
           self.scroll(callback);
         });
-        document.body.addEventListener("touchend", function(e){
+        document.body.addEventListener("touchend", function(e) {
           self.scroll(callback);
         });
       }
-      window.onscroll = function(){
+      window.onscroll = function() {
         self.scroll(callback);
       }
     },
-    scroll : function (callback) {
+    scroll: function(callback) {
       var self = this;
       var clientHeight = document.documentElement.scrollTop === 0 ? document.body.clientHeight : document.documentElement.clientHeight;
       var scrollTop = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
       var scrollHeight = document.documentElement.scrollTop === 0 ? document.body.scrollHeight : document.documentElement.scrollHeight;
 
-      if (scrollHeight-scrollTop-self.params.distance <= window.innerHeight) {
-            isToBottom = true;
-            if(isToBottom){
-              callback({
-                "scrollTop":scrollTop,
-                "isToBottom":true
-              })
-            }
-          }else{
-            isToBottom = false;
-            callback({
-              "scrollTop":scrollTop,
-              "isToBottom":false
-            })
-          }
+      if (scrollHeight - scrollTop - self.params.distance <= window.innerHeight) {
+        isToBottom = true;
+        if (isToBottom) {
+          callback({
+            "scrollTop": scrollTop,
+            "isToBottom": true
+          })
+        }
+      } else {
+        isToBottom = false;
+        callback({
+          "scrollTop": scrollTop,
+          "isToBottom": false
+        })
+      }
     },
     extend: function(a, b) {
       for (var key in b) {
-          if (b.hasOwnProperty(key)) {
-            a[key] = b[key];
-          }
+        if (b.hasOwnProperty(key)) {
+          a[key] = b[key];
         }
-        return a;
+      }
+      return a;
     }
   }
   window.auiScroll = auiScroll;

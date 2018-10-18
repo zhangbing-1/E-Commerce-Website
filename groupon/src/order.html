@@ -122,11 +122,11 @@
         {{ if activity.bookingStatus != 0 && user &&  user.couponDiscountPrice }}
         <div >优惠券： - {{user ? user.couponDiscountPrice : 0}}</div>
         {{/if}}
-        <div>{{ activity.bookingStatus != 0 ? '实付款：':'需支付：' }} <span class="orange">¥ {{activity.price}}<span></div>
+        <div>{{ activity.bookingStatus != 0 ? '实付款：':'需支付：' }} <span class="orange">¥ {{activity.infactPrice}}<span></div>
       </div>
     </div>
 
-    {{ if !isShop }}
+    {{ if !isShop && !isWxApp }}
     <div class="product-coupon go-coupon">
       <div class="coupon-lable">优惠券</div>
       {{ if coupon && coupon.id == 0}}
