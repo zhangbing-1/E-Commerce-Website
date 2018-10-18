@@ -274,13 +274,13 @@ $(function() {
       return request({ url: 'group/activity/groupbookingInfo', data: data })
     },
     getPoster: function(data) {
-      return request({ url: 'activity/getPoster', data: data })
+      return request({ url: 'activity/getPoster', data:data })
     },
     getCouponMatchProduct: function(data) {
-      return request({ url: 'coupon/optimalMatch', data })
+      return request({ url: 'coupon/optimalMatch', data:data  })
     },
     getCouponProductSuitList: function(data) {
-      return request({ url: 'coupon/availablePayList', data })
+      return request({ url: 'coupon/availablePayList', data:data })
     }
   }
 
@@ -554,8 +554,6 @@ $(function() {
       multiply: multiply,
       divide: divide
     }
-
-
   }
 
   $.extend(common, {
