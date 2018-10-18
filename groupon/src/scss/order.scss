@@ -90,6 +90,31 @@
       line-height:.33rem;
       text-align:right;
     }
+    .product-coupon{
+      position:relative;
+      display:flex;
+      height:1rem;
+      border-top:1px solid #F4F4F4;
+      align-items:center;
+      .coupon-lable{
+        font-size: .3rem;
+        line-height: .42rem;
+        color: #333;
+      }
+      .coupon-info{
+        flex:1;
+        font-size: .3rem;
+        line-height: .42rem;
+        color: #333;
+        text-align:right;
+      }
+      .go-coupon-list{
+        margin-left: .2rem;
+        display:block;
+        width:auto;
+        height:.3rem;
+      }
+    }
     .price{
       padding-top:.3rem;
       font-size:.28rem;
@@ -102,34 +127,7 @@
       }
     }
   }
-  .product-coupon{
-    position:relative;
-    display:flex;
-    height:1rem;
-    margin-top: .1rem;
-    background-color:#fff;
-    align-items:center;
-    padding: 0 .3rem;
-    .coupon-lable{
-      font-size: .3rem;
-      line-height: .42rem;
-      color: #333;
-    }
-    .coupon-info{
-      flex:1;
-      font-size: .3rem;
-      line-height: .42rem;
-      color: #333;
-      text-align:right;
-    }
-    .go-coupon-list{
-      margin-left: .2rem;
-      display:block;
-      width:auto;
-      height:.3rem;
-    }
 
-  }
   .pay-method{
     padding: 0 .3rem;
     background-color:#fff;

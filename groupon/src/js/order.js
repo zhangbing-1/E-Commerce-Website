@@ -164,10 +164,12 @@ $(function() {
         if(isShop){
           activity.infactPrice = common.floatTool.subtract(activity.price,user.couponDiscountPrice);
         }else if(coupon){
-          activity.infactPrice =  common.floatTool.subtract(activity.price,coupon.denomination);
+          activity.infactPrice =  common.floatTool.subtract(activity.price,coupon.denomination) ;
         }else{
           activity.infactPrice = activity.price;
         }
+
+         activity.infactPrice = activity.infactPrice < 0 ? 0 : activity.infactPrice;
 
         var html = template('tpl-main', { activity: activity,
           product: product,

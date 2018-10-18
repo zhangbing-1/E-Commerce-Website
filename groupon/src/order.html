@@ -118,6 +118,21 @@
       <div class="product-title-sm">{{product.names}} {{product.timeSlot}}</div>
       <div class="original-price"> 原价 ¥ {{activity.originalPrice}} </div>
       <div class="group-price">拼团价 ¥ {{activity.price}}</div>
+
+      {{ if !isShop && !isWxApp }}
+      <div class="product-coupon go-coupon">
+        <div class="coupon-lable">优惠券</div>
+        {{ if coupon && coupon.id == 0}}
+        <div class="coupon-info">不使用优惠券</div>
+        {{else if coupon}}
+        <div class="coupon-info">满{{coupon.thresholdPrice}}元减{{coupon.denomination}}元</div>
+        {{else}}
+        <div class="coupon-info">暂无可用</div>
+        {{/if}}
+        <img class="go-coupon-list" src="./img/icon-arrow-d8.png" />
+      </div>
+      {{/if}}
+
       <div class="price">
         {{ if activity.bookingStatus != 0 && user &&  user.couponDiscountPrice }}
         <div >优惠券： - {{user ? user.couponDiscountPrice : 0}}</div>
@@ -126,19 +141,6 @@
       </div>
     </div>
 
-    {{ if !isShop && !isWxApp }}
-    <div class="product-coupon go-coupon">
-      <div class="coupon-lable">优惠券</div>
-      {{ if coupon && coupon.id == 0}}
-      <div class="coupon-info">不使用优惠券</div>
-      {{else if coupon}}
-      <div class="coupon-info">满{{coupon.thresholdPrice}}元减{{coupon.denomination}}元</div>
-      {{else}}
-      <div class="coupon-info">暂无可用</div>
-      {{/if}}
-      <img class="go-coupon-list" src="./img/icon-arrow-d8.png" />
-    </div>
-    {{/if}}
 
     {{ if isClient && !isShop}}
     <div class="product-lable">支付方式</div>
