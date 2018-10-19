@@ -1,6 +1,15 @@
 .container-index{
   position: relative;
   padding: .35rem .3rem .3rem;
+  .banner-get-coupon{
+    position:fixed;
+    top:0;
+    left:0; right:0;
+    z-index:20;
+    & + .list{
+      margin-top:.8rem;
+    }
+  }
   .list{
     list-style: none;
     padding:0;

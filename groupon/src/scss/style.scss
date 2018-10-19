@@ -115,7 +115,6 @@ input::-moz-placeholder { // Firefox19+
       border-left: 1px solid #F4F4F4;
     }
   }
-
 }
 
 
@@ -162,6 +161,36 @@ input::-moz-placeholder { // Firefox19+
       content:none;
     }
   }
+}
+
+.banner-get-coupon{
+  display: flex;
+  align-items:center;
+  height:.8rem;
+  padding:0 .3rem;
+  background-color: #FFEFF5;
+  font-size:.26rem;
+  line-height:.37rem;
+  color: #D32480;
+  > img{
+    display:block;
+    width:.3rem;
+    height:auto;
+  }
+  .content{
+    flex:1;
+    padding-left: .1rem;
+  }
+  .btn-get-coupon{
+    display:block;
+    width:1.07rem;
+    height:.43rem;
+    border-radius:.43rem;
+    line-height:.43rem;
+    border:1px solid #D32480;
+    text-align:center;
+  }
+
 }
 
 @-webkit-keyframes rotate {

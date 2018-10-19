@@ -160,6 +160,10 @@ $(function() {
     return '<div class="qrcode-layer"><img src="' + common.prefix + '/img/icon-my-course2.png"></div>';
   }
 
+  common.createGetCoupon = function(){
+    return '<div class="banner-get-coupon"><img src="' + common.prefix + 'img/icon-noice.png" /><span class="content">老用户专属100元优惠券</span><span class="btn-get-coupon">领取</span></div>'
+  }
+
   function createLoading() {
     return new Loading();
   }
@@ -281,6 +285,9 @@ $(function() {
     },
     getCouponProductSuitList: function(data) {
       return request({ url: 'coupon/availablePayList', data:data })
+    },
+    getIsGiveCoupon:function(data){
+      return request({ url: '/coupon/showCoupon', data:data })
     }
   }
 
@@ -435,7 +442,6 @@ $(function() {
               }
               callBack();
             })
-
           })
         })
       }

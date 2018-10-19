@@ -38,6 +38,10 @@ $(function() {
       location.href = $(this).data('link')
     })
 
+    dom.on('click','.banner-get-coupon',function(e){
+      location.href = location.origin + '/wap/#/givecoupons';
+    })
+
     new auiScroll({ listen: true, distance: 100 }, function(res) {
       if (res.isToBottom) {
         loadMore();
@@ -48,6 +52,14 @@ $(function() {
   common.initialize(function(){
     renderList();
     bindEvent();
+    if(common.getLocalStroge('token')){
+      common.actions.getIsGiveCoupon().done(function(res){
+        if(res.code  == 0 && res.data == 1 && dom.find('.banner-get-coupon').length == 0){
+          dom.prepend(common.createGetCoupon());
+        }
+      })
+
+    }
     wx.ready(function() {
       wx.showMenuItems({
         menuList: ['menuItem:share:appMessage','menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
@@ -55,7 +67,7 @@ $(function() {
       var wxData = {
         title: '【团购】好课成团立享优惠',
         link: common.shareUrl,
-        desc: '3人成团，即可立享优惠，24小时内，拼团失败，全额原路退回',
+        desc: '参与拼团，即可立享优惠，24小时内，拼团失败，全额原路退回',
         imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
       }
       wx.onMenuShareAppMessage(wxData);

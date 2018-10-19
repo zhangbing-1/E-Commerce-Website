@@ -157,7 +157,18 @@ $(function() {
         var isMore = res.data.length > 1;
         var html = template('tpl-main', { activity: activity, product: product, isShop: isShop, isMore:isMore });
         dom.html(html);
+        if(!isShop){
+          getOldCoupon(dom);
+        }
         startCountDown();
+      }
+    })
+  }
+
+  function getOldCoupon(){
+    common.actions.getIsGiveCoupon().done(function(res){
+      if(res.code  == 0 && res.data == 1 && dom.find('.banner-get-coupon').length == 0){
+        dom.prepend(common.createGetCoupon());
       }
     })
   }
@@ -399,6 +410,10 @@ $(function() {
       dom.find('.tab-container').hide();
       $(this).addClass('current');
       dom.find(target).show();
+    })
+
+    dom.on('click','.banner-get-coupon',function(e){
+      location.href = location.origin + '/wap/#/givecoupons';
     })
 
     if(common.isClient){
