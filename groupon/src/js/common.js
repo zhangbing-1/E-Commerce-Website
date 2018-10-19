@@ -287,7 +287,10 @@ $(function() {
       return request({ url: 'coupon/availablePayList', data:data })
     },
     getIsGiveCoupon:function(data){
-      return request({ url: '/coupon/showCoupon', data:data })
+      return request({ url: 'coupon/showCoupon', data:data })
+    },
+    getIsReceiveCoupon: function(data){
+      return request({ url: 'coupon/isReceive', data:data })
     }
   }
 
