@@ -160,6 +160,7 @@ $(function() {
         if(!isShop){
           getOldCoupon(dom);
         }
+        renderToFreeCourse();
         startCountDown();
       }
     })
@@ -175,6 +176,12 @@ $(function() {
         })
       }
     })
+  }
+
+  function renderToFreeCourse(){
+    if(!common.isClient && dom.find('.free-course').length == 0){
+      dom.prepend(common.createToFreeCourse());
+    }
   }
 
   function startCountDown(){
@@ -418,6 +425,10 @@ $(function() {
 
     dom.on('click','.banner-get-coupon',function(e){
       location.href = location.origin + '/wap/#/givecoupons';
+    })
+
+    dom.on('click','.free-course',function(e){
+      location.href = location.origin + '/wap/#/';
     })
 
     if(common.isClient){

@@ -164,6 +164,10 @@ $(function() {
     return '<div class="banner-get-coupon"><img src="' + common.prefix + 'img/icon-noice.png" /><span class="content">老用户专属100元优惠券</span><span class="btn-get-coupon">领取</span></div>'
   }
 
+  common.createToFreeCourse = function(){
+    return '<img class="free-course" src="' + common.prefix + 'img/btn-free-course.png" />'
+  }
+
   function createLoading() {
     return new Loading();
   }

@@ -1,6 +1,5 @@
 $(function() {
   var dom = $('#container'),loadStatus = 'loading',page = 1,pageSize = 5;
-
   function renderList(isOrder) {
     common.actions.getActivityList({
       page:page,
@@ -10,6 +9,8 @@ $(function() {
         if(page == 1){
           var html = template('tpl-main', { list: res.data });
           dom.html(html);
+          renderGetCoupon();
+          renderToFreeCourse();
         }else if(page > 1){
           var html = template('tpl-list', { list: res.data });
           dom.find('.list').append(html);
@@ -23,6 +24,26 @@ $(function() {
         }
       }
     })
+  }
+
+  function renderGetCoupon(){
+    if(common.getLocalStroge('token')){
+      common.actions.getIsGiveCoupon().done(function(res){
+        if(res.code == 0 && res.data == 1){
+          common.actions.getIsReceiveCoupon().done(function(res){
+            if(res.code == 0 && res.data == 0 && dom.find('.banner-get-coupon').length == 0){
+              dom.prepend(common.createGetCoupon());
+            }
+          })
+        }
+      })
+    }
+  }
+
+  function renderToFreeCourse(){
+    if(!common.isClient && dom.find('.free-course').length == 0){
+      dom.append(common.createToFreeCourse());
+    }
   }
 
   function loadMore(){
@@ -42,6 +63,10 @@ $(function() {
       location.href = location.origin + '/wap/#/givecoupons';
     })
 
+    dom.on('click','.free-course',function(e){
+      location.href = location.origin + '/wap/#/';
+    })
+
     new auiScroll({ listen: true, distance: 100 }, function(res) {
       if (res.isToBottom) {
         loadMore();
@@ -52,18 +77,6 @@ $(function() {
   common.initialize(function(){
     renderList();
     bindEvent();
-    if(common.getLocalStroge('token')){
-      common.actions.getIsGiveCoupon().done(function(res){
-        if(res.code == 0 && res.data == 1){
-          common.actions.getIsReceiveCoupon().done(function(res){
-            if(res.code == 0 && res.data == 0 && dom.find('.banner-get-coupon').length == 0){
-              dom.prepend(common.createGetCoupon());
-            }
-          })
-        }
-      })
-
-    }
     wx.ready(function() {
       wx.showMenuItems({
         menuList: ['menuItem:share:appMessage','menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
