@@ -221,6 +221,12 @@
       padding:0 .3rem;
       border-radius: .5rem;
       border:1px solid #FF6D41;
+      &.disable{
+        border:solid 1px #D8D8D8;
+        background-color:#D8D8D8 !important;
+        color:#666666 !important;
+      }
     }
+
   }
 }

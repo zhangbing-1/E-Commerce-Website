@@ -39,7 +39,7 @@
   <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
   <script id="tpl-list" type="text/html">
     {{each list item}}
-    <li class="item link" data-link="./detail.html?id={{item.id}}">
+    <li class="item link" data-id="{{item.id}}">
       <div class="header">{{item.title || item.activityTitle}}</div>
       <div class="body">
         <div class="avater" style="background-image:url({{item.titlePicUrl}});"></div>
@@ -48,13 +48,19 @@
           <br/><span class="num">{{item.bookingCount}}人已拼团</span>
         </div>
       </div>
+
       <div class="footer">
         <div class="status">限时拼团</div>
+        {{if item.productRemainCount > 0}}
         <div class="footer-right">
           <span class="original-price"> ¥ {{item.productPrice}} </span>
           <span class="price">¥ {{item.activityPrice}}</span>
         </div>
+        {{/if}}
       </div>
+      {{if item.productRemainCount <= 0}}
+      <img class="sell-out" src="./img/icon-sell-out.png" >
+      {{/if}}
     </li>
     {{/each}}
   </script>

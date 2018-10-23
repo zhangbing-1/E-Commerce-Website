@@ -1,7 +1,13 @@
 $(function() {
-  var dom = $('#container'),loadStatus = 'loading',page = 1,pageSize = 5;
+  var dom = $('#container'),
+    loadStatus = 'loading',
+    page = 1,
+    pageSize = 5,
+    params = common.urlGet();
   function renderList(isOrder) {
     common.actions.getActivityList({
+      gradeId: params.gradeId || 0,
+      type: params.type || 0,
       page:page,
       pageSize:pageSize
     }).done(function(res) {
@@ -56,7 +62,11 @@ $(function() {
 
   function bindEvent() {
     dom.on('click', '.link', function(e) {
-      location.href = $(this).data('link')
+      location.href = './detail.html?' + common.stringify({
+        id:$(this).data('id'),
+        type: params.type || 0,
+        gradeId: params.gradeId || 0
+      })
     })
 
     dom.on('click','.banner-get-coupon',function(e){

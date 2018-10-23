@@ -68,7 +68,11 @@
     {{ if isShop }}
       {{ if activity.bookingStatus == 1 }}
       <div class="btns block">
+        {{if product.leftCount <= 0}}
+        <div class="btn disable">已售罄</div>
+        {{else}}
         <div class="btn btn-share">邀请好友参团</div>
+        {{/if}}
       </div>
       {{else if activity.bookingStatus == 2 }}
       <div class="btns block">

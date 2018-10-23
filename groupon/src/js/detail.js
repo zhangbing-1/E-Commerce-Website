@@ -344,7 +344,10 @@ $(function() {
       if(iosPhonePay()){
         return;
       }
-      location.href = './index.html';
+      location.href = './index.html?' + common.stringify({
+        type: params.type,
+        gradeId: params.gradeId
+      });
     })
 
     dom.on('click','.go-order',function(){
