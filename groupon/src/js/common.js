@@ -1,5 +1,7 @@
 var common = {};
 $(function() {
+  var params = $.extend({type: 1, gradeId: 0},JSON.parse(getLocalStroge('params') || '{}'),urlGet());
+  setLocalStroge('params',JSON.stringify(params))
   var version = '1.0.0';
   common.baseUrl = '//testapi.chaisenwuli.com/';
   common.prefix = './';
@@ -458,7 +460,9 @@ $(function() {
   common.toAppShare = function(activity) {
     var reqContent = common.shareUrl + "detail.html?" + common.stringify({
       id: activity.activityId,
-      groupId: activity.bookingId || 0
+      groupId: activity.bookingId || 0,
+      gradeId: common.params.gradeId,
+      type: common.params.type
     })
     var timeSlot = new Date(activity.activityStartTime).Format('MM月dd日') + '-' + new Date(activity.activityEndTime).Format('MM月dd日');
     common.actions.getPoster({ bizId: activity.activityId, reqContent: reqContent }).done(function(res) {
@@ -581,7 +585,8 @@ $(function() {
     stringify: stringify,
     createConfirm: createConfirm,
     createAlert: createAlert,
-    floatTool: floatTool()
+    floatTool: floatTool(),
+    params:params
   }, true);
 });
 

@@ -38,7 +38,9 @@ $(function() {
             title: '【团购】' + activity.activityTitle,
             link: common.shareUrl + "detail.html?" + common.stringify({
               id: activity.activityId,
-              groupId: activity.bookingId || 0
+              groupId: activity.bookingId || 0,
+              gradeId: common.params.gradeId,
+              type: common.params.type
             }),
             desc: activity.activityGroupCount + '人成团，各减' + (activity.originalPrice-activity.price) + '元',
             imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
@@ -344,10 +346,7 @@ $(function() {
       if(iosPhonePay()){
         return;
       }
-      location.href = './index.html?' + common.stringify({
-        type: params.type,
-        gradeId: params.gradeId
-      });
+      location.href = './index.html';
     })
 
     dom.on('click','.go-order',function(){
@@ -369,7 +368,9 @@ $(function() {
             title: '【团购】' + activity.activityTitle,
             link: common.shareUrl + "detail.html?" + common.stringify({
               id: activity.activityId,
-              groupId: activity.bookingId || 0
+              groupId: activity.bookingId || 0,
+              gradeId: common.params.gradeId,
+              type: common.params.type
             }),
             desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
             imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'

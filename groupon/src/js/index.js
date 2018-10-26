@@ -2,12 +2,11 @@ $(function() {
   var dom = $('#container'),
     loadStatus = 'loading',
     page = 1,
-    pageSize = 5,
-    params = common.urlGet();
+    pageSize = 5;
   function renderList(isOrder) {
     common.actions.getActivityList({
-      gradeId: params.gradeId || 0,
-      type: params.type || 0,
+      gradeId: common.params.gradeId,
+      type: common.params.type,
       page:page,
       pageSize:pageSize
     }).done(function(res) {
@@ -62,11 +61,7 @@ $(function() {
 
   function bindEvent() {
     dom.on('click', '.link', function(e) {
-      location.href = './detail.html?' + common.stringify({
-        id:$(this).data('id'),
-        type: params.type || 0,
-        gradeId: params.gradeId || 0
-      })
+      location.href = './detail.html?id=' + $(this).data('id');
     })
 
     dom.on('click','.banner-get-coupon',function(e){
@@ -93,7 +88,10 @@ $(function() {
       });
       var wxData = {
         title: '【团购】好课成团立享优惠',
-        link: common.shareUrl,
+        link: common.shareUrl + 'index.html?' + common.stringify({
+          gradeId: common.params.gradeId,
+          type: common.params.type
+        }),
         desc: '参与拼团，即可立享优惠，24小时内，拼团失败，全额原路退回',
         imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
       }
