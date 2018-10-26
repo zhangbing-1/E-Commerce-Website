@@ -61,7 +61,14 @@ $(function() {
 
   function bindEvent() {
     dom.on('click', '.link', function(e) {
-      location.href = './detail.html?id=' + $(this).data('id');
+      common.go('./detail.html',{
+        id:$(this).data('id')
+      })
+      // location.href = './detail.html?id=' + common.stringify({
+      //   id:$(this).data('id'),
+      //   type: common.params.type,
+      //   gradeId: common.params.gradeId
+      // });
     })
 
     dom.on('click','.banner-get-coupon',function(e){

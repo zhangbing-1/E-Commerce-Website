@@ -1,7 +1,9 @@
 var common = {};
 $(function() {
-  var params = $.extend({type: 1, gradeId: 0},JSON.parse(getLocalStroge('params') || '{}'),urlGet());
-  setLocalStroge('params',JSON.stringify(params))
+  var params = $.extend({type: 1, gradeId: 0},urlGet());
+  if(typeof params.atype != 'undefined'){
+    params.type = params.atype;
+  }
   var version = '1.0.0';
   common.baseUrl = '//testapi.chaisenwuli.com/';
   common.prefix = './';
@@ -135,9 +137,12 @@ $(function() {
     } else if (common.isClient) {
       bridge.call('tokenExpire');
     } else {
-      location.href = './login.html?' + stringify({
+      common.go('./login.html',{
         callBackUrl: location.href
-      });
+      })
+      // location.href = './login.html?' + stringify({
+      //   callBackUrl: location.href
+      // });
     }
   }
 
@@ -485,6 +490,21 @@ $(function() {
     })
   }
 
+  common.createToUrl = function(url,data){
+    return url + '?' + stringify($.extend({
+      gradeId: params.gradeId,
+      type: params.type
+    }, data || {}));
+  }
+
+  common.go = function(url,data){
+    location.href = common.createToUrl(url,data);
+  }
+
+  common.replace = function(url,data){
+    location.replace(common.createToUrl(url,data));
+  }
+
   function floatTool() {
 
     function isInteger(obj) {
@@ -586,7 +606,7 @@ $(function() {
     createConfirm: createConfirm,
     createAlert: createAlert,
     floatTool: floatTool(),
-    params:params
+    params: params
   }, true);
 });
 

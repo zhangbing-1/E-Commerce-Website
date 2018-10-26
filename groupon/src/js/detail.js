@@ -154,7 +154,12 @@ $(function() {
   }
 
   function getActivityList(activity,product,isShop){
-    common.actions.getActivityList(1).done(function(res){
+    common.actions.getActivityList({
+      gradeId: common.params.gradeId,
+      type: common.params.type,
+      page: 1,
+      pageSize: 5
+    }).done(function(res){
       if(res.code == 0){
         var isMore = res.data.length > 1;
         var html = template('tpl-main', { activity: activity, product: product, isShop: isShop, isMore:isMore });
@@ -211,78 +216,6 @@ $(function() {
     }
   }
 
-  function pay(id,groupId) {
-    if(common.isWxApp()){
-      wx.miniProgram.navigateTo({
-        url:'/pages/h5/bridgeView?' + common.stringify({
-          groupActivityId: id,
-          groupBookingId: groupId,
-          expressAddress: '',
-          expressPhone: '',
-          expressName: '',
-          callBackUrl: common.shareUrl + "detail.html?id=" + id + "&groupId=" + groupId
-        })
-      })
-    }else if(common.isClient){
-      var payType = 1;
-      common.actions.groupActivityPay({
-        groupActivityId: id,
-        groupBookingId: groupId,
-        expressAddress: '',
-        expressPhone: '',
-        expressName: '',
-        payType: 1,
-        orderSource: 5
-      }).done(function(res) {
-        if (res.code == 0) {
-          var params = null, config = res.data;
-          if(payType == 1){
-            params = {
-              partnerid:config.partnerId,
-              prepayid:config.prepayId,
-              noncestr:config.nonceStr,
-              timestamp:config.timeStamp,
-              packageName:config.packageValue,
-              sign:config.sign
-            }
-          } else {
-            params = {
-              orderInfo: config,
-            }
-          }
-          bridge.call('callNavPay', { ptype: payType, params:params })
-        } else {
-          common.toast(res.message);
-        }
-      })
-    }else{
-      common.actions.groupActivityPay({
-        groupActivityId: id,
-        groupBookingId: groupId,
-        expressAddress: '',
-        expressPhone: '',
-        expressName: '',
-        openId: common.getLocalStroge('openId'),
-        payType: 1,
-        orderSource: 3
-      }).done(function(res) {
-        if (res.code == 0) {
-          location.replace('//www.zongjie.com/pay.html?' + common.stringify({
-            type: 'groupon',
-            callBackUrl: common.shareUrl + "detail.html?id=" + id +"&groupId=" + groupId,
-            timeStamp: res.data.timeStamp,
-            nonceStr: res.data.nonceStr,
-            packageValue: res.data.packageValue,
-            signType: res.data.signType,
-            paySign: res.data.paySign
-          }));
-        } else {
-          common.toast(res.message);
-        }
-      })
-    }
-  }
-
   function payResult(res){
     if(res == 1){
       location.reload()
@@ -314,14 +247,14 @@ $(function() {
         return;
       }
       if (common.getLocalStroge('token')) {
-        location.href = './order.html?' +  common.stringify({
+        common.go('./order.html',{
           id : activity.activityId,
           groupId : activity.bookingId || 0,
         })
-        // if(product.merchandises.length > 0 || common.isClient){
-        // }else{
-        //   pay(activity.activityId,activity.bookingId || 0);
-        // }
+        // location.href = './order.html?' +  common.stringify({
+        //   id : activity.activityId,
+        //   groupId : activity.bookingId || 0,
+        // })
       }else{
         common.tokenExpire();
       }
@@ -346,13 +279,17 @@ $(function() {
       if(iosPhonePay()){
         return;
       }
-      location.href = './index.html';
+      common.go('./index.html')
+      // location.href = './index.html';
     })
 
     dom.on('click','.go-order',function(){
-      location.href = './order.html?' + common.stringify({
+      common.go('./order.html',{
         id : activity.activityId
       })
+      // location.href = './order.html?' + common.stringify({
+      //   id : activity.activityId
+      // })
     })
 
     dom.on('click','.go-share',function(){

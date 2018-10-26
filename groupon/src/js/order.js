@@ -245,7 +245,7 @@ $(function() {
         orderSource: 3
       }).done(function(res) {
         if (res.code == 0) {
-          location.replace('//www.zongjie.com/pay.html?' + common.stringify({
+          common.replace('//www.zongjie.com/pay.html',{
             type: 'groupon',
             callBackUrl: location.href,
             timeStamp: res.data.timeStamp,
@@ -253,7 +253,16 @@ $(function() {
             packageValue: res.data.packageValue,
             signType: res.data.signType,
             paySign: res.data.paySign
-          }));
+          })
+          // location.replace('//www.zongjie.com/pay.html?' + common.stringify({
+          //   type: 'groupon',
+          //   callBackUrl: location.href,
+          //   timeStamp: res.data.timeStamp,
+          //   nonceStr: res.data.nonceStr,
+          //   packageValue: res.data.packageValue,
+          //   signType: res.data.signType,
+          //   paySign: res.data.paySign
+          // }));
         } else {
           common.toast(res.message);
         }
@@ -282,14 +291,16 @@ $(function() {
         selectId: address ? address.id : -1 ,
         callBackUrl: './order.html'
       })
-      location.href = './address.html?' + common.stringify(data);
+      common.go('./address.html',data);
+      // location.href = './address.html?' + common.stringify(data);
     })
 
     dom.on('click','.go-coupon',function(){
       location.href = '/wap/index.html?'
         + common.stringify($.extend({},params,{
           callBackUrl: location.origin + location.pathname,
-          type: 'groupon'
+          type: 'groupon',
+          atype: common.params.type
         })) + '#/usecoupons?' + common.stringify({
           courseId: product.courseId,
           productId: product.id,

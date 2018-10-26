@@ -1,7 +1,10 @@
 $(function(){
   var token = common.getLocalStroge('token');
   if(!token){
-    location.href = './login.html';
+    common.go('./login.html',{
+      callBackUrl:location.href
+    });
+    // location.href = './login.html';
   }
   var dom = $('#container');
   var params = common.urlGet();
@@ -60,11 +63,16 @@ $(function(){
     })
 
     dom.on('click','.go-select',function(){
-      location.href = params.callBackUrl + '?' + common.stringify($.extend({},{
+      common.go(params.callBackUrl, {
         id: params.id,
         groupId: params.groupId,
-        addressId: $(this).data('id')
-      }))
+        addressId: $(this).data('id'),
+      })
+      // location.href = params.callBackUrl + '?' + common.stringify($.extend({},{
+      //   id: params.id,
+      //   groupId: params.groupId,
+      //   addressId: $(this).data('id'),
+      // }))
     })
 
     dom.on('click','.btn-add',function(){
