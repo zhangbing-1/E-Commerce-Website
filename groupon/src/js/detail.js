@@ -174,15 +174,17 @@ $(function() {
   }
 
   function getOldCoupon(){
-    common.actions.getIsGiveCoupon().done(function(res){
-      if(res.code == 0 && res.data == 1){
-        common.actions.getIsReceiveCoupon().done(function(res){
-          if(res.code == 0 && res.data == 0 && dom.find('.banner-get-coupon').length == 0){
-            dom.prepend(common.createGetCoupon());
-          }
-        })
-      }
-    })
+    if(common.getLocalStroge('token')){
+      common.actions.getIsGiveCoupon().done(function(res){
+        if(res.code == 0 && res.data == 1){
+          common.actions.getIsReceiveCoupon().done(function(res){
+            if(res.code == 0 && res.data == 0 && dom.find('.banner-get-coupon').length == 0){
+              dom.prepend(common.createGetCoupon());
+            }
+          })
+        }
+      })
+    }
   }
 
   function renderToFreeCourse(){
