@@ -1,0 +1,22 @@
+{
+  "name": "hanchun-activity",
+  "version": "0.0.6",
+  "description": "调查问券",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/gulp --gulpfile gulp/dev.js dev",
+    "test": "./node_modules/.bin/gulp --gulpfile gulp/build.js build --env test",
+    "build": "./node_modules/.bin/gulp --gulpfile gulp/build.js build --env dev",
+    "deploy": "bash ./gulp/deploy.sh",
+    "upyun": "node ./gulp/upyun.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git clone ssh://liucy@47.104.171.221:29418/fe-wx-web"
+  },
+  "author": "liuchengyong",
+  "license": "ISC",
+  "devDependencies": {
+    "upyun": "^3.3.4"
+  }
+}
