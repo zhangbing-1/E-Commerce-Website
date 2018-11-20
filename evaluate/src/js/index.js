@@ -18,7 +18,7 @@ $(function() {
     lable = data.reployLabel ? data.reployLabel : lable;
     $(".select:contains(" + lable + ")").addClass('current');
     dom.find('.answer-num').text('答疑数量： ' + data.count);
-    reployScore = data.reployScore;
+    reployScore = 2 * data.reployScore;
     if(reployScore == 1){
       dom.find('.select-group').show();
       dom.find('.reployContent').attr('placeholder','详细描述你所遇到的问题，不超过200字')
