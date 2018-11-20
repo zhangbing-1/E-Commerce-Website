@@ -37,7 +37,7 @@
         height:.4rem;
         align-items:center;
         margin-right:.3rem;
-        .icon-gray,.icon-light{
+        .icon-gray,.icon-light,.icon-half{
           display:block;
           width:.4rem;
           height:100%;
@@ -45,12 +45,24 @@
           background-position: left center;
           background-repeat: no-repeat;
           background-size: 100% auto;
+          display: flex;
+          .icon-left {
+            height: 100%;
+            flex: 1;
+          }
+          .icon-right {
+            height: 100%;
+            flex: 1;
+          }
         }
         .icon-gray{
           background-image: url(../img/icon-star-gray.png);
         }
         .icon-light{
-          background-image:url(../img/icon-start-light.png);
+          background-image:url(../img/icon-star-light.png);
+        }
+        .icon-half{
+          background-image:url(../img/icon-star-half.png);
         }
       }
     }
