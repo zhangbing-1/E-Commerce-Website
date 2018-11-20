@@ -168,7 +168,7 @@ $(function() {
       }
       common.actions.commitEvaluate({
         id: params.id,
-        score: reployScore,
+        score: reployScore / 2,
         type: reployScore == 1 ? 2 : 1,
         content : content,
         label: reployScore == 1 ? lable : ''
@@ -181,6 +181,7 @@ $(function() {
     })
   }
   function bindSliding() {
+    if(isComplete) return
     var targetLeft = document.getElementsByClassName('icon-left')
     var targetRight = document.getElementsByClassName('icon-right')
 
