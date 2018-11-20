@@ -1,6 +1,6 @@
 {
   "name": "group-buying-activity",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "答疑评价页面",
   "main": "index.js",
   "scripts": {
