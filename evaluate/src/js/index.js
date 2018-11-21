@@ -113,7 +113,6 @@ $(function() {
     }
     dom.find('.star').html(domStr);
     dom.find('.star-text').html(starStr);
-    console.log('12312')
     bindSliding()
   }
 
@@ -188,6 +187,7 @@ $(function() {
     for(var i=0;i<targetLeft.length;i++) {
       targetLeft[i].index=i;
       targetLeft[i].addEventListener('click', function(){
+        if(isComplete) return
         renderStar(2 * (this.index) + 1)
       })
     }
@@ -195,6 +195,7 @@ $(function() {
     for(var i=0;i<targetRight.length;i++) {
       targetRight[i].index=i;
       targetRight[i].addEventListener('click', function(){
+        if(isComplete) return
         renderStar(2 * this.index + 2)
       })
     }
@@ -204,8 +205,8 @@ $(function() {
       if(res.code == 0){
         renderPage(res.data);
       }
-      bindEvent();
       bindSliding()
+      bindEvent();
     })
   }
   init();
