@@ -1,0 +1,141 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta http-equiv="Expires" CONTENT="0">
+  <meta http-equiv="Cache-Control" CONTENT="no-cache">
+  <meta http-equiv="Pragma" CONTENT="no-cache">
+  <title>红包说明</title>
+  <script type="text/javascript">
+  function adapt(designWidth, rem2px) {
+    var d = window.document.createElement('div');
+    d.style.width = '1rem';
+    d.style.display = "none";
+    var head = window.document.getElementsByTagName('head')[0];
+    head.appendChild(d);
+    var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+    document.documentElement.style.fontSize = window.innerWidth / designWidth * rem2px / defaultFontSize * 100 + '%';
+    var st = document.createElement('style');
+    var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+    var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+    st.innerHTML = portrait + landscape;
+    head.appendChild(st);
+    return defaultFontSize
+  };
+  var defaultFontSize = adapt(750, 100);
+  </script>
+  <style type="text/css">
+    body{
+      padding: 0.3rem;
+      margin: 0;
+    }
+    .t1{
+      margin-bottom: 0.1rem;
+      font-size: 0.30rem;
+      color: #333333;
+    }
+    t2{
+      font-size: 0.3rem;
+      color: #333333;
+      padding-left: 0.3rem;
+    }
+    t3{
+      font-size: 0.26rem;
+      color: #666666;
+      padding-left: 0.3rem;
+    }
+    p{
+      margin: .3rem 0 0;
+      font-size: .26rem;
+      color:#666;
+      line-height: .4rem;
+    }
+    .qa{
+      padding: 0.15rem 0;
+    }
+    .qa-top{
+      margin-bottom: 0.1rem;
+    }
+    .qa-bottom{
+    }
+    .q{
+      width: 0.3rem;
+      height: 0.3rem;
+      font-size: 0.28rem;
+      display: inline-block;
+      background: #999999;
+      border: #999999 1px solid;
+      border-radius: 0.06rem;
+      color: #ffffff;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .a{
+      width: 0.3rem;
+      height: 0.3rem;
+      font-size: 0.28rem;
+      display: inline-block;
+      background: #ffffff;
+      color: #666666;
+      border-radius: 0.06rem;
+      border: #999999 1px solid;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="t1">红包常见问题</div>
+  <div class="qa">
+    <div class="qa-top">
+      <div class="q">Q</div><t2>怎样才能获得红包呢？</t2>
+    </div>
+    <div class="qa-bottom">
+      <div class="a">A</div><t3>下课后及时做作业，得满分就能领取现金红包</t3>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="qa-top">
+      <div class="q">Q</div><t2>作业得满分了，能领多大红包？</t2>
+    </div>
+    <div class="qa-bottom">
+      <div class="a">A</div><t3>根据你提交时间的先后，金额不同。</t3>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="qa-top">
+      <div class="q">Q</div><t2>第一次提交没得满分，还有机会得红包吗？</t2>
+    </div>
+    <div class="qa-bottom">
+      <div class="a">A</div><t3>第一次提交后没得满分，别气馁。还有2次修改机会，</t3>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="qa-top">
+      <div class="q">Q</div><t2>第一次提交没得满分，再提交得满分了，能领多大红包？</t2>
+    </div>
+    <div class="qa-bottom">
+      <div class="a">A</div><t3>按满分作业的提交时间判定，与第一次提交时间无关哦。如果你满分作业的提交在下课1小时后，那就是6.66元。</t3>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="qa-top">
+      <div class="q">Q</div><t2>红包怎么提现？</t2>
+    </div>
+    <div class="qa-bottom">
+      <div class="a">A</div><t3>点击我的-奖学金-提现，绑定微信号，即可立刻提现。</t3>
+    </div>
+  </div>
+</body>
+
+</html>
