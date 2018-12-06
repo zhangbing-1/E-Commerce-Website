@@ -1,7 +1,10 @@
 /**
  * ppt.js
- * version 1.0.0
- * 基础功能实现
+ * version 2.0.0
+ *
+ * 修改：
+ *   播放音视频
+ *   播放flash
  *
  */
 
@@ -84,11 +87,13 @@ var bridge = {
   }
 }();
 
-function onPlayerInit(cplayer) {
+function onPlayerCustomInit(cplayer) {
   player = cplayer;
   presentation = player.presentation();
   view = player.view();
   control = view.playbackController();
+  view.displayObject().parentElement.style.display = 'block';
+  view.resize(document.body.clientWidth, view.height() / view.width() * document.body.clientWidth)
 
   control.stepChangeEvent().addHandler(function(index) {
     bridge.call('pptStepChangeEvent', index);
@@ -97,13 +102,8 @@ function onPlayerInit(cplayer) {
   control.slideChangeEvent().addHandler(function(index) {
     bridge.call('pptSlideChangeEvent', index);
   });
-
-  setTimeout(function() {
-    view.resize(document.body.clientWidth, view.height() / view.width() * document.body.clientWidth)
-    document.getElementById('_content').remove();
-    document.getElementById('content').appendChild(view.displayObject());
-  }, 300)
 }
+
 
 bridge.register('pptPreStep', function() {
   control.gotoPreviousStep()
@@ -124,18 +124,3 @@ bridge.register('pptGotoPage', function(index) {
   index = index < 0 ? 0 : (index >= presentation.slides().count() ? (presentation.slides().count() - 1) : index);
   control.gotoSlide(index);
 });
-
-
-if (!ispring.compatibility.performRedirectIfNeeded("data/html5-unsupported.html")) {
-  (function(startup) {
-    function start(savedPresentationState) {
-      PresentationPlayer.start(presInfo, "content", "playerView", onPlayerInit, savedPresentationState);
-    }
-
-    if (startup) {
-      startup(start);
-    } else {
-      start();
-    }
-  })();
-};
