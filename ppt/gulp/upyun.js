@@ -13,7 +13,7 @@ const client = new upyun.Client(service);
 
 let sourcePath = path.join(__dirname, '../src/');
 
-
+let fileName = 'ppt.js'
 client.putFile('ppt', fs.createReadStream(sourcePath + fileName), {}).then(res => {
   console.log(path + '===== success');
 }).catch(res => {
