@@ -4,9 +4,9 @@ function proDeploy(){
   npm run build
   npm run upyun pro
 
-  ssh -i ~/.ssh/id_rsa azj@47.104.184.42 " mkdir -p /home/azj/frontend/fe-activitys/single "
-  scp -i ~/.ssh/id_rsa -r ./build/*.html azj@47.104.184.42:/home/azj/frontend/fe-activitys/single
-  ssh -i ~/.ssh/id_rsa azj@47.104.184.42 "
+  ssh -i ~/.ssh/deploy azj@47.104.184.42 " mkdir -p /home/azj/frontend/fe-activitys/single "
+  scp -i ~/.ssh/deploy -r ./build/*.html azj@47.104.184.42:/home/azj/frontend/fe-activitys/single
+  ssh -i ~/.ssh/deploy azj@47.104.184.42 "
     ssh web1 'mkdir -p /home/azj/fe-project/activitys/single'
     scp -r /home/azj/frontend/fe-activitys/single/* web1:/home/azj/fe-project/activitys/single
     ssh web2 'mkdir -p /home/azj/fe-project/activitys/single'
