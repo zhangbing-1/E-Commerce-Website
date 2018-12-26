@@ -1,0 +1,57 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta http-equiv="Expires" CONTENT="0">
+  <meta http-equiv="Cache-Control" CONTENT="no-cache">
+  <meta http-equiv="Pragma" CONTENT="no-cache">
+  <title>答疑规则</title>
+  <script type="text/javascript">
+  function adapt(designWidth, rem2px) {
+    var d = window.document.createElement('div');
+    d.style.width = '1rem';
+    d.style.display = "none";
+    var head = window.document.getElementsByTagName('head')[0];
+    head.appendChild(d);
+    var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+    document.documentElement.style.fontSize = window.innerWidth / designWidth * rem2px / defaultFontSize * 100 + '%';
+    var st = document.createElement('style');
+    var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+    var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+    st.innerHTML = portrait + landscape;
+    head.appendChild(st);
+    return defaultFontSize
+  };
+  var defaultFontSize = adapt(750, 100);
+  </script>
+  <style type="text/css">
+    body{
+      padding: .3rem;
+    }
+    t5{
+      display: block;
+      font-size: .28rem;
+      color: #999999;
+      line-height:.4rem;
+    }
+    p{
+      margin: .2rem 0 0;
+      font-size: .3rem;
+      color:#333;
+      line-height: .46rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <t5>为了更好地服务同学们，给大家提供更加高效的答疑服务，我们对答疑模式做了升级优化。</t5>
+  <p>1. 答疑对象：报名含答疑服务课程的所有同学。</p>
+  <p>2. 答疑时间：具体班级时间以及节假日调整以班主任通知为准。</p>
+  <p>3. 答疑要求：图片拍摄清晰完整，一图一题，如果您上传的题目未按要求提交，会被老师驳回。请按要求提交哦。</p>
+  <p>4. 追问：如果老师的回答没有完全解决您的问题，您可以在48小时内对老师的解答进行追问。</p>
+</body>
+
+</html>
