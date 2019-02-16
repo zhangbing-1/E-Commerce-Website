@@ -95,6 +95,7 @@ $(function() {
       _data.unionId = getLocalStroge('unionId');
     }
     _data.timestamp = new Date().Format();
+    _data.pageFrom = 4;
     _data.sign = getSign(_data);
     _options.data = stringify(_data);
     return $.ajax(_options).done(function(res) {
