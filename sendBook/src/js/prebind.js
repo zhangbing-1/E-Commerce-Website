@@ -1,5 +1,11 @@
 $(function() {
   var dom = $('#container'),_obj = common.urlGet();
+  if(_obj.activityId < 23){
+    $('#backimg').attr('src','https://zongjiewebimg.chaisenwuli.com/othercloud/prebind-back.jpg');
+  }else{
+    $('#backimg').attr('src','https://zongjiewebimg.chaisenwuli.com/othercloud/prebind-back-' + _obj.activityId + '.jpg');
+  }
+
   function bindUserRelationship() {
     common.actions.bindUserRelationship({
       sourceOpenId: _obj.sourceOpenId,
