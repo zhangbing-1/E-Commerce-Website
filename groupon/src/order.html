@@ -107,15 +107,33 @@
     </div>
     {{/if}}
   </script>
-
+  <script id="tpl-qrcode-layer" type="text/html">
+    {{ if qrInfo != null}}
+      <div class="qrcode-layer-bg">
+        <div class="qrcode-close" >
+          <img src="./img/video-close.png" class="qrcode-close-image" alt="">
+        </div>
+        <div class="qrcode-img-bg">
+          <img src="{{qrInfo.codePic}}" class="qrcode-img" alt="">
+        </div>
+        <div class="qrcode-text">
+          <p>长按识别二维码，添加老师微信</p> 
+          <p>领取课堂讲义资料</p>
+        </div>
+      </div>
+    {{/if}}
+  </script>
   <script id="tpl-main" type="text/html">
     {{ if activity.bookingStatus != 0 }}
       {{ include 'tpl-header' }}
+      
     {{/if}}
     {{ if product.merchandises.length > 0}}
       {{ include 'tpl-address' }}
     {{/if}}
-
+    {{ if isShop && (activity.bookingStatus == 2 || activity.bookingStatus == 1)}}
+      {{ include 'tpl-qrcode-layer' }}
+    {{/if}}
     <div class="product-lable">课程信息</div>
     <div class="product-wrapper">
       <div class="product-title">{{activity.activityTitle}}</div>
