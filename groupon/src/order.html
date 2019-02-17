@@ -131,7 +131,7 @@
     {{ if product.merchandises.length > 0}}
       {{ include 'tpl-address' }}
     {{/if}}
-    {{ if isShop && (activity.bookingStatus == 2 || activity.bookingStatus == 1)}}
+    {{ if (isShop && activity.bookingStatus == 1) || (activity.bookingStatus == 2)}}
       {{ include 'tpl-qrcode-layer' }}
     {{/if}}
     <div class="product-lable">课程信息</div>
