@@ -136,7 +136,7 @@ $(function() {
         orderPrice: activity.price
       }),
       common.actions.getActivityTeacherWxInfo({
-        activityId: '5635469963747328'
+        activityId: '6329142729046016'
       })).done(function(data1,data2,data3,data4){
       var res1 = data1[0], res2 = data2[0], res3 = data3[0], res4 = data4[0];
       if(res1.code == 0 && res2.code == 0 && res3.code == 0){
@@ -175,7 +175,7 @@ $(function() {
         }
 
          activity.infactPrice = activity.infactPrice < 0 ? 0 : activity.infactPrice;
-        if(res4.code == 0 && activity.bookingStatus != 0){
+        if(res4.code == 0 && isShop && (activity.bookingStatus == 1 || activity.bookingStatus == 2)){
           if (res4.data) {
             if (res4.data.tabs.length > 0) {
               var index = 0
