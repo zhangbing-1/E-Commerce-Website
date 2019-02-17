@@ -303,6 +303,14 @@ $(function() {
     },
     getIsReceiveCoupon: function(data){
       return request({ url: 'coupon/isReceive', data:data })
+    },
+    getActivityTeacherWxInfo: function(data){
+      data.token = getLocalStroge('token');
+      return request({ url: 'activity/api/v1/wechat/code', type: "POST", data: data });
+    },
+    submitActivityTeacherCodeLink: function(data){
+      data.token = getLocalStroge('token');
+      return request({ url: 'activity/api/v1/wechat/code/link', type: "POST", data: data });
     }
   }
 

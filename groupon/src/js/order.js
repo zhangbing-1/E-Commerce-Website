@@ -1,7 +1,7 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, address = null, user = null, coupon = null ,payType = 1;
+  var activity = null, product = null, address = null, user = null, coupon = null ,qrInfo = null ,payType = 1;
 
   function renderActivityInfo() {
     var data = {
@@ -134,8 +134,11 @@ $(function() {
         courseId: product.courseId,
         productId: product.id,
         orderPrice: activity.price
-      })).done(function(data1,data2,data3){
-      var res1 = data1[0], res2 = data2[0], res3 = data3[0];
+      }),
+      common.actions.getActivityTeacherWxInfo({
+        activityId: '5635469963747328'
+      })).done(function(data1,data2,data3,data4){
+      var res1 = data1[0], res2 = data2[0], res3 = data3[0], res4 = data4[0];
       if(res1.code == 0 && res2.code == 0 && res3.code == 0){
         var isShop = false;
         if(activity.bookingUsers){
@@ -172,7 +175,17 @@ $(function() {
         }
 
          activity.infactPrice = activity.infactPrice < 0 ? 0 : activity.infactPrice;
-
+        if(res4.code == 0 && activity.bookingStatus != 0){
+          if (res4.data) {
+            if (res4.data.tabs.length > 0) {
+              var index = 0
+              if(res4.data.tabs.length > 1){
+                index = parseInt(Math.random()*(res4.data.tabs.length),10);
+              }
+              qrInfo = res4.data.tabs[index]
+            }
+          }
+        }
         var html = template('tpl-main', { activity: activity,
           product: product,
           user: user,
@@ -180,7 +193,8 @@ $(function() {
           address: address,
           isWxApp: common.isWxApp(),
           isClient: common.isClient,
-          coupon: coupon });
+          coupon: coupon,
+          qrInfo: qrInfo });
         dom.html(html);
       }
     })
@@ -371,7 +385,9 @@ $(function() {
         $(this).addClass('selected')
       })
     }
-
+    dom.on('click','.qrcode-layer-bg',function(){
+      dom.find('.qrcode-layer-bg').remove()
+    })
   }
 
   common.initialize(function(){

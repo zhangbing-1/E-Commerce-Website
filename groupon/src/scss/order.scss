@@ -127,7 +127,48 @@
       }
     }
   }
-
+  .qrcode-layer-bg{
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    .qrcode-close{
+      width: 0.5rem;
+      margin-top: 25%;
+      .qrcode-close-image{
+        width: .5rem;
+        height: .5rem;
+      }
+    }
+    .qrcode-img-bg{
+      margin-top: .2rem;
+      width: 3.7rem;
+      height: 3.7rem;
+      background: #FFFFFF;
+      .qrcode-img{
+        width: 3.5rem;
+        height: 3.5rem;
+        margin: .1rem;
+      }
+    }
+    .qrcode-text{
+      font-size: 0.3rem;
+      padding-top: 1.5rem;
+      color: #FFFFFF;
+      text-align: center;
+      line-height: .42rem;
+      &:last-child{
+        padding-top: .3rem;
+      }
+    }
+  }
   .pay-method{
     padding: 0 .3rem;
     background-color:#fff;
