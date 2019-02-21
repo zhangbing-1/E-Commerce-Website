@@ -134,11 +134,8 @@ $(function() {
         courseId: product.courseId,
         productId: product.id,
         orderPrice: activity.price
-      }),
-      common.actions.getActivityTeacherWxInfo({
-        activityId: '6329142729046016'//5635469963747328//
-      })).done(function(data1,data2,data3,data4){
-      var res1 = data1[0], res2 = data2[0], res3 = data3[0], res4 = data4[0];
+      })).done(function(data1,data2,data3){
+      var res1 = data1[0], res2 = data2[0], res3 = data3[0];
       if(res1.code == 0 && res2.code == 0 && res3.code == 0){
         var isShop = false;
         if(activity.bookingUsers){
@@ -174,32 +171,51 @@ $(function() {
           activity.infactPrice = activity.price;
         }
 
-         activity.infactPrice = activity.infactPrice < 0 ? 0 : activity.infactPrice;
-         console.log('11111111')
-         console.log
-        if(res4.code == 0 && ((isShop && activity.bookingStatus == 1) || activity.bookingStatus == 2)){
-          if (res4.data) {
-            if (res4.data.tabs.length > 0) {
-              var index = 0
-              if(res4.data.tabs.length > 1){
-                index = parseInt(Math.random()*(res4.data.tabs.length),10);
+        activity.infactPrice = activity.infactPrice < 0 ? 0 : activity.infactPrice;
+        console.log('11111111')
+        console.log(common.isClient)
+        if(!common.isClient){
+          common.actions.getActivityTeacherWxInfo({
+            activityId: '6329142729046016'//5635469963747328//
+          }).done(function(data4){
+            if(data4.code == 0 && ((isShop && activity.bookingStatus == 1) || activity.bookingStatus == 2)){
+              if (data4.data) {
+                if (data4.data.tabs.length > 0) {
+                  var index = 0
+                  if(data4.data.tabs.length > 1){
+                    index = parseInt(Math.random()*(data4.data.tabs.length),10);
+                  }
+                  qrInfo = data4.data.tabs[index]
+                  
+                  console.log(qrInfo)
+                }
               }
-              qrInfo = res4.data.tabs[index]
-              
-              console.log(qrInfo)
             }
-          }
+            var html = template('tpl-main', { activity: activity,
+              product: product,
+              user: user,
+              isShop: isShop,
+              address: address,
+              isWxApp: common.isWxApp(),
+              isClient: common.isClient,
+              coupon: coupon,
+              qrInfo: qrInfo });
+            dom.html(html);
+          })
+        }else{
+          var html = template('tpl-main', { activity: activity,
+            product: product,
+            user: user,
+            isShop: isShop,
+            address: address,
+            isWxApp: common.isWxApp(),
+            isClient: common.isClient,
+            coupon: coupon,
+            qrInfo: qrInfo });
+          dom.html(html);
         }
-        var html = template('tpl-main', { activity: activity,
-          product: product,
-          user: user,
-          isShop: isShop,
-          address: address,
-          isWxApp: common.isWxApp(),
-          isClient: common.isClient,
-          coupon: coupon,
-          qrInfo: qrInfo });
-        dom.html(html);
+        
+        
       }
     })
   }
