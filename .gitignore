@@ -4,3 +4,4 @@ public/
 build/
 ppt/src/data/
 .DS_Store
+.idea/
