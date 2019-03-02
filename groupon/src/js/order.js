@@ -185,7 +185,7 @@ $(function() {
                   if(data4.data.tabs.length > 1){
                     index = parseInt(Math.random()*(data4.data.tabs.length),10);
                   }
-                  qrInfo = data4.data.tabs[index]
+                  // qrInfo = data4.data.tabs[index]
                   
                   console.log(qrInfo)
                 }
