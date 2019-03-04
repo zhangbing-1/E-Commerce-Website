@@ -176,7 +176,7 @@ $(function() {
         console.log(common.isClient)
         if(!common.isClient){
           common.actions.getActivityTeacherWxInfo({
-            activityId: '6329142729046016'//5635469963747328//
+            activityId: '6674442021828608'//5635469963747328//
           }).done(function(data4){
             if(data4.code == 0 && ((isShop && activity.bookingStatus == 1) || activity.bookingStatus == 2)){
               if (data4.data) {
