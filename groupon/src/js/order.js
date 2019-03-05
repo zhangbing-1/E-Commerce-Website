@@ -172,11 +172,9 @@ $(function() {
         }
 
         activity.infactPrice = activity.infactPrice < 0 ? 0 : activity.infactPrice;
-        console.log('11111111')
-        console.log(common.isClient)
-        if(!common.isClient){
+        if(!common.isClient && activity.wechatEnable == 1){
           common.actions.getActivityTeacherWxInfo({
-            activityId: '6674442021828608'//5635469963747328//
+            activityId: activity.wechatId
           }).done(function(data4){
             if(data4.code == 0 && ((isShop && activity.bookingStatus == 1) || activity.bookingStatus == 2)){
               if (data4.data) {
