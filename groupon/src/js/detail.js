@@ -393,12 +393,17 @@ $(function() {
     dom.on('click','.free-course',function(e){
       location.href = location.origin + '/wap/#/';
     })
-
+    dom.on('click','.big-course-mask',function(e){
+      console.log('click')
+      dom.find('.big-course-mask').remove()
+    })
     dom.on('click','.bigcourse-buy',function(e){
       pay()
+      dom.find('.big-course-mask').remove()
     })
 
     dom.on('click','.bigcourse-see',function(e){
+      dom.find('.big-course-mask').remove()
       if(common.isClient){
         var href = location.origin + '/wap/#/detail' + bigCourse.bigCourseUrl;
         bridge.call('openNewLink', href);
