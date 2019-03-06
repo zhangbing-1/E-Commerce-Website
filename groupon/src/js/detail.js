@@ -1,8 +1,7 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null;
-
+  var activity = null, product = null, bigCourse = null, isBuy = false;
   function renderActivityInfo() {
     var data = {
       groupActivityId: params.id,
@@ -51,8 +50,22 @@ $(function() {
       }
     })
   }
+  function isBuyProduct(productId) {
+    common.actions.isBuyClass(productId).done(function(res) {
+      bigCourse = res.data;
+      isBuy = bigCourse.isBuy
+      // if(bigCourse.isBuy){//已经购买
 
+      // }
+      if(bigCourse.bigCourseShowMessage){
+        var string = bigCourse.bigCourseShowMessage.replace('\n','<br/>');
+        var stringArray = string.split('$')
+        bigCourse.stringArray = stringArray;
+      }
+    })
+  }
   function renderProductDetail(activity) {
+    isBuyProduct(activity.productId)
     common.actions.getProductDetail({
       courseId: activity.courseId,
       productId: activity.productId
@@ -162,7 +175,7 @@ $(function() {
     }).done(function(res){
       if(res.code == 0){
         var isMore = res.data.length > 1;
-        var html = template('tpl-main', { activity: activity, product: product, isShop: isShop, isMore:isMore });
+        var html = template('tpl-main', { activity: activity, product: product, isShop: isShop, isMore:isMore, isBuy:isBuy });
         dom.html(html);
         if(!isShop){
           getOldCoupon(dom);
@@ -242,24 +255,31 @@ $(function() {
     }
     return false;
   }
-
+  function pay(){
+    if(iosPhonePay()){
+      return;
+    }
+    if (common.getLocalStroge('token')) {
+      common.go('./order.html',{
+        id : activity.activityId,
+        groupId : activity.bookingId || 0,
+      })
+      // location.href = './order.html?' +  common.stringify({
+      //   id : activity.activityId,
+      //   groupId : activity.bookingId || 0,
+      // })
+    }else{
+      common.tokenExpire();
+    }
+  }
   function bindEvent() {
     dom.on('click', '.group-pay', function(e) {
-      if(iosPhonePay()){
-        return;
+      if(bigCourse.bigCourseShowMessage != null){
+        var $html = $(template('tpl-big-course',{showBigCourseToast:true,buyBigCourse:bigCourse}));
+        dom.append($html)
+        return
       }
-      if (common.getLocalStroge('token')) {
-        common.go('./order.html',{
-          id : activity.activityId,
-          groupId : activity.bookingId || 0,
-        })
-        // location.href = './order.html?' +  common.stringify({
-        //   id : activity.activityId,
-        //   groupId : activity.bookingId || 0,
-        // })
-      }else{
-        common.tokenExpire();
-      }
+      pay()
     })
 
     dom.on('click','.group-repay',function(){
@@ -372,6 +392,24 @@ $(function() {
 
     dom.on('click','.free-course',function(e){
       location.href = location.origin + '/wap/#/';
+    })
+    dom.on('click','.big-course-mask',function(e){
+      console.log('click')
+      dom.find('.big-course-mask').remove()
+    })
+    dom.on('click','.bigcourse-buy',function(e){
+      pay()
+      dom.find('.big-course-mask').remove()
+    })
+
+    dom.on('click','.bigcourse-see',function(e){
+      dom.find('.big-course-mask').remove()
+      if(common.isClient){
+        var href = location.origin + '/wap/#/detail' + bigCourse.bigCourseUrl;
+        bridge.call('openNewLink', href);
+      }else{
+        location.href = location.origin + '/wap/#/detail' + bigCourse.bigCourseUrl;
+      }
     })
 
     if(common.isClient){
