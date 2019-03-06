@@ -311,6 +311,9 @@ $(function() {
     submitActivityTeacherCodeLink: function(data){
       data.token = getLocalStroge('token');
       return request({ url: 'activity/api/v1/wechat/code/link', type: "POST", data: data });
+    },
+    isBuyClass: function(productId){
+      return request({ url: 'product/isBuyClass', data: { productId:productId, token: getLocalStroge('token') } });
     }
   }
 

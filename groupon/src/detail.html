@@ -149,6 +149,11 @@
         {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
       </div>
       {{/if}}
+    {{else if isBuy}}
+      <div class="btns oval">
+        <div class="btn go-my-course">我的课程</div>
+        {{if isMore}}<div class="btn  go-list">更多团购</div>{{/if}}
+      </div>
     {{else}}
       {{if activity.activityStatus == 2 }}
       <div class="btns">
@@ -199,8 +204,27 @@
       </div>
     {{/if}}
   </script>
-
+  <script id="tpl-big-course" type="text/html">
+    {{ if (showBigCourseToast) }}
+    <div class="big-course-mask">
+      <div class="model-bg">
+        <div class="model-text">
+            <span>{{ buyBigCourse.stringArray[0] }}</span>
+            <span class="color">{{ buyBigCourse.stringArray[1] }}</span>
+            <span>{{ buyBigCourse.stringArray[2] }}</span>
+        </div>
+        <div class="model-btn-bg">
+          <div class="model-btn bigcourse-buy">直接购买</div>
+          <div class="model-btn bigcourse-see">去看看</div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </script>
   <script id="tpl-main" type="text/html">
+    
+      {{ include 'tpl-big-course' }}
+
     <img class="top-image" src="{{activity.productTitlePicUrl}}">
     <div class="group-header">
       <div class="group-price">

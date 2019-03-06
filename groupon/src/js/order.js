@@ -184,8 +184,6 @@ $(function() {
                     index = parseInt(Math.random()*(data4.data.tabs.length),10);
                   }
                   qrInfo = data4.data.tabs[index]
-
-                  console.log(qrInfo)
                 }
               }
             }

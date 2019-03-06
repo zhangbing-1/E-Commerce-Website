@@ -1,6 +1,58 @@
 .container-detail{
   background-color:#F8F8F8;
   padding-bottom: 1rem;
+  .big-course-mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100000;
+    .model-bg{
+      margin-top: 35%;
+      margin-left: calc(50% - 3.1rem);
+      width: 6.2rem;
+      height: 2.85rem;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: stretch;
+      background: #FFF;
+      .model-text{
+        font-size: .3rem;
+        color: #333333;
+        text-align: center; 
+        // height: 2.05rem;
+        margin: .4rem .4rem 0 .4rem;
+        line-height: .4rem;
+        .color{
+          color: #FF6D41;
+        }
+      }
+      .model-btn-bg{
+        width: 100%;
+        border-top: 1px solid #F4F4F4;
+        height: .8rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        .model-btn{
+          width: 50%;
+          color: #333333;
+          font-size: .3rem;
+          text-align: center;
+          line-height: .8rem;
+          &:last-child{
+            color: #FF6D41;
+            border-left: 1px solid #F4F4F4;
+          }
+        }
+      }
+    }
+  }
   .activity-null{
     line-height:1rem;
     font-size: .32rem;
