@@ -288,7 +288,7 @@ $(function() {
     }
   }
   function bindEvent() {
-    dom.on('click','.video-container-cover',function(e){=
+    dom.on('click','.video-container-cover',function(e){
       if(common.isClient){
         var version = bridge.call("getVersionCode");
         if ((common.isPhone &&  version > 154) || (common.isAndroid && version > 152)) {
