@@ -288,10 +288,9 @@ $(function() {
     }
   }
   function bindEvent() {
-    dom.on('click','.video-container-cover',function(e){
-
+    dom.on('click','.video-container-cover',function(e){=
       if(common.isClient){
-        let version = bridge.call("getVersionCode");
+        var version = bridge.call("getVersionCode");
         if ((common.isPhone &&  version > 154) || (common.isAndroid && version > 152)) {
           bridge.call('callNavPage', {page:'play_landscape_video',params:{url:  product.titleVideoUrl}});
         } else  {
