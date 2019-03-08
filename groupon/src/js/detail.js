@@ -1,7 +1,7 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, bigCourse = null, isBuy = false;
+  var activity = null, product = null, bigCourse = null, isBuy = false, player = null;
   function renderActivityInfo() {
     var data = {
       groupActivityId: params.id,
@@ -182,6 +182,21 @@ $(function() {
         }
         renderToFreeCourse();
         startCountDown();
+
+        if(product.titleVideoUrl && product.titleVideoThumburl ){
+          player = new TcPlayer('video', {
+            mp4: product.titleVideoUrl, //请替换成实际可用的播放地址
+            autoplay: false,      //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
+            coverpic: {
+              "style": "stretch",
+              "src": product.titleVideoThumburl
+            },
+            x5_type: 'h5',
+            width : $(window).width(),//视频的显示宽度，请尽量使用视频分辨率宽度
+            height : $(window).width() / 16 * 9,//视频的显示高度，请尽量使用视频分辨率高度
+            systemFullscreen: true
+          });
+        }
       }
     })
   }
@@ -273,6 +288,22 @@ $(function() {
     }
   }
   function bindEvent() {
+    dom.on('click','.video-container-cover',function(e){
+
+      if(common.isClient){
+        let version = bridge.call("getVersionCode");
+        if ((common.isPhone &&  version > 154) || (common.isAndroid && version > 152)) {
+          bridge.call('callNavPage', {page:'play_landscape_video',params:{url:  product.titleVideoUrl}});
+        } else  {
+          dom.find('.video-container-cover').remove()
+          player.play()
+        }
+      }else{
+        dom.find('.video-container-cover').remove()
+        player.play()
+      }
+    })
+
     dom.on('click', '.group-pay', function(e) {
       if(bigCourse.bigCourseShowMessage != null){
         var $html = $(template('tpl-big-course',{showBigCourseToast:true,buyBigCourse:bigCourse}));

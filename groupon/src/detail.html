@@ -37,7 +37,7 @@
   <!-- endbuild -->
   <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
   <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-
+  <script src="//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.2.js" charset="utf-8"></script>;
   <script id="tpl-ios-guide" type="text/html">
     <div class="ios-layer">
       {{if isGroup}}
@@ -222,10 +222,22 @@
     {{/if}}
   </script>
   <script id="tpl-main" type="text/html">
-    
-      {{ include 'tpl-big-course' }}
 
-    <img class="top-image" src="{{activity.productTitlePicUrl}}">
+    {{ include 'tpl-big-course' }}
+    {{ if product.titleVideoUrl && product.titleVideoThumburl }}
+    <div class="video-container">
+      <div class="video-container-cover">
+        <img class="cover-image" src="{{product.titleVideoThumburl}}" />
+        <img class="btn-play" src="./img/zj_live_play_start.png" />
+        <span class="btn-paly-text">点击试听</span>
+      </div>
+      <div id="video" style="width:100%; height:auto;"></div>
+    </div>
+
+    {{ else }}
+    <img class="top-image" src="{{activity.productTitlePicUrl}}" />
+    {{/if}}
+
     <div class="group-header">
       <div class="group-price">
         <span class="price">¥{{activity.price}}<span class="original-price">单买¥ {{activity.originalPrice}}</span></span>
