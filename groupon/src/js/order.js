@@ -1,8 +1,18 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, address = null, user = null, coupon = null ,qrInfo = null ,payType = 1;
-
+  var activity = null, product = null, address = null, user = null, coupon = null ,qrInfo = null ,payType = 1 ,isOldUser = false;
+  function checkIsOldUser(){
+    if(common.getLocalStroge('token')){
+       common.actions.getIsGiveCoupon().done(function(res){ //新用户为 1
+        if(res.code == 0 && res.data == 1){
+          isOldUser = false;
+        }else if(res.code == 0 && res.data == 0){
+          isOldUser = true;
+        }
+      })
+    }
+  }
   function renderActivityInfo() {
     var data = {
       groupActivityId: params.id,
@@ -310,6 +320,12 @@ $(function() {
 
   function bindEvent() {
     dom.on('click', '.btn-pay', function(e) {
+      if(isOldUser && common.oldUserNoShopProducts.indexOf(product.id) != -1){ // 老用户不能购买
+        common.createAlert('本活动仅限新用户参加').done(function(confirm){
+          confirm.remove();
+        })
+        return
+      }
       if(product.merchandises.length > 0 && !address) {
         return common.toast('请选择地址');
       }
@@ -410,6 +426,7 @@ $(function() {
     if(!common.getLocalStroge('token')){
       common.tokenExpire();
     }
+    checkIsOldUser();
     renderActivityInfo();
     bindEvent();
   })

@@ -14,7 +14,6 @@ $(function() {
         if(page == 1){
           var html = template('tpl-main', { list: res.data });
           dom.html(html);
-          renderGetCoupon();
           renderToFreeCourse();
         }else if(page > 1){
           var html = template('tpl-list', { list: res.data });

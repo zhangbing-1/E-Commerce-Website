@@ -1,7 +1,18 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, bigCourse = null, isBuy = false, player = null;
+  var activity = null, product = null, bigCourse = null, isBuy = false, player = null, isOldUser = false;
+  function checkIsOldUser(){
+    if(common.getLocalStroge('token')){
+       common.actions.getIsGiveCoupon().done(function(res){ //新用户为 1
+        if(res.code == 0 && res.data == 1){
+          isOldUser = false;
+        }else if(res.code == 0 && res.data == 0){
+          isOldUser = true;
+        }
+      })
+    }
+  }
   function renderActivityInfo() {
     var data = {
       groupActivityId: params.id,
@@ -177,9 +188,6 @@ $(function() {
         var isMore = res.data.length > 1;
         var html = template('tpl-main', { activity: activity, product: product, isShop: isShop, isMore:isMore, isBuy:isBuy });
         dom.html(html);
-        if(!isShop){
-          getOldCoupon(dom);
-        }
         renderToFreeCourse();
         startCountDown();
 
@@ -304,6 +312,12 @@ $(function() {
     })
 
     dom.on('click', '.group-pay', function(e) {
+      if(isOldUser && common.oldUserNoShopProducts.indexOf(product.id) != -1){ // 老用户不能购买
+        common.createAlert('本活动仅限新用户参加').done(function(confirm){
+          confirm.remove();
+        })
+        return
+      }
       if(bigCourse.bigCourseShowMessage != null){
         var $html = $(template('tpl-big-course',{showBigCourseToast:true,buyBigCourse:bigCourse}));
         dom.append($html)
@@ -448,6 +462,7 @@ $(function() {
   }
 
   common.initialize(function(){
+    checkIsOldUser();
     renderActivityInfo();
     bindEvent();
   })
