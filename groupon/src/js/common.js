@@ -21,7 +21,7 @@ $(function() {
   common.shareUrl = location.origin + "/activitys/groupon/";
   common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie" || (common.isPhone && bridge.hasNativeMethod('getVersionCode') == 1);
 
-  common.oldUserNoShopProducts = [];
+  common.oldUserNoShopProducts = [427,428,429,430,431,432,433,434,435,436];
 
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
