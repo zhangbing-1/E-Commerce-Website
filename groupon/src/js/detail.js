@@ -1,7 +1,7 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, bigCourse = null, isBuy = false, player = null, isOldUser = false;
+  var activity = null, product = null, bigCourse = null, isBuy = false, player = null, isOldUser = false, isBuyProducts = false;
   function checkIsOldUser(){
     if(common.getLocalStroge('token')){
        common.actions.getIsGiveCoupon().done(function(res){ //新用户为 1
@@ -13,6 +13,19 @@ $(function() {
       })
     }
   }
+
+  function checkBuyProducts(){
+    if(common.getLocalStroge('token')){
+       common.actions.isBuyProducts({productIds:common.oldUserNoShopProducts.join(',')}).done(function(res){ //新用户为 1
+        if(res.code == 0 && res.data == 1){
+          isBuyProducts = true;
+        }else if(res.code == 0 && res.data == 0){
+          isBuyProducts = false;
+        }
+      })
+    }
+  }
+
   function renderActivityInfo() {
     var data = {
       groupActivityId: params.id,
@@ -318,6 +331,12 @@ $(function() {
         })
         return
       }
+      if(isBuyProducts){
+        common.createAlert('此类物品仅限团购一次').done(function(confirm){
+          confirm.remove();
+        })
+        return
+      }
       if(bigCourse.bigCourseShowMessage != null){
         var $html = $(template('tpl-big-course',{showBigCourseToast:true,buyBigCourse:bigCourse}));
         dom.append($html)
@@ -463,6 +482,7 @@ $(function() {
 
   common.initialize(function(){
     checkIsOldUser();
+    checkBuyProducts();
     renderActivityInfo();
     bindEvent();
   })

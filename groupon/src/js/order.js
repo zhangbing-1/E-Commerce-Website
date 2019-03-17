@@ -1,7 +1,7 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, address = null, user = null, coupon = null ,qrInfo = null ,payType = 1 ,isOldUser = false;
+  var activity = null, product = null, address = null, user = null, coupon = null ,qrInfo = null ,payType = 1 ,isOldUser = false, isBuyProducts = false;
   function checkIsOldUser(){
     if(common.getLocalStroge('token')){
        common.actions.getIsGiveCoupon().done(function(res){ //新用户为 1
@@ -9,6 +9,17 @@ $(function() {
           isOldUser = false;
         }else if(res.code == 0 && res.data == 0){
           isOldUser = true;
+        }
+      })
+    }
+  }
+  function checkBuyProducts(){
+    if(common.getLocalStroge('token')){
+       common.actions.isBuyProducts({productIds:common.oldUserNoShopProducts.join(',')}).done(function(res){ //新用户为 1
+        if(res.code == 0 && res.data == 1){
+          isBuyProducts = true;
+        }else if(res.code == 0 && res.data == 0){
+          isBuyProducts = false;
         }
       })
     }
@@ -326,6 +337,12 @@ $(function() {
         })
         return
       }
+      if(isBuyProducts){
+        common.createAlert('此类物品仅限团购一次').done(function(confirm){
+          confirm.remove();
+        })
+        return
+      }
       if(product.merchandises.length > 0 && !address) {
         return common.toast('请选择地址');
       }
@@ -426,6 +443,7 @@ $(function() {
     if(!common.getLocalStroge('token')){
       common.tokenExpire();
     }
+    checkBuyProducts();
     checkIsOldUser();
     renderActivityInfo();
     bindEvent();
