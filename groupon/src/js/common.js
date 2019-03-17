@@ -318,7 +318,7 @@ $(function() {
       return request({ url: 'product/isBuyClass', data: { productId:productId, token: getLocalStroge('token') } });
     },
     isBuyProducts:function(data){
-      return request({ url: 'activity/api/v1/isBuySpecialProduct', data });
+      return request({ url: 'activity/api/v1/isBuySpecialProduct', data: data });
     }
   }
 
