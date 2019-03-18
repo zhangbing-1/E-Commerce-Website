@@ -4,11 +4,11 @@ $(function() {
   var activity = null, product = null, bigCourse = null, isBuy = false, player = null, isOldUser = false, isBuyProducts = false;
   function checkIsOldUser(){
     if(common.getLocalStroge('token')){
-       common.actions.getIsGiveCoupon().done(function(res){ //新用户为 1
+       common.actions.isOldUser().done(function(res){ //新用户为 1
         if(res.code == 0 && res.data == 1){
-          isOldUser = false;
-        }else if(res.code == 0 && res.data == 0){
           isOldUser = true;
+        }else if(res.code == 0 && res.data == 0){
+          isOldUser = false;
         }
       })
     }

@@ -319,6 +319,9 @@ $(function() {
     },
     isBuyProducts:function(data){
       return request({ url: 'activity/api/v1/isBuySpecialProduct', data: data });
+    },
+    isOldUser:function(data){
+      return request({ url: 'activity/api/v1/checkUser', data:data }) 
     }
   }
 
