@@ -331,7 +331,7 @@ $(function() {
         })
         return
       }
-      if(isBuyProducts && common.oldUserNoShopProducts.indexOf(product.id) == -1){
+      if(isBuyProducts && common.oldUserNoShopProducts.indexOf(product.id) != -1){
         common.createAlert('此类物品仅限团购一次').done(function(confirm){
           confirm.remove();
         })
