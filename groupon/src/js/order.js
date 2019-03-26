@@ -15,7 +15,7 @@ $(function() {
   }
   function checkBuyProducts(){
     if(common.getLocalStroge('token')){
-       common.actions.isBuyProducts({productIds:common.oldUserNoShopProducts.join(',')}).done(function(res){ //新用户为 1
+       common.actions.isBuyProducts({productIds:common.onlyShopProductOnce.join(',')}).done(function(res){ //新用户为 1
         if(res.code == 0 && res.data == 1){
           isBuyProducts = true;
         }else if(res.code == 0 && res.data == 0){
@@ -337,7 +337,7 @@ $(function() {
         })
         return
       }
-      if(isBuyProducts && common.oldUserNoShopProducts.indexOf(product.id) != -1){
+      if(isBuyProducts && common.onlyShopProductOnce.indexOf(product.id) != -1){
         common.createAlert('此类物品仅限团购一次').done(function(confirm){
           confirm.remove();
         })
