@@ -92,14 +92,27 @@ $(function() {
       wx.showMenuItems({
         menuList: ['menuItem:share:appMessage','menuItem:share:timeline'] // 要显示的菜单项，所有menu项见附录3
       });
-      var wxData = {
-        title: '【团购】好课成团立享优惠',
-        link: common.shareUrl + 'index.html?' + common.stringify({
-          gradeId: common.params.gradeId,
-          type: common.params.type
-        }),
-        desc: '参与拼团，即可立享优惠，24小时内，拼团失败，全额原路退回',
-        imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+      var wxData = null
+      if(common.params.type == 1001){
+        wxData = {
+          title: '【团购】6块6，给本书＋四节题型方法大招课',
+          link: common.shareUrl + 'index.html?' + common.stringify({
+            gradeId: common.params.gradeId,
+            type: common.params.type
+          }),
+          desc: '3人成团，各减92.4元',
+          imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+        }
+      }else{
+        wxData = {
+          title: '【团购】好课成团立享优惠',
+          link: common.shareUrl + 'index.html?' + common.stringify({
+            gradeId: common.params.gradeId,
+            type: common.params.type
+          }),
+          desc: '参与拼团，即可立享优惠，24小时内，拼团失败，全额原路退回',
+          imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+        }
       }
       wx.onMenuShareAppMessage(wxData);
       wx.onMenuShareTimeline(wxData);
