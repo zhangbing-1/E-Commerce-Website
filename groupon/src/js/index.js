@@ -95,13 +95,13 @@ $(function() {
       var wxData = null
       if(common.params.type == 1001){
         wxData = {
-          title: '【团购】6块6，给本书＋四节题型方法大招课',
+          title: '【团购】6块6，给本226页书＋四节题型方法大招课',
           link: common.shareUrl + 'index.html?' + common.stringify({
             gradeId: common.params.gradeId,
             type: common.params.type
           }),
           desc: '3人成团，各减92.4元',
-          imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+          imgUrl: 'https://zongjiewebimg.chaisenwuli.com/othercloud/icon-share-1001.png'
         }
       }else{
         wxData = {
