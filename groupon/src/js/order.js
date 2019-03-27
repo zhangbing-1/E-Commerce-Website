@@ -48,8 +48,8 @@ $(function() {
               gradeId: common.params.gradeId,
               type: common.params.type
             }),
-            desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
-            imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+            desc: activity.activityGroupCount + '人成团，各减' + (activity.originalPrice-activity.price) + '元',
+            imgUrl: [474,476].indexOf(activity.productId) != -1 ? 'https://zongjiewebimg.chaisenwuli.com/othercloud/icon-share-1001.png' : 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
           }
           wx.onMenuShareAppMessage(wxData);
           wx.onMenuShareTimeline(wxData);
@@ -387,8 +387,8 @@ $(function() {
               gradeId: common.params.gradeId,
               type: common.params.type
             }),
-            desc: activity.activityGroupCount + '人成团,各减' + (activity.originalPrice-activity.price) + '元',
-            imgUrl: 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
+            desc: activity.activityGroupCount + '人成团，各减' + (activity.originalPrice-activity.price) + '元',
+            imgUrl: [474,476].indexOf(activity.productId) != -1 ? 'https://zongjiewebimg.chaisenwuli.com/othercloud/icon-share-1001.png' : 'https://zongjiewebimg.chaisenwuli.com/activitys/groupon/img/icon-share-icon.png'
           });
         }
 
