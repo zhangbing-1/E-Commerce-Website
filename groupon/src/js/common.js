@@ -23,6 +23,7 @@ $(function() {
 
   common.oldUserNoShopProducts = [427,428,429,430,431,432,433,434,435,436,474,476];
   common.onlyShopProductOnce = [427,428,429,430,431,432,433,434,435,436];
+  common.onlyShopProductOnce2 = [474,476];
 
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';

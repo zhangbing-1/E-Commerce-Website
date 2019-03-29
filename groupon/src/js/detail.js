@@ -14,15 +14,23 @@ $(function() {
     }
   }
 
-  function checkBuyProducts(){
+  function checkBuyProducts(activity){
     if(common.getLocalStroge('token')){
-       common.actions.isBuyProducts({productIds:common.onlyShopProductOnce.join(',')}).done(function(res){ //新用户为 1
-        if(res.code == 0 && res.data == 1){
-          isBuyProducts = true;
-        }else if(res.code == 0 && res.data == 0){
-          isBuyProducts = false;
-        }
-      })
+      let isProductAction = null;
+      if(common.onlyShopProductOnce.indexOf(activity.productId) != -1){ //
+        isProductAction = common.actions.isBuyProducts({productIds:common.onlyShopProductOnce.join(',')})
+      }else if(common.onlyShopProductOnce2.indexOf(activity.productId) != -1){
+        isProductAction = common.actions.isBuyProducts({productIds:common.onlyShopProductOnce2.join(',')})
+      }
+      if(isProductAction){
+        isProductAction.done(function(res){
+          if(res.code == 0 && res.data == 1){
+            isBuyProducts = true;
+          }else if(res.code == 0 && res.data == 0){
+            isBuyProducts = false;
+          }
+        })
+      }
     }
   }
 
@@ -42,7 +50,9 @@ $(function() {
         }
 
         renderProductDetail(res.data);
+        checkBuyProducts(res.data);
         activity = res.data;
+
 
         if(activity.activityRemainingTime <= 0 ){
           activity.activityStatus = 2;
@@ -331,7 +341,7 @@ $(function() {
         })
         return
       }
-      if(isBuyProducts && common.onlyShopProductOnce.indexOf(product.id) != -1){
+      if(isBuyProducts){
         common.createAlert('此类物品仅限团购一次').done(function(confirm){
           confirm.remove();
         })
@@ -482,7 +492,6 @@ $(function() {
 
   common.initialize(function(){
     checkIsOldUser();
-    checkBuyProducts();
     renderActivityInfo();
     bindEvent();
   })
