@@ -15,7 +15,7 @@ $(function() {
   }
   function checkBuyProducts(activity){
     if(common.getLocalStroge('token')){
-      let isProductAction = null;
+      var isProductAction = null;
       if(common.onlyShopProductOnce.indexOf(activity.productId) != -1){ //
         isProductAction = common.actions.isBuyProducts({productIds:common.onlyShopProductOnce.join(',')})
       }else if(common.onlyShopProductOnce2.indexOf(activity.productId) != -1){
