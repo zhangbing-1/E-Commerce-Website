@@ -106,7 +106,8 @@ $(function(){
         oneLevelId: $this.data('province'),
         twoLevelId: $this.data('city'),
         threeLevelId: $this.data('area'),
-        callback: function (selectOneObj, selectTwoObj, selectThreeObj) {  // 用户确认选择后的回调函数
+        callback: function (selectOneObj, selectTwoObj, selectThreeObj, a,b,c,d) {  // 用户确认选择后的回调函数
+          if(!selectOneObj.dom || !selectTwoObj.dom || !selectThreeObj.dom) return;
           var address = selectOneObj.value + ' ' + selectTwoObj.value + ' ' +  selectThreeObj.value;
           $this.data('province',selectOneObj.id)
             .data('city',selectTwoObj.id)
