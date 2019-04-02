@@ -21,9 +21,9 @@ $(function() {
   common.shareUrl = location.origin + "/activitys/groupon/";
   common.isClient = u.toLowerCase().match(/zongjie/i) == "zongjie" || (common.isPhone && bridge.hasNativeMethod('getVersionCode') == 1);
 
-  common.oldUserNoShopProducts = [427,428,429,430,431,432,433,434,435,436,474,476];
+  common.oldUserNoShopProducts = [427,428,429,430,431,432,433,434,435,436,474,476,481,482,457];
   common.onlyShopProductOnce = [427,428,429,430,431,432,433,434,435,436];
-  common.onlyShopProductOnce2 = [474,476];
+  common.onlyShopProductOnce2 = [474,476,481,482,457];
 
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
