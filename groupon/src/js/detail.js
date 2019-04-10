@@ -205,7 +205,7 @@ $(function() {
       gradeId: common.params.gradeId,
       type: common.params.type,
       page: 1,
-      pageSize: 5
+      pageSize: 25
     }).done(function(res){
       if(res.code == 0){
         var isMore = res.data.length > 1;

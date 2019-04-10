@@ -2,7 +2,7 @@ $(function() {
   var dom = $('#container'),
     loadStatus = 'loading',
     page = 1,
-    pageSize = 5;
+    pageSize = 25;
   function renderList(isOrder) {
     common.actions.getActivityList({
       gradeId: common.params.gradeId,
