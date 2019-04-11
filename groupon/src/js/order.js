@@ -1,7 +1,7 @@
 $(function() {
   var params = common.urlGet();
   var dom = $('#container');
-  var activity = null, product = null, address = null, user = null, coupon = null ,qrInfo = null ,payType = 1 ,isOldUser = false, isBuyProducts = false;
+  var activity = null, product = null, address = null, user = null, coupon = null ,qrInfo = null ,payType = 1 ,isOldUser = false, isBuyProducts = false, schoolShip = null;
   function checkIsOldUser(){
     if(common.getLocalStroge('token')){
        common.actions.isOldUser().done(function(res){ //新用户为 1
@@ -164,9 +164,14 @@ $(function() {
         courseId: product.courseId,
         productId: product.id,
         orderPrice: activity.price
-      })).done(function(data1,data2,data3){
-      var res1 = data1[0], res2 = data2[0], res3 = data3[0];
-      if(res1.code == 0 && res2.code == 0 && res3.code == 0){
+      }),
+      common.actions.getPreferentialList(),
+      common.actions.getCouponProductSuitList({
+        courseId: product.courseId,
+        productId: product.id,
+      })).done(function(data1,data2,data3,data4,data5){
+      var res1 = data1[0], res2 = data2[0], res3 = data3[0], res4 = data4[0], res5 = data5[0];
+      if(res1.code == 0 && res2.code == 0 && res3.code == 0 && res4.code == 0 && res5.code == 0){
         var isShop = false;
         if(activity.bookingUsers){
           for(var i = 0; i < activity.bookingUsers.length; i++){
@@ -179,8 +184,16 @@ $(function() {
         if(res2.data && res2.data.length > 0){
           address = getAddress(params.addressId||res1.data.addressid,res2.data);
         }
+        if(res4.data && res4.data.length > 0){
+          schoolShip = res4.data[0]
+        }
 
-        if(params.couponId){
+        var isAvaliable = false;
+        if(!Array.isArray(res5.data)) res5.data = []
+        for(var i = 0; i < res5.data.length; i++){
+          if(res5.data[i].id == params.couponId && res5.data[i].available) isAvaliable = true
+        }
+        if(params.couponId && isAvaliable){
           coupon = params.couponId == -1 ? {
             id:0,
             denomination:0,
@@ -195,10 +208,12 @@ $(function() {
 
         if(isShop){
           activity.infactPrice = common.floatTool.subtract(activity.price,user.couponDiscountPrice);
-        }else if(coupon){
-          activity.infactPrice =  common.floatTool.subtract(activity.price,coupon.denomination) ;
+          activity.infactPrice = common.floatTool.subtract(activity.infactPrice,user.scholarshipDiscountPriceStr);
         }else{
           activity.infactPrice = activity.price;
+          if(coupon){
+            activity.infactPrice =  common.floatTool.subtract(activity.infactPrice,coupon.denomination) ;
+          }
         }
 
         activity.infactPrice = activity.infactPrice < 0 ? 0 : activity.infactPrice;
@@ -225,7 +240,8 @@ $(function() {
               isWxApp: common.isWxApp(),
               isClient: common.isClient,
               coupon: coupon,
-              qrInfo: qrInfo });
+              qrInfo: qrInfo,
+              schoolShip: schoolShip });
             dom.html(html);
           })
         }else{
@@ -237,7 +253,8 @@ $(function() {
             isWxApp: common.isWxApp(),
             isClient: common.isClient,
             coupon: coupon,
-            qrInfo: qrInfo });
+            qrInfo: qrInfo,
+            schoolShip: schoolShip });
           dom.html(html);
         }
 
@@ -247,6 +264,14 @@ $(function() {
   }
 
   function pay() {
+    var scholarshipDiscountPrice = 0;
+    if(dom.find('.school-ship-status').hasClass('open')){
+      scholarshipDiscountPrice = schoolShip.preferentialPrice;
+      if(activity.infactPrice <= schoolShip.preferentialPrice){
+        scholarshipDiscountPrice = activity.infactPrice
+      }
+    }
+
     if(common.isWxApp()){
       wx.miniProgram.navigateTo({
         url:'/pages/h5/bridgeView?' + common.stringify({
@@ -268,10 +293,12 @@ $(function() {
         payType: payType,
         userCouponId: coupon ? coupon.id : 0,
         couponDiscountPrice: coupon ? coupon.denomination : 0,
-        orderSource: common.isPhone ? 6 : 5
+        orderSource: common.isPhone ? 6 : 5,
+        scholarshipDiscountPrice: scholarshipDiscountPrice
       }).done(function(res) {
         if (res.code == 0) {
           var params = null, config = res.data;
+          if(res.data && res.data.zeroPay == 1) return location.reload();
           if(payType == 1){
             params = {
               partnerid:config.partnerId,
@@ -302,9 +329,11 @@ $(function() {
         userCouponId: coupon ? coupon.id : 0,
         couponDiscountPrice: coupon ? coupon.denomination : 0,
         payType: 1,
-        orderSource: 3
+        orderSource: 3,
+        scholarshipDiscountPrice: scholarshipDiscountPrice
       }).done(function(res) {
         if (res.code == 0) {
+          if(res.data && res.data.zeroPay == 1) return location.reload();
           common.replace('//www.zongjie.com/pay.html',{
             type: 'groupon',
             callBackUrl: location.href,
@@ -314,15 +343,6 @@ $(function() {
             signType: res.data.signType,
             paySign: res.data.paySign
           })
-          // location.replace('//www.zongjie.com/pay.html?' + common.stringify({
-          //   type: 'groupon',
-          //   callBackUrl: location.href,
-          //   timeStamp: res.data.timeStamp,
-          //   nonceStr: res.data.nonceStr,
-          //   packageValue: res.data.packageValue,
-          //   signType: res.data.signType,
-          //   paySign: res.data.paySign
-          // }));
         } else {
           common.toast(res.message);
         }
@@ -377,6 +397,16 @@ $(function() {
           courseId: product.courseId,
           productId: product.id,
           couponId: coupon ? coupon.id : -1 })
+    })
+
+    dom.on('click','.school-ship-status',function(){
+      $(this).toggleClass('open');
+      if($(this).hasClass('open')){
+        var price = common.floatTool.subtract(activity.infactPrice,schoolShip.preferentialPrice);
+        dom.find('.orderPrice').text('¥ ' + (price <= 0 ? 0 : price))
+      }else{
+        dom.find('.orderPrice').text('¥ ' + activity.infactPrice)
+      }
     })
 
     dom.on('click','.btn-share',function(){

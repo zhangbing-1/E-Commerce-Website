@@ -155,12 +155,24 @@
       </div>
       {{/if}}
 
+      {{ if !isShop && !isWxApp && [0,1].indexOf(activity.bookingStatus) != -1 && schoolShip}}
+      <div class="product-school-ship">
+        <div class="school-ship-lable">{{schoolShip.title}}</div>
+        <div class="product-school-info">{{schoolShip.msg}}</div>
+        <div class="school-ship-status"></div>
+      </div>
+      {{/if}}
+
+
       {{ if isShop || (!isShop && [0,1].indexOf(activity.bookingStatus) != -1)}}
       <div class="price">
         {{ if activity.bookingStatus != 0 && user &&  user.couponDiscountPrice }}
-        <div >优惠券： - {{user ? user.couponDiscountPrice : 0}}</div>
+        <div >优惠券： - ¥ {{user ? user.couponDiscountPrice : 0}}</div>
         {{/if}}
-        <div>{{ activity.bookingStatus != 0 ? '实付款：':'需支付：' }} <span class="orange">¥ {{activity.infactPrice}}<span></div>
+        {{ if activity.bookingStatus != 0 && user &&  user.scholarshipDiscountPriceStr }}
+        <div >奖学金： - ¥ {{user ? user.scholarshipDiscountPriceStr : 0}}</div>
+        {{/if}}
+        <div>{{ activity.bookingStatus != 0 ? '实付款：':'需支付：' }} <span class="orange orderPrice">¥ {{activity.infactPrice}}<span></div>
       </div>
       {{/if}}
     </div>
