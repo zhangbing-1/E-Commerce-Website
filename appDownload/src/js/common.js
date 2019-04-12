@@ -127,7 +127,15 @@ $(function() {
   }
 
   common.createShare = function(){
-    return '<div class="share-layer"><span>点击右上角按钮，<br/>选择浏览器打开</span><img src="' + common.prefix + '/img/icon-arrow.png"></div>';
+    var dtd = $.Deferred();
+    var share = $('<div class="share-layer"><span>点击右上角按钮，<br/>选择浏览器打开</span><img src="' + common.prefix + '/img/icon-arrow.png"></div>')
+    share.appendTo('body').fadeIn('fast', function() {
+      share.on('click', function() {
+        dtd.resolve(confirm);
+        share.remove()
+      })
+    })
+    return dtd
   }
 
   function createLoading() {
