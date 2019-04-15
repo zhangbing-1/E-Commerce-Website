@@ -177,7 +177,7 @@ $(function() {
   }
 
   common.createToFreeCourse = function(){
-    return '<img class="free-course" src="' + common.prefix + 'img/btn-free-course.png" />'
+    return '<div class="free-course">更多课程</div>';
   }
 
   function createLoading() {

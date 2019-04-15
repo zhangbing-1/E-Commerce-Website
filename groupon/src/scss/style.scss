@@ -197,8 +197,15 @@ input::-moz-placeholder { // Firefox19+
   position:fixed;
   right:0; bottom:2rem;
   display:block;
-  width:1.24rem;height:auto;
+  font-size: .26rem;
+  color: #fff;
+  line-height:.6rem;
+  width:1.4rem; height:auto;
+  text-align:center;
   z-index:100;
+  border-top-left-radius:.6rem;
+  border-bottom-left-radius:.6rem;
+  background-image: linear-gradient(180deg, #FF9347 0%, #FF6D41 100%);
 }
 
 @-webkit-keyframes rotate {
