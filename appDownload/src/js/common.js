@@ -15,6 +15,10 @@ $(function() {
   common.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
   common.isWxApp = function(){ return window.__wxjs_environment == 'miniprogram' };
   common.shareUrl = location.origin + "/activitys/appDownload/";
+  common.isTJ = (function(){
+    return location.href.indexOf('://tjh5.test.zongjie.com') !== -1 || location.href.indexOf('://tjh5.zongjie.com') !== -1
+  })();
+
 
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
@@ -170,7 +174,7 @@ $(function() {
 
   var actions = {
     getVersion: function(){
-      return request({ url: 'app/api/v1/version', type:'POST' })
+      return request({ url: 'app/api/v1/version', type:'POST', data:{deviceType: common.isTJ ? 'ANDROID_TJ' : 'ANDROID'} })
     }
   }
 
