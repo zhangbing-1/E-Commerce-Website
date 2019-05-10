@@ -85,18 +85,18 @@ $(function() {
     })
   }
   function isBuyProduct(productId) {
-    common.actions.isBuyClass(productId).done(function(res) {
-      bigCourse = res.data;
-      isBuy = bigCourse.isBuy
-      // if(bigCourse.isBuy){//已经购买
+    if(common.getLocalStroge('token')){
+      common.actions.isBuyClass(productId).done(function(res) {
+        bigCourse = res.data;
+        isBuy = bigCourse.isBuy
+        if(bigCourse.bigCourseShowMessage){
+          var string = bigCourse.bigCourseShowMessage.replace('\n','<br/>');
+          var stringArray = string.split('$')
+          bigCourse.stringArray = stringArray;
+        }
+      })
+    }
 
-      // }
-      if(bigCourse.bigCourseShowMessage){
-        var string = bigCourse.bigCourseShowMessage.replace('\n','<br/>');
-        var stringArray = string.split('$')
-        bigCourse.stringArray = stringArray;
-      }
-    })
   }
   function renderProductDetail(activity) {
     isBuyProduct(activity.productId)
@@ -305,18 +305,10 @@ $(function() {
     if(iosPhonePay()){
       return;
     }
-    if (common.getLocalStroge('token')) {
-      common.go('./order.html',{
-        id : activity.activityId,
-        groupId : activity.bookingId || 0,
-      })
-      // location.href = './order.html?' +  common.stringify({
-      //   id : activity.activityId,
-      //   groupId : activity.bookingId || 0,
-      // })
-    }else{
-      common.tokenExpire();
-    }
+    common.go('./order.html',{
+      id : activity.activityId,
+      groupId : activity.bookingId || 0,
+    })
   }
   function bindEvent() {
     dom.on('click','.video-container-cover',function(e){
@@ -335,6 +327,7 @@ $(function() {
     })
 
     dom.on('click', '.group-pay', function(e) {
+      if (!common.getLocalStroge('token')) { return common.tokenExpire() }
       if(isOldUser && common.oldUserNoShopProducts.indexOf(product.id) != -1){ // 老用户不能购买
         common.createAlert('本活动仅限新用户参加').done(function(confirm){
           confirm.remove();
@@ -375,16 +368,12 @@ $(function() {
         return;
       }
       common.go('./index.html')
-      // location.href = './index.html';
     })
 
     dom.on('click','.go-order',function(){
       common.go('./order.html',{
         id : activity.activityId
       })
-      // location.href = './order.html?' + common.stringify({
-      //   id : activity.activityId
-      // })
     })
 
     dom.on('click','.go-share',function(){

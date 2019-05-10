@@ -250,17 +250,17 @@ $(function() {
       return request({ url: 'group/activity/pay', type: "POST", data: data });
     },
     getUser: function() {
-      return request({ url: 'user/userInfo', data: { token: getLocalStroge('token') } });
+      return request({ url: 'user/userInfo' });
     },
     editUserInfo: function(user) {
       user.token = getLocalStroge('token');
       return request({ url: 'user/userUploadInfo', type: 'POST', data: user })
     },
     getAddressList: function() {
-      return request({ url: 'user/addressList', data: { token: getLocalStroge('token') } })
+      return request({ url: 'user/addressList' })
     },
     deleteAddress: function(addressId) {
-      return request({ url: 'user/deleteAddress', type: 'POST', data: { token: getLocalStroge('token'), addressId: addressId } })
+      return request({ url: 'user/deleteAddress', type: 'POST', data: { addressId: addressId } })
     },
     addAddress: function(address) {
       address.token = getLocalStroge('token');
@@ -271,7 +271,7 @@ $(function() {
       return request({ url: 'user/updateAddress', type: 'POST', data: address })
     },
     getAreaList: function(type, parentId) {
-      return request({ url: 'area/select', data: { type: type, parentId: parentId, token: getLocalStroge('token') } })
+      return request({ url: 'area/select', data: { type: type, parentId: parentId } })
     },
     getWxConfig: function() {
       return request({ url: 'wx/createUrlSig', data: { url: location.href.split('#')[0] } });
@@ -317,7 +317,7 @@ $(function() {
       return request({ url: 'activity/api/v1/wechat/code/link', type: "POST", data: data });
     },
     isBuyClass: function(productId){
-      return request({ url: 'product/isBuyClass', data: { productId:productId, token: getLocalStroge('token') } });
+      return request({ url: 'product/isBuyClass', data: { productId:productId } });
     },
     isBuyProducts:function(data){
       return request({ url: 'activity/api/v1/isBuySpecialProduct', data: data });
