@@ -178,7 +178,7 @@ $(function() {
 
   var actions = {
     getVersion: function(){
-      return request({ url: 'app/api/v1/version', type:'POST', data:{deviceType: common.isTJ ? 'ANDROID_TJ' : 'ANDROID'} })
+      return request({ url: 'app/api/v1/h5/version', type:'POST', data:{deviceType: common.isTJ ? 'ANDROID_TJ' : 'ANDROID'} })
     }
   }
 
