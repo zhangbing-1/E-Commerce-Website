@@ -19,6 +19,10 @@ $(function() {
     return location.href.indexOf('://tjh5.test.zongjie.com') !== -1 || location.href.indexOf('://tjh5.zongjie.com') !== -1
   })();
 
+  common.iosDownloadUrl = (function(){
+    return common.isTJ ? 'https://itunes.apple.com/us/app/%E5%A4%A9%E6%B4%A5%E7%88%B1%E6%80%BB%E7%BB%93/id1462616846?l=zh&ls=1&mt=8' : 'https://itunes.apple.com/cn/app/%E7%88%B1%E6%80%BB%E7%BB%93/id1377039393?mt=8'
+  })()
+
 
   Date.prototype.Format = function(fmt) {
     fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
