@@ -1,6 +1,6 @@
 {
   "name": "group-buying-activity",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "爱总结app下载页",
   "main": "index.js",
   "scripts": {
