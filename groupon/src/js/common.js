@@ -7,9 +7,9 @@ $(function() {
   var version = '1.0.0';
   common.baseUrl = '//testapi.chaisenwuli.com/';
   common.prefix = './';
-  if (location.href.indexOf("h5.test.chaisenwuli.com") !== -1) {
+  if (location.href.indexOf("h5.test.chaisenwuli.com") !== -1 || location.href.indexOf("h5.test.zongjie.com") !== -1 || location.href.indexOf("tjh5.test.zongjie.com") !== -1 ) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/test/activitys/groupon/";
-  } else if (location.href.indexOf('h5.chaisenwuli.com') !== -1) {
+  } else if (location.href.indexOf('h5.chaisenwuli.com') !== -1 || location.href.indexOf('h5.zongjie.com') !== -1 || location.href.indexOf('tjh5.zongjie.com') !== -1) {
     common.prefix = "//zongjiewebimg.chaisenwuli.com/activitys/groupon/";
     common.baseUrl = "//api.chaisenwuli.com/";
   }
@@ -412,7 +412,15 @@ $(function() {
       .replace(/\?$/, '')
       .replace(location.origin, 'http://codeproxy.chaisenwuli.com'),
       _obj = urlGet();
-    if (location.href.indexOf('h5.test.chaisenwuli.com') != -1) {
+    if(location.href.indexOf('://h5.test.zongjie.com') != -1){
+      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=5' : '&t=5';
+    }else if(location.href.indexOf('://h5.zongjie.com') != -1){
+      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=6' : '&t=6';
+    }else if(location.href.indexOf('://tjh5.test.zongjie.com') != -1){
+      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=7' : '&t=7';
+    }else if(location.href.indexOf('://tjh5.zongjie.com') != -1){
+      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=8' : '&t=8';
+    }else if (location.href.indexOf('h5.test.chaisenwuli.com') != -1) {
       redirectUri += redirectUri.indexOf('?') == -1 ? '?t=3' : '&t=3';
     } else {
       redirectUri += redirectUri.indexOf('?') == -1 ? '?t=1' : '&t=1';
