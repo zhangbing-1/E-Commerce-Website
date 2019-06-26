@@ -188,22 +188,22 @@ $(function() {
           schoolShip = res4.data[0]
         }
 
-        var isAvaliable = false;
-        if(!Array.isArray(res5.data)) res5.data = []
-        for(var i = 0; i < res5.data.length; i++){
-          if(res5.data[i].id == params.couponId && res5.data[i].available) isAvaliable = true
-        }
-        if(params.couponId && isAvaliable){
-          coupon = params.couponId == -1 ? {
+        if(params.couponId == -1){
+          coupon = {
             id:0,
             denomination:0,
-          } : {
+          };
+        }else{
+          var isAvaliable = false;
+          if(!Array.isArray(res5.data)) res5.data = []
+          for(var i = 0; i < res5.data.length; i++){
+            if(res5.data[i].id == params.couponId && res5.data[i].available) isAvaliable = true
+          }
+          coupon = isAvaliable ? {
             id: params.couponId,
             thresholdPrice: params.thresholdPrice,
             denomination: params.choosePrice
-          }
-        }else{
-          coupon = res3.data;
+          } : res3.data;
         }
 
         if(isShop){
