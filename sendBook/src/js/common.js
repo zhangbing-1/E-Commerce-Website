@@ -289,13 +289,14 @@ $(function() {
     });
   }
 
-  common.createRedirectUri = function(type) {
+  common.createRedirectUri = function(type,appid) {
     var redirectUri = location.href.replace(/#.*/, '')
       .replace(/(code|state|t)=[^&]+[&]?/g, '')
       .replace(/&$/, '')
       .replace(/\?$/, '')
       .replace(location.origin, 'http://codeproxy.chaisenwuli.com'),
       baseUrl = '';
+      appid = appid || common.appid;
     if(location.href.indexOf('://h5.test.zongjie.com') != -1){
       redirectUri += redirectUri.indexOf('?') == -1 ? '?t=5' : '&t=5';
     }else if(location.href.indexOf('://h5.zongjie.com') != -1){
@@ -311,9 +312,9 @@ $(function() {
     }
     redirectUri = encodeURIComponent(redirectUri);
     if (type == 'user') {
-      return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + common.appid + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=null#wechat_redirect";
+      return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=null#wechat_redirect";
     }
-    return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + common.appid + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=null#wechat_redirect";
+    return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=null#wechat_redirect";
   }
 
   common.getOpenId = function(type) {
@@ -349,6 +350,42 @@ $(function() {
     }
     return dtd;
   }
+
+
+  common.getSpeacialOpenId = function(type,appid) {
+    var dtd = $.Deferred(),
+      _obj = urlGet(),
+      baseUrl = common.createRedirectUri(type,appid),
+      openId = common.getLocalStroge(appid + 'openId'),
+      unionId = common.getLocalStroge(appid + 'unionId');
+    if (unionId && openId) {
+      dtd.resolve(openId, unionId);
+    } else if (type == 'base' && openId) {
+      dtd.resolve(openId);
+    } else if (_obj.code) {
+      actions.getOpenId({
+        code: _obj.code,
+        scope: type == 'base' ? 0 : 1,
+        appId: appid
+      }).done(function(res) {
+        if (res.code == 0 && res.data.openId) {
+          setLocalStroge(appid + 'openId', res.data.openId);
+          if (res.data.unionId) {
+            setLocalStroge(appid + 'unionId', res.data.unionId);
+            dtd.resolve(res.data.openId, res.data.unionId);
+          } else {
+            dtd.resolve(res.data.openId);
+          }
+        } else {
+          location.replace(baseUrl);
+        }
+      })
+    } else {
+      location.replace(baseUrl);
+    }
+    return dtd;
+  }
+
 
   var jsApiList = ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'translateVoice', 'startRecord', 'stopRecord', 'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'closeWindow', 'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'];
   common.initWeixinConfig = function() {
