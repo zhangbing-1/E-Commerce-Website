@@ -163,12 +163,16 @@ $(function() {
       common.actions.getCouponMatchProduct({
         courseId: product.courseId,
         productId: product.id,
-        orderPrice: activity.price
+        orderPrice: activity.price,
+        type:2,
+        groupActivityId: activity.activityId
       }),
       common.actions.getPreferentialList(),
       common.actions.getCouponProductSuitList({
         courseId: product.courseId,
         productId: product.id,
+        type:2,
+        groupActivityId: activity.activityId
       })).done(function(data1,data2,data3,data4,data5){
       var res1 = data1[0], res2 = data2[0], res3 = data3[0], res4 = data4[0], res5 = data5[0];
       if(res1.code == 0 && res2.code == 0 && res3.code == 0 && res4.code == 0 && res5.code == 0){
@@ -396,7 +400,9 @@ $(function() {
         })) + '#/usecoupons?' + common.stringify({
           courseId: product.courseId,
           productId: product.id,
-          couponId: coupon ? coupon.id : -1 })
+          couponId: coupon ? coupon.id : -1,
+          type: 2,
+          groupActivityId: activity.activityId })
     })
 
     dom.on('click','.school-ship-status',function(){
