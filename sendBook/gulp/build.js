@@ -17,7 +17,7 @@ var config = require('../package.json');
 var rename = require("gulp-rename");
 var urlPrefixer = require('gulp-url-prefixer');
 
-var modules = ['index','login','preBind','address'];
+var modules = ['index','login','preBind','address','transfer'];
 var buildPath = '../build/',srcPath = '../src/';
 var isDev = process.argv[6] == 'dev';
 var cdnHost = isDev ? '//zongjiewebimg.chaisenwuli.com/activitys/sendBook/' : '//zongjiewebimg.chaisenwuli.com/test/activitys/sendBook/';
