@@ -9,7 +9,7 @@ $(function() {
     return
   }
   common.getSpeacialOpenId('user',_obj.appid).done(function() {
-    let unionId = common.getLocalStroge(_obj.appid + 'unionId')
+    var unionId = common.getLocalStroge(_obj.appid + 'unionId')
     location.href = location.origin + '/wap/#/detail/'+_obj.courseId +'/' + _obj.productId + '?wechatMark=' + unionId
   })
 });
