@@ -1,0 +1,64 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta http-equiv="Expires" CONTENT="0">
+  <meta http-equiv="Cache-Control" CONTENT="no-cache">
+  <meta http-equiv="Pragma" CONTENT="no-cache">
+  <title></title>
+  <script type="text/javascript">
+  function adapt(designWidth, rem2px) {
+    var d = window.document.createElement('div');
+    d.style.width = '1rem';
+    d.style.display = "none";
+    var head = window.document.getElementsByTagName('head')[0];
+    head.appendChild(d);
+    var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+    document.documentElement.style.fontSize = window.innerWidth / designWidth * rem2px / defaultFontSize * 100 + '%';
+    var st = document.createElement('style');
+    var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+    var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+    st.innerHTML = portrait + landscape;
+    head.appendChild(st);
+    return defaultFontSize
+  };
+  var defaultFontSize = adapt(750, 100);
+  </script>
+  <style type="text/css">
+    body{
+      padding: .4rem .3rem;
+    }
+    t1{
+      display: block;
+      margin: .3rem 0 0;
+      font-size: .32rem;
+      color:#333;
+      line-height: .45rem;
+    }
+    p{
+      margin: .3rem 0 0;
+      font-size: .26rem;
+      color:#666;
+      line-height: .4rem;
+    }
+    p + p{
+      margin: .2rem 0 0;
+    }
+
+  </style>
+</head>
+
+<body>
+  <t1>Q1:怎样才能获得作业红包呢</t1>
+  <p>看直播课/录播课后交作业，达到满分，就可以获得作业红包。不看课做作业则没有红包。</p>
+  <t1>Q2:影响红包金额大小的因素？</t1>
+  <p>影响因素有：</p>
+  <p>观看的是直播或录播、提交满分作业的排名、连续次数。</p>
+  <p>假设提交排名不变，连续提交，红包成线性增长，比如第一次1元，第二次2元，第三次3元。</p>
+  <p>排名越靠前，红包金额越大。</p>
+  <p>如果断掉，则重新开始，支持补交，补交后按此节之前连续提交的作业计算金额。</p>
+</body>
+
+</html>
