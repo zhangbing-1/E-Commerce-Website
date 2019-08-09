@@ -56,7 +56,12 @@ body {
   font-size: 14px;
   color: #959595;
   line-height: 30px;
+
+}
+
+.book-from a {
   text-decoration: none;
+  color:#0F5BBA;
 }
 
 .head-item {
