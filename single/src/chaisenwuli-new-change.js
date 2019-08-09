@@ -4,7 +4,8 @@ btn.addEventListener('click', () => {
   input.setAttribute('readonly', 'readonly');
   input.setAttribute('value', 'chaisen456');
   document.body.appendChild(input);
-  input.setSelectionRange(0, 9999);
+  // input.setSelectionRange(0, 9999);
+  input.select();
   if (document.execCommand('copy')) {
     document.execCommand('copy');
     console.log('复制成功');
