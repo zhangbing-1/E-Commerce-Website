@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" CONTENT="no-cache">
   <meta http-equiv="Pragma" CONTENT="no-cache">
   <title>孩子，我允许你不优秀，但不允许你不努力</title>
-  <link rel="stylesheet" type="text/css" href="chaisenwuli-new-style.css">
+  <link rel="stylesheet" type="text/css" href="./css/chaisenwuli-new-style.css">
   <script type="text/javascript">
     function adapt(designWidth, rem2px) {
       var d = window.document.createElement('div');
@@ -29,7 +29,6 @@
 
     var defaultFontSize = adapt(750, 100);
   </script>
-
 </head>
 
 <body>
@@ -40,11 +39,11 @@
       <div class="desc-1">
         <span class="desc-2">点击复制，加柴老师微信</span>
         <span class="desc-3">chaisen456</span>
-        <input id="demoInput" value="valuekjahskjldhakjlshdhs" hidden="hidden">
+        <input id="demoInput" value="chaisen456" type="text">
       </div>
       <div>领取提分秘籍</div>
     </div>
-    <div class="copy-btn">复制</div>
+    <button class="copy-btn" data-clipboard-target="#demoInput" data-clipboard-text="chaisen456">复制</button>
   </div>
   <div class="content-container">
     <p class="title">孩子，我允许你不优秀，但不允许你不努力</p>
@@ -60,7 +59,8 @@
         作者 柴森 出自 <a href="https://www.zongjie.com/course/detail/1/412">《学好不难》</a>
       </div>
     </div>
-    <img class="top-banner" src="./img/student_early_love_banner_web.png">
+    <img class="top-banner-web" src="./img/student_early_love_banner_web.png">
+    <img class="top-banner-h5" src="./img/student_early_love_banner_h5.png">
     <p class="content-detail">有的孩子，以前小学成绩好，但到了中学，知识变难后，就不行了。进而开始刷QQ、朋友圈，玩手机游戏，自暴自弃了。
     </p>
     <p class="content-detail">家长们为了改变孩子疲疲沓沓的学习状态，绞尽脑汁，花尽心思，软硬兼施，报各种辅导班，堵车接送。有小矛盾，有时还与孩子争吵，一次次地重燃希望，又一次次地灰飞烟灭。
@@ -158,7 +158,9 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="./chaisenwuli-new-change.js"></script>
+<script type="text/javascript" src="./js/clipboard.min.js"></script>
+<script type="text/javascript" src="./js/chaisenwuli-new-change.js"></script>
+
 
 </body>
 

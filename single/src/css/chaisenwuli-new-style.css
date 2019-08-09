@@ -4,7 +4,10 @@ body {
   margin: 0;
   padding-bottom: 2rem;
 }
-
+#demoInput{
+  position: fixed;
+  top: -300px;
+}
 .container {
   position: relative;
   width: 80%;
@@ -195,10 +198,14 @@ body {
   margin-top: 30px;
 }
 
-.top-banner {
+.top-banner-web {
+  display: block;
   width: 100%;
   height: auto;
   margin-top: 23px;
+}
+.top-banner-h5{
+  display: none;
 }
 
 .table-title {
@@ -278,6 +285,17 @@ body {
     margin: 0;
   }
 
+  .top-banner-web {
+    display: none;
+  }
+
+  .top-banner-h5{
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 23px;
+  }
+
   .content-container {
     position: relative;
     padding: 0 0.3rem;
@@ -352,7 +370,7 @@ body {
   }
 
   .copy-btn {
-    width: 1rem;
+    padding: 0 0.2rem;
     line-height: 0.5rem;
     border-radius: 8px;
     background-color: #fff;
@@ -366,6 +384,9 @@ body {
     line-height: 0.4rem;
     color: #999;
     margin-top: 0.3rem;
+  }
+  .author-container a{
+    color:#0F5BBA;
     text-decoration: none;
   }
 

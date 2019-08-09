@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" CONTENT="no-cache">
   <meta http-equiv="Pragma" CONTENT="no-cache">
   <title>学习真有一条捷径！好吧，我坦白了……</title>
-  <link rel="stylesheet" type="text/css" href="chaisenwuli-new-style.css">
+  <link rel="stylesheet" type="text/css" href="./css/chaisenwuli-new-style.css">
   <script type="text/javascript">
     function adapt(designWidth, rem2px) {
       var d = window.document.createElement('div');
@@ -30,6 +30,7 @@
     var defaultFontSize = adapt(750, 100);
   </script>
 
+
 </head>
 
 <body>
@@ -40,11 +41,11 @@
       <div class="desc-1">
         <span class="desc-2">点击复制，加柴老师微信</span>
         <span class="desc-3">chaisen456</span>
-        <input id="demoInput" value="valuekjahskjldhakjlshdhs" hidden="hidden">
+        <input id="demoInput" value="chaisen456">
       </div>
       <div>领取提分秘籍</div>
     </div>
-    <div class="copy-btn">复制</div>
+    <button class="copy-btn" data-clipboard-target="#demoInput" data-clipboard-text="chaisen456">复制</button>
   </div>
   <div class="content-container">
     <p class="title">学习真有一条捷径！好吧，我坦白了……</p>
@@ -60,7 +61,8 @@
         作者 柴森 出自 <a href="https://www.zongjie.com/course/detail/1/412">《学好不难》</a>
       </div>
     </div>
-    <img class="top-banner" src="./img/student_early_love_banner_web.png">
+    <img class="top-banner-web" src="./img/student_early_love_banner_web.png">
+    <img class="top-banner-h5" src="./img/student_early_love_banner_h5.png">
     <p class="content-detail"> 经常有学生问我：“我觉得我挺努力的，为啥成绩还不进步呢？”
     </p>
     <p class="content-detail">“第一，你一定要努力到，忘记自己在努力的程度，让努力成为你的一种生活习惯。第二，学习一定要用巧劲儿，不要用蛮力。”
@@ -203,7 +205,9 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="./chaisenwuli-new-change.js"></script>
+<script type="text/javascript" src="./js/clipboard.min.js"></script>
+<script type="text/javascript" src="./js/chaisenwuli-new-change.js"></script>
+
 
 </body>
 
