@@ -63,16 +63,13 @@ $(function(){
     })
 
     dom.on('click','.go-select',function(){
-      common.go(params.callBackUrl, {
+      var callBackUrl = params.callBackUrl;
+      delete params.callBackUrl;
+      common.go(callBackUrl, $.extend({},params,{
         id: params.id,
         groupId: params.groupId,
-        addressId: $(this).data('id'),
-      })
-      // location.href = params.callBackUrl + '?' + common.stringify($.extend({},{
-      //   id: params.id,
-      //   groupId: params.groupId,
-      //   addressId: $(this).data('id'),
-      // }))
+        addressId: $(this).data('id')
+      }))
     })
 
     dom.on('click','.btn-add',function(){

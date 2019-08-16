@@ -334,7 +334,8 @@ $(function() {
         couponDiscountPrice: coupon ? coupon.denomination : 0,
         payType: 1,
         orderSource: 3,
-        scholarshipDiscountPrice: scholarshipDiscountPrice
+        scholarshipDiscountPrice: scholarshipDiscountPrice,
+        salerId : params.salerId || 0
       }).done(function(res) {
         if (res.code == 0) {
           if(res.data && res.data.zeroPay == 1) return location.reload();

@@ -308,6 +308,7 @@ $(function() {
     common.go('./order.html',{
       id : activity.activityId,
       groupId : activity.bookingId || 0,
+      salerId : params.salerId || 0
     })
   }
   function bindEvent() {
