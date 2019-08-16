@@ -131,7 +131,7 @@ $(function() {
     });
   }
 
-  common.tokenExpire = function() {
+  common.tokenExpire = function(pageFromRefId) {
     removeLocalStroge('token')
     if (common.isWxApp()) {
       wx.miniProgram.navigateTo({
@@ -142,12 +142,13 @@ $(function() {
     } else if (common.isClient) {
       bridge.call('tokenExpire');
     } else {
-      common.go('./login.html',{
-        callBackUrl: location.href
-      })
-      // location.href = './login.html?' + stringify({
-      //   callBackUrl: location.href
-      // });
+      var obj = {
+        callBackUrl: location.href,
+      }
+      if(pageFromRefId){
+        obj.pageFromRefId = pageFromRefId
+      }
+      common.go('./login.html',obj)
     }
   }
 

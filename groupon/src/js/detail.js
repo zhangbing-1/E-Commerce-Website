@@ -328,7 +328,7 @@ $(function() {
     })
 
     dom.on('click', '.group-pay', function(e) {
-      if (!common.getLocalStroge('token')) { return common.tokenExpire() }
+      if (!common.getLocalStroge('token')) { return common.tokenExpire(product.id) }
       if(isOldUser && common.oldUserNoShopProducts.indexOf(product.id) != -1){ // 老用户不能购买
         common.createAlert('本活动仅限新用户参加').done(function(confirm){
           confirm.remove();
