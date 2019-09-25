@@ -56,6 +56,9 @@ input::-moz-placeholder { // Firefox19+
   bottom: 0;
   z-index: 10000;
   background-color: rgba(0, 0, 0, 0.3);
+  & + .loading-layer{
+    display: none!important;
+  }
   .loading-inner {
     position: absolute;
     top:50%;

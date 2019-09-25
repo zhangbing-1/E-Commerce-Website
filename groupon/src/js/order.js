@@ -360,6 +360,7 @@ $(function() {
       location.reload()
     }else{
       common.toast('支付失败');
+      setTimeout(function(){ location.reload() }, 1000);
     }
   }
 

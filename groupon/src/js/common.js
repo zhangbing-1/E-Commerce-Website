@@ -126,7 +126,7 @@ $(function() {
   }
   Loading.prototype.hide = function() {
     var that = this;
-    this.elem.fadeOut('fast', function() {
+    this.elem.fadeOut('slow', function() {
       that.elem.remove();
     });
   }
