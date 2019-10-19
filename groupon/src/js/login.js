@@ -61,6 +61,7 @@ $(function() {
   }
 
   common.initialize(function(){
+    common.setTitle('登录');
     var page = new Page();
     page.init();
   })

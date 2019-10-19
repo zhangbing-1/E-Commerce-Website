@@ -86,6 +86,7 @@ $(function() {
   }
 
   common.initialize(function(){
+    common.setTitle('团购')
     renderList();
     bindEvent();
     wx.ready(function() {

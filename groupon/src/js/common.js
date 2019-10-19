@@ -627,6 +627,14 @@ $(function() {
     }
   }
 
+  common.setTitle = function(title){
+    if(common.isClient){
+      bridge.call('setBarTitle', title);
+    } else {
+      document.title = title;
+    }
+  }
+
   $.extend(common, {
     version: version,
     actions: actions,

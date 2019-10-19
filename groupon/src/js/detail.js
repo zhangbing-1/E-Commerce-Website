@@ -481,6 +481,7 @@ $(function() {
   }
 
   common.initialize(function(){
+    common.setTitle('团购详情');
     checkIsOldUser();
     renderActivityInfo();
     bindEvent();

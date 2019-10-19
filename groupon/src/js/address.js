@@ -156,6 +156,7 @@ $(function(){
   }
 
   common.initialize(function(){
+    common.setTitle('我的地址');
     renderAddressList();
     bindEvent();
   })

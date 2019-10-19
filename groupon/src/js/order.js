@@ -487,6 +487,7 @@ $(function() {
   }
 
   common.initialize(function(){
+    common.setTitle('订单详情');
     if(!common.getLocalStroge('token')){
       common.tokenExpire();
     }

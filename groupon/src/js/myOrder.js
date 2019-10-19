@@ -47,6 +47,7 @@ $(function() {
   }
 
   common.initialize(function(){
+    common.setTitle('团购订单');
     if(!common.getLocalStroge('token')){
       common.tokenExpire()
     }
