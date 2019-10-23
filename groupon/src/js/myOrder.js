@@ -3,8 +3,8 @@ $(function() {
 
   function renderList() {
     common.actions.getMyOrder({
-      page:page,
-      pageSize:pageSize
+      page: page,
+      pageSize: pageSize
     }).done(function(res) {
       if (res.code == 0) {
         if(page == 1){

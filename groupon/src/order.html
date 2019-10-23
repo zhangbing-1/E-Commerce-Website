@@ -50,7 +50,18 @@
       <div class="count-down">交易已关闭</div>
       {{/if}}
     {{else}}
-      {{if activity.bookingStatus == 1 }}
+      {{if activity.bookingStatus == 0 }}
+        {{if user.status == 1}}
+        <div class="count-down-title">订单已结束</div>
+        <div class="count-down">已取消</div>
+        {{else if [5,6].indexOf(user.status) != -1}}
+        <div class="count-down-title">订单已结束</div>
+        <div class="count-down">订单超时，自动取消</div>
+        {{else}}
+        <div class="count-down-title">订单未支付</div>
+        <div class="count-down">等待支付</div>
+        {{/if}}
+      {{else if activity.bookingStatus == 1 }}
       <div class="count-down-title">等待支付</div>
       <div class="count-down">剩 {{ activity.remainingTime | remainingTimeFilter }} 此次团购结束</div>
       {{else if activity.bookingStatus == 2 }}
@@ -80,7 +91,20 @@
       </div>
       {{/if}}
     {{else}}
-      {{ if activity.bookingStatus == 1 || activity.bookingStatus == 0}}
+      {{ if user && [1,5,6].indexOf(user.status) != -1 }}
+      <div class="btns block">
+        <div class="btn btn-open">开新团</div>
+      </div>
+      {{else if user && user.status == 0 }}
+      <div class="btns">
+        <div class="btn btn-cancle">取消订单</div>
+        {{if activity.bookingStatus == 2 }}
+        <div class="btn btn-reopen">开新团</div>
+        {{else}}
+        <div class="btn btn-repay">继续支付</div>
+        {{/if}}
+      </div>
+      {{else}}
       <div class="btns block">
         <div class="btn btn-pay">付款</div>
       </div>
@@ -89,13 +113,7 @@
   </script>
 
   <script id="tpl-address" type="text/html">
-    {{if isShop}}
-    <div class="address-lable">收货地址</div>
-    <div class="address-wrapper">
-      <div class="address-title">{{user.expressName}} {{user.expressPhone}}</div>
-      <div class="address-detail">{{user.expressAddress}}</div>
-    </div>
-    {{else if [0,1].indexOf(activity.bookingStatus) != -1}}
+    {{if !user || user.status == 0 }}
     <div class="address-lable">收货地址<span class="red">(必填)</span></div>
     <div class="address-wrapper go-address">
       {{ if address }}
@@ -104,6 +122,12 @@
       {{else}}
       <div class="btn-add-address">选择地址</div>
       {{/if}}
+    </div>
+    {{else}}
+    <div class="address-lable">收货地址</div>
+    <div class="address-wrapper">
+      <div class="address-title">{{user.expressName}} {{user.expressPhone}}</div>
+      <div class="address-detail">{{user.expressAddress}}</div>
     </div>
     {{/if}}
   </script>
@@ -124,14 +148,13 @@
     {{/if}}
   </script>
   <script id="tpl-main" type="text/html">
-    {{ if activity.bookingStatus != 0 }}
+    {{if user }}
       {{ include 'tpl-header' }}
-
     {{/if}}
     {{ if product.merchandises.length > 0}}
       {{ include 'tpl-address' }}
     {{/if}}
-    {{ if (isShop && activity.bookingStatus == 1) || (activity.bookingStatus == 2)}}
+    {{ if isShop}}
       {{ include 'tpl-qrcode-layer' }}
     {{/if}}
     <div class="product-lable">课程信息</div>
@@ -141,7 +164,7 @@
       <div class="original-price"> 原价 ¥ {{activity.originalPrice}} </div>
       <div class="group-price">拼团价 ¥ {{activity.price}}</div>
 
-      {{ if !isShop && !isWxApp && [0,1].indexOf(activity.bookingStatus) != -1 }}
+      {{ if !isShop && !isWxApp && !user }}
       <div class="product-coupon go-coupon">
         <div class="coupon-lable">优惠券</div>
         {{ if coupon && coupon.id == 0}}
@@ -155,30 +178,28 @@
       </div>
       {{/if}}
 
-      {{ if !isShop && !isWxApp && [0,1].indexOf(activity.bookingStatus) != -1 && schoolShip}}
+      {{ if !isShop && !isWxApp && !user && schoolShip}}
       <div class="product-school-ship">
         <div class="school-ship-lable">{{schoolShip.title}}</div>
         <div class="product-school-info">{{schoolShip.msg}}</div>
         <div class="school-ship-status"></div>
       </div>
       {{/if}}
-
-
-      {{ if isShop || (!isShop && [0,1].indexOf(activity.bookingStatus) != -1)}}
+      {{if !user || [1,5,6].indexOf(user.status) == -1 }}
       <div class="price">
-        {{ if activity.bookingStatus != 0 && user &&  user.couponDiscountPrice }}
+        {{ if user && user.couponDiscountPrice }}
         <div >优惠券： - ¥ {{user ? user.couponDiscountPrice : 0}}</div>
         {{/if}}
-        {{ if activity.bookingStatus != 0 && user &&  user.scholarshipDiscountPriceStr }}
+        {{ if user &&  user.scholarshipDiscountPriceStr }}
         <div >奖学金： - ¥ {{user ? user.scholarshipDiscountPriceStr : 0}}</div>
         {{/if}}
-        <div>{{ activity.bookingStatus != 0 ? '实付款：':'需支付：' }} <span class="orange orderPrice">¥ {{activity.infactPrice}}<span></div>
+        <div>{{ isShop ? '实付款：':'需支付：' }} <span class="orange orderPrice">¥ {{activity.infactPrice}}<span></div>
       </div>
       {{/if}}
     </div>
 
 
-    {{ if isClient && !isShop && [0,1].indexOf(activity.bookingStatus) != -1 }}
+    {{ if isClient && (!user || user.status == 0) }}
     <div class="product-lable">支付方式</div>
     <div class="pay-method">
       <div class="item selected" data-id="1">
@@ -192,7 +213,7 @@
     </div>
     {{/if}}
 
-    {{ if isShop && activity.bookingStatus == 3 }}
+    {{ if isShop && user && user.status == 3 }}
     <div class="product-lable">退款信息</div>
     <div class="group-refund">
       <div class="item">
@@ -206,10 +227,8 @@
     </div>
     {{/if}}
 
-    {{ if activity.bookingStatus != 0 }}
     <div class="group-no">团购编号：{{activity.bookingId}}</div>
     <div class="group-start">开团时间：{{activity.bookingCreatedTime | dateFormatFilter }}</div>
-    {{/if}}
 
     {{ include 'tpl-btns' }}
   </script>

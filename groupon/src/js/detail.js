@@ -371,6 +371,10 @@ $(function() {
       common.go('./index.html')
     })
 
+    dom.on('click','.go-my-order',function(){
+      common.go('./myOrder.html')
+    })
+
     dom.on('click','.go-order',function(){
       common.go('./order.html',{
         id : activity.activityId

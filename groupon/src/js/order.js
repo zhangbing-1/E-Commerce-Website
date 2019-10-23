@@ -34,13 +34,20 @@ $(function() {
   }
   function renderActivityInfo() {
     var data = {
+      groupUserId: params.orderId,
       groupActivityId: params.id,
       groupBookingId: params.groupId || 0,
     };
     if (common.getLocalStroge('token')) {
       data.token = common.getLocalStroge('token');
     }
-    common.actions.getActivityInfo(data).done(function(res) {
+    var remoteData = null
+    if(params.orderId){
+      remoteData = common.actions.getActivityInfoByOrder(data)
+    }else{
+      remoteData = common.actions.getActivityInfo(data)
+    }
+    remoteData.done(function(res) {
       if (res.code == 0) {
         renderProductDetail(res.data);
         checkBuyProducts(res.data);
@@ -180,12 +187,23 @@ $(function() {
         if(activity.bookingUsers){
           for(var i = 0; i < activity.bookingUsers.length; i++){
             if(activity.bookingUsers[i].userId == res1.data.id){
-              isShop = true;
+              isShop = activity.bookingUsers[i].status == 2;
               user = activity.bookingUsers[i];
             }
           }
         }
-        if(res2.data && res2.data.length > 0){
+        if(user && user.status == 0){
+          if(params.addressId){
+            address = getAddress(params.addressId,res2.data);
+          }else{
+            address = {
+              all: user.expressAddress,
+              phone: user.expressPhone,
+              name: user.expressName,
+              provincename: user.expressAddress
+            }
+          }
+        }else if(res2.data && res2.data.length > 0){
           address = getAddress(params.addressId||res1.data.addressid,res2.data);
         }
         if(res4.data && res4.data.length > 0){
@@ -210,9 +228,8 @@ $(function() {
           } : res3.data;
         }
 
-        if(isShop){
-          activity.infactPrice = common.floatTool.subtract(activity.price,user.couponDiscountPrice);
-          activity.infactPrice = common.floatTool.subtract(activity.infactPrice,user.scholarshipDiscountPriceStr);
+        if(isShop || user){
+          activity.infactPrice = user.payPrice;
         }else{
           activity.infactPrice = activity.price;
           if(coupon){
@@ -288,7 +305,7 @@ $(function() {
         })
       })
     }else if(common.isClient){
-      common.actions.groupActivityPay({
+      var data = {
         groupActivityId: activity.activityId,
         groupBookingId: activity.bookingId || 0,
         expressAddress: address ? address.all : '',
@@ -299,7 +316,15 @@ $(function() {
         couponDiscountPrice: coupon ? coupon.denomination : 0,
         orderSource: common.isPhone ? 6 : 5,
         scholarshipDiscountPrice: scholarshipDiscountPrice
-      }).done(function(res) {
+      };
+      if(params.orderId){
+        data.groupUserId = params.orderId;
+        data.userCouponId =  user ? user.couponId : 0;
+        data.couponDiscountPrice =  user ? user.couponDiscountPrice : 0;
+        data.scholarshipDiscountPrice = user ? user.scholarshipDiscountPriceStr : 0;
+      }
+      var remoteData = params.orderId ? common.actions.continuePay(data) : common.actions.groupActivityPay(data)
+      remoteData.done(function(res) {
         if (res.code == 0) {
           var params = null, config = res.data;
           if(res.data && res.data.zeroPay == 1) return location.reload();
@@ -323,7 +348,7 @@ $(function() {
         }
       })
     }else{
-      common.actions.groupActivityPay({
+      var data = {
         groupActivityId: activity.activityId,
         groupBookingId: activity.bookingId || 0,
         expressAddress: address ? address.all : '',
@@ -336,7 +361,15 @@ $(function() {
         orderSource: 3,
         scholarshipDiscountPrice: scholarshipDiscountPrice,
         salerId : params.salerId || 0
-      }).done(function(res) {
+      };
+      if(params.orderId){
+        data.groupUserId = params.orderId;
+        data.userCouponId =  user ? user.couponId : 0;
+        data.couponDiscountPrice =  user ? user.couponDiscountPrice : 0;
+        data.scholarshipDiscountPrice = user ? user.scholarshipDiscountPriceStr : 0;
+      }
+      var remoteData = params.orderId ? common.actions.continuePay(data) : common.actions.groupActivityPay(data)
+      remoteData.done(function(res) {
         if (res.code == 0) {
           if(res.data && res.data.zeroPay == 1) return location.reload();
           common.replace('//www.zongjie.com/pay.html',{
@@ -364,24 +397,33 @@ $(function() {
     }
   }
 
+  function payBeforeIntercept(){
+    var dtd = $.Deferred();
+    if(isOldUser && common.oldUserNoShopProducts.indexOf(product.id) != -1){ // 老用户不能购买
+      common.createAlert('本活动仅限新用户参加').done(function(confirm){
+        confirm.remove();
+      })
+      return dtd.reject();
+    }
+    if(isBuyProducts){
+      common.createAlert('此类物品仅限团购一次').done(function(confirm){
+        confirm.remove();
+      })
+      return dtd.reject();
+    }
+    if(product.merchandises.length > 0 && !address) {
+      common.toast('请选择地址');
+      return dtd.reject();
+    }
+    dtd.resolve(confirm);
+    return dtd;
+  }
+
   function bindEvent() {
     dom.on('click', '.btn-pay', function(e) {
-      if(isOldUser && common.oldUserNoShopProducts.indexOf(product.id) != -1){ // 老用户不能购买
-        common.createAlert('本活动仅限新用户参加').done(function(confirm){
-          confirm.remove();
-        })
-        return
-      }
-      if(isBuyProducts){
-        common.createAlert('此类物品仅限团购一次').done(function(confirm){
-          confirm.remove();
-        })
-        return
-      }
-      if(product.merchandises.length > 0 && !address) {
-        return common.toast('请选择地址');
-      }
-      pay();
+      payBeforeIntercept().done(res=>{
+        pay()
+      });
     })
 
     dom.on('click','.go-address',function(){
@@ -470,6 +512,37 @@ $(function() {
 
     dom.on('click','.qrcode-layer',function(){
       dom.find('.qrcode-layer').remove()
+    })
+
+    dom.on('click','.btn-cancle',function(){
+      common.createConfirm('确定取消吗？').done(function(confirm){
+        confirm.remove();
+        common.actions.cancleOrder({ groupUserId: user.id }).done(res=>{
+          if(res.code == 0){
+            location.reload();
+          }
+        })
+      }).fail(function(confirm){
+        confirm.remove()
+      })
+    })
+
+    dom.on('click','.btn-open',function(){
+      common.go('./detail.html',{ id: activity.activityId});
+    })
+
+    dom.on('click','.btn-repay',function(){
+      payBeforeIntercept().done(res=>{
+        pay()
+      });
+    })
+
+    dom.on('click','.btn-reopen',function(){
+      common.actions.cancleOrder({ groupUserId: user.id }).done(res=>{
+        if(res.code == 0){
+          common.go('./detail.html',{ id: activity.activityId});
+        }
+      })
     })
 
     if(common.isClient){

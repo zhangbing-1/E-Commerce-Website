@@ -333,39 +333,48 @@
         border-radius: 0.68rem;
         height:0.68rem;
         margin:0 .15rem;
-        &:last-child{
-          color:#FF6D41;
-          background-color:#F8F8F8;
-        }
+        color: #FF6D41;
+        background-color: #F8F8F8;
         &.disable{
           border:solid 1px #D8D8D8;
         }
-        &:first-child{
+        &.primary{
           color:#fff;
           background-color:#FF6D41;
         }
+        &.group-pay{
+          flex:2;
+        }
       }
+    }
+    .go-list{
+      height: 100%;
+      width: 1.3rem;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: .68rem auto;
+      background-image: url(../img/icon-home.png)
     }
     .btn{
       font-size:0.3rem;
       color:#fff;
       display:flex;
-      flex:1;
+      flex: 1;
       align-items:center;
       justify-content:center;
-      &:last-child{
-        background-color:#FF6D41;
+      // &:last-child{
+      //   background-color:#FF6D41;
+      // }
+      // &:first-child{
+      //   background-color:#FF9D80;
+      // }
+      &.disable{
+        background-color: #D8D8D8;
+        color: #666666;
       }
-      &:first-child{
-        background-color:#FF9D80;
+      &.light{
+        background-color: #FF6D41;
       }
-    }
-    .btn.disable{
-      background-color:#D8D8D8 !important;
-      color:#666666 !important;
-    }
-    .btn.light{
-      background-color:#FF6D41 !important;
     }
   }
 

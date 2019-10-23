@@ -38,14 +38,14 @@
   <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
   <script id="tpl-list" type="text/html">
     {{each list item}}
-    <li class="item link" data-link="./order.html?id={{item.activityId}}">
+    <li class="item link" data-link="./order.html?id={{item.activityId}}&orderId={{item.bookingUsers[0].id}}">
         <div class="header">
-          <div class="order-time">{{item.bookingCreatedTime | dateFormatFilter}}</div>
-          <div class="order-status">{{item.bookingStatus | bookStatusFilter}}</div>
+          <div class="order-time">{{item.bookingUsers[0].createdTime | dateFormatFilter}}</div>
+          <div class="order-status">{{item.bookingUsers[0].status | statusFilter}}</div>
         </div>
         <div class="body">{{item.activityTitle}}</div>
         <div class="footer">
-          共1项，总计：¥{{item.price}}
+          共1项，总计：¥{{item.bookingUsers[0].payPrice}}
         </div>
       </li>
     {{/each}}

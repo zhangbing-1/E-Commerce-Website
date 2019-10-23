@@ -246,6 +246,9 @@ $(function() {
     getActivityInfo: function(data) {
       return request({ url: 'group/activity/groupbookingInfo', data: data })
     },
+    getActivityInfoByOrder: function(data){
+      return request({ url: 'group/activity/api/v1/getGroupActivityOrderDetail', data: data })
+    },
     groupActivityPay: function(data) {
       data.token = getLocalStroge('token');
       return request({ url: 'group/activity/pay', type: "POST", data: data });
@@ -288,7 +291,13 @@ $(function() {
     },
     getMyOrder: function(data) {
       data.token = getLocalStroge('token');
-      return request({ url: 'group/activity/groupbooingInfoList', data: data }, data.page != 1)
+      return request({ url: 'group/activity/api/v1/myGroupActivityOrderList', data: data }, data.page != 1)
+    },
+    continuePay(data){
+      return request({ url: 'group/activity/api/v1/rePayOrder', type: 'POST', data:data })
+    },
+    cancleOrder(data){
+      return request({ url: 'group/activity/api/v1/cancelGroupActivityOrder', type: 'POST', data:data })
     },
     getOrderInfo: function(data) {
       data.token = getLocalStroge('token');
@@ -329,6 +338,7 @@ $(function() {
     getPreferentialList:function(){
       return request({ url: 'preferential/list' });
     }
+
   }
 
   function urlGet() {
@@ -371,7 +381,11 @@ $(function() {
   }
 
   template.defaults.imports.bookStatusFilter = function(status) {
-    return ["", "等待成团", "已成团", "拼团成功"][status]
+    return ["", "等待成团", "已成团", "拼团失败"][status]
+  }
+
+  template.defaults.imports.statusFilter = function(status) {
+    return ["未支付", "已取消", "已支付"][status]
   }
 
   function createAreaList(list) {
