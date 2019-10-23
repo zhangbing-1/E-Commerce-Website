@@ -293,10 +293,10 @@ $(function() {
       data.token = getLocalStroge('token');
       return request({ url: 'group/activity/api/v1/myGroupActivityOrderList', data: data }, data.page != 1)
     },
-    continuePay(data){
+    continuePay: function(data){
       return request({ url: 'group/activity/api/v1/rePayOrder', type: 'POST', data:data })
     },
-    cancleOrder(data){
+    cancleOrder: function(data){
       return request({ url: 'group/activity/api/v1/cancelGroupActivityOrder', type: 'POST', data:data })
     },
     getOrderInfo: function(data) {

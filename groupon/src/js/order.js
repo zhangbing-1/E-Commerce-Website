@@ -421,7 +421,7 @@ $(function() {
 
   function bindEvent() {
     dom.on('click', '.btn-pay', function(e) {
-      payBeforeIntercept().done(res=>{
+      payBeforeIntercept().done(function(res){
         pay()
       });
     })
@@ -517,7 +517,7 @@ $(function() {
     dom.on('click','.btn-cancle',function(){
       common.createConfirm('确定取消吗？').done(function(confirm){
         confirm.remove();
-        common.actions.cancleOrder({ groupUserId: user.id }).done(res=>{
+        common.actions.cancleOrder({ groupUserId: user.id }).done(function(res){
           if(res.code == 0){
             location.reload();
           }
@@ -532,13 +532,13 @@ $(function() {
     })
 
     dom.on('click','.btn-repay',function(){
-      payBeforeIntercept().done(res=>{
+      payBeforeIntercept().done(function(res){
         pay()
       });
     })
 
     dom.on('click','.btn-reopen',function(){
-      common.actions.cancleOrder({ groupUserId: user.id }).done(res=>{
+      common.actions.cancleOrder({ groupUserId: user.id }).done(function(res){
         if(res.code == 0){
           common.go('./detail.html',{ id: activity.activityId});
         }
