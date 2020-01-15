@@ -1,0 +1,72 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta http-equiv="Expires" CONTENT="0">
+  <meta http-equiv="Cache-Control" CONTENT="no-cache">
+  <meta http-equiv="Pragma" CONTENT="no-cache">
+  <title>爱总结返现活动</title>
+  <script type="text/javascript">
+
+    function stringify(param) {
+      let result = [];
+      Object.keys(param).forEach(function(key) {
+        result.push(key + "=" + encodeURIComponent(param[key]));
+      })
+      return result.join('&');
+    }
+    let str = 'http://www.baidu.com/?' + stringify({
+      token: 'sdsds',
+      orderId: 1213213123,
+      payType: 2,
+      orderSource: 2,
+      successUrl: location.origin + '/wap/#/order?' + stringify(Object.assign({},{id:12,product:22},{orderId:1213213123}))
+    })
+
+    console.log(str)
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = str.substr(1).match(reg);
+        if (r != null && name == 'successUrl') {
+          // console.log(r[2])
+          // r[2] = encodeURI(r[2])
+          // r[2] = encodeURI(r[2])
+          // r[2] = encodeURI(r[2])
+          // r[2] = encodeURI(r[2])
+        }
+        if (r != null) return decodeURIComponentDeep(r[2]);
+        return null;
+    }
+
+    function decodeURIComponentDeep(str){
+      return str == decodeURIComponent(str) ? str : decodeURIComponentDeep(decodeURIComponent(str));
+    }
+
+    var orderId = getUrlParam("orderId");
+    var token = getUrlParam("token");
+    var sign = getUrlParam("sign");
+    var timestamp = getUrlParam("timestamp");
+    var orderSource = getUrlParam("orderSource");
+    var successUrl = getUrlParam("successUrl");
+
+
+    var payType = getUrlParam("payType");
+
+    console.log({orderId: orderId, token: token, sign: sign, timestamp: timestamp, payType: payType, orderSource: orderSource, successUrl:successUrl})
+
+  </script>
+
+<body>
+
+</body>
+</html>
+  </script>>
+</head>
+
+<body>
+
+</body>
+
+</html>
