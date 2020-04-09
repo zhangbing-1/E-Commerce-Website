@@ -421,27 +421,17 @@ $(function() {
   common.getOpenId = function() {
     var dtd = $.Deferred();
     var appid = 'wxb34a5e23b1078fad';
-    var redirectUri = location.href.replace(/#.*/, '')
-      .replace(/(code|state|t)=[^&]+[&]?/g, '')
+
+    var localHref = location.href.split('#')[0],
+        _obj = urlGet();
+    var re = localHref.replace(/(code|state|t)=[^&]+[&]?/g, '')
       .replace(/&$/, '')
-      .replace(/\?$/, '')
-      .replace(location.origin, 'http://codeproxy.chaisenwuli.com'),
-      _obj = urlGet();
-    if(location.href.indexOf('://h5.test.zongjie.com') != -1){
-      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=5' : '&t=5';
-    }else if(location.href.indexOf('://h5.zongjie.com') != -1){
-      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=6' : '&t=6';
-    }else if(location.href.indexOf('://tjh5.test.zongjie.com') != -1){
-      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=7' : '&t=7';
-    }else if(location.href.indexOf('://tjh5.zongjie.com') != -1){
-      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=8' : '&t=8';
-    }else if (location.href.indexOf('h5.test.chaisenwuli.com') != -1) {
-      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=3' : '&t=3';
-    } else {
-      redirectUri += redirectUri.indexOf('?') == -1 ? '?t=1' : '&t=1';
-    }
-    redirectUri = encodeURIComponent(redirectUri);
+      .replace(/\?$/, '');
+    re += re.indexOf('?') == -1 ? '?code=0' : '&code=0';
+
+    var redirectUri = encodeURIComponent('http://codeproxy.zongjie.com/codeProxy/?re=' + encodeURIComponent(re + location.hash));
     var baseUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=null#wechat_redirect";
+
 
     var openId = getLocalStroge('openId'),
       unionId = getLocalStroge('unionId');
